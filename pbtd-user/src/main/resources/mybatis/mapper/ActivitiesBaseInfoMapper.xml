@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.ActivitiesBaseInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.ActivitiesBaseInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="activeCode" property="activecode" jdbcType="VARCHAR" />
+    <result column="activeName" property="activename" jdbcType="VARCHAR" />
+    <result column="activeDescribe" property="activedescribe" jdbcType="VARCHAR" />
+    <result column="startTime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="endTime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="activePicture" property="activepicture" jdbcType="VARCHAR" />
+    <result column="activeFloat" property="activefloat"  />
+    <result column="activeType" property="activetype"  />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,activeCode, activeName,activeDescribe, startTime, endTime, activePicture,activeFloat, activeType,updateTime, createTime
+  </sql>
+  <select id="queryAll" resultMap="BaseResultMap" parameterType="Map" >
+    select *
+    from activities_base_info
+    where now() BETWEEN startTime and endTime;
+  </select>
+  <select id="queryOne" resultType="com.pbtd.playuser.domain.ActivitiesBaseInfo" parameterType="Map" >
+    select *
+    from activities_base_info
+    where now() BETWEEN startTime and endTime and activeCode = #{activeCode};
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from activities_base_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pbtd.playuser.domain.ActivitiesBaseInfo" >
+    insert into activities_base_info (id, activeName, startTime, 
+      endTime, activePicture, updateTime, 
+      createTime)
+    values (#{id,jdbcType=INTEGER}, #{activename,jdbcType=VARCHAR}, #{starttime,jdbcType=TIMESTAMP}, 
+      #{endtime,jdbcType=TIMESTAMP}, #{activepicture,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pbtd.playuser.domain.ActivitiesBaseInfo" >
+    insert into activities_base_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="activename != null" >
+        activeName,
+      </if>
+      <if test="starttime != null" >
+        startTime,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+      <if test="activepicture != null" >
+        activePicture,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="activename != null" >
+        #{activename,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activepicture != null" >
+        #{activepicture,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playuser.domain.ActivitiesBaseInfo" >
+    update activities_base_info
+    <set >
+      <if test="activename != null" >
+        activeName = #{activename,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        startTime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        endTime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activepicture != null" >
+        activePicture = #{activepicture,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playuser.domain.ActivitiesBaseInfo" >
+    update activities_base_info
+    set activeName = #{activename,jdbcType=VARCHAR},
+      startTime = #{starttime,jdbcType=TIMESTAMP},
+      endTime = #{endtime,jdbcType=TIMESTAMP},
+      activePicture = #{activepicture,jdbcType=VARCHAR},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

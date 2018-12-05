@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.phone.common.mapper.VodChannelMapper">
+	<resultMap id="resultMap"
+		type="com.pbtd.manager.vod.phone.common.domain.Vodchannel">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="channelName" property="channelName" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="channelCode" property="channelCode" jdbcType="INTEGER" />
+		<result column="levels" property="levels" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="parentCode" property="parentCode" jdbcType="INTEGER" />
+		<result column="navigationtype" property="navigationtype"
+			jdbcType="INTEGER" />
+		<result column="count" property="count" jdbcType="INTEGER" />
+		<result column="create_time" property="create_time" jdbcType="DATE" />
+		<result column="create_user" property="create_user" jdbcType="VARCHAR" />
+		<result column="update_time" property="update_time" jdbcType="DATE" />
+		<result column="update_user" property="update_user" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="img" property="img" jdbcType="VARCHAR" />
+		<result column="isshow_img" property="isshow_img" jdbcType="INTEGER" />
+		<result column="isshow_right" property="isshow_right" jdbcType="INTEGER" />
+		<result column="isshow_left" property="isshow_left" jdbcType="INTEGER" />
+		<result column="anotherName" property="anotherName" jdbcType="VARCHAR" />
+		<result column="labelType" property="labelType" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="columns">
+		id,channelCode,channelName,levels,sequence , parentCode,
+		status,
+		navigationtype,count,
+		create_time,create_user,update_time,update_user,type,img,isshow_img,
+		isshow_right,isshow_left,anotherName,labelType
+	</sql>
+	<!-- 模糊查询 -->
+	<sql id="whrClauseLike">
+		<if test="id != null and id > -1">
+			and id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="channelName != null and channelName != ''">
+			and channelName like '%${channelName}%'
+		</if>
+		<if test="create_user != null and create_user != ''">
+			and create_user like '%${create_user}%'
+		</if>
+		<if test="update_user != null and update_user != ''">
+			and update_user like '%${update_user}%'
+		</if>
+	</sql>
+	<sql id="whrClauseLikeMore">
+		<if test="id_ != null">
+			and ID in
+			<foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=INTEGER}
+			</foreach>
+		</if>
+	</sql>
+	<!-- 精确查询 -->
+	<sql id="whrClauseEqual">
+		<if test="id != null and id > -1">
+			and ID = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="levels != null and levels > -1">
+			and levels = #{levels,jdbcType=INTEGER}
+		</if>
+		<if test="channelCode != null and channelCode > -1">
+			and channelCode = #{channelCode,jdbcType=INTEGER}
+		</if>
+
+		<if test="parentCode != null and parentCode > -1">
+			and parentCode = #{parentCode,jdbcType=INTEGER}
+		</if>
+		<if test="status != null and status > -1">
+			and status = #{status,jdbcType=INTEGER}
+		</if>
+		<if test="navigationtype != null and navigationtype > -1">
+			and navigationtype = #{navigationtype,jdbcType=INTEGER}
+		</if>
+		<if test="create_time != null and create_time != '' ">
+			and
+			(date_format(create_time,'%Y-%m-%d') =
+			#{create_time,jdbcType=DATE}
+			or date_format(update_time,'%Y-%m-%d') =
+			#{create_time,jdbcType=DATE}
+			)
+		</if>
+		<if test="update_time != null and update_time != '' ">
+			and date_format(update_time,'%Y-%m-%d') =
+			#{update_time,jdbcType=DATE}
+		</if>
+	</sql>
+	<sql id="whrClauseEqualMore">
+		<if test="id_ != null">
+			and ID in
+			<foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=INTEGER}
+			</foreach>
+		</if>
+	</sql>
+	<sql id="orderByClause">
+		<choose>
+			<when test="sort != null and sort != ''">
+				order by ${sort}
+				<if test="order != null and order != ''">${order}</if>
+			</when>
+			<otherwise>
+				order by parentCode,sequence
+			</otherwise>
+		</choose>
+	</sql>
+	<!--SElECT查询语句 -->
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(ID)
+		from vod_phone_channel
+		where 1=1
+		<if test="ids != null and ids!=''">
+			and channelCode in(${ids})
+		</if>
+		<include refid="whrClauseLike" />
+		<include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+	</select>
+	<select id="page" parameterType="Map" resultMap="resultMap">
+		select
+		id,channelName,
+		(select b.channelName from vod_phone_channel b
+		where
+		a.parentCode=b.channelCode ) name,
+		channelCode,levels,sequence ,
+		parentCode, status,
+		navigationtype,count,type,img,isshow_img,isshow_right,isshow_left,anotherName,labelType
+		from vod_phone_channel a
+		where 1=1
+		<if test="ids != null and ids!=''">
+			and a.channelCode in(${ids})
+		</if>
+		<include refid="whrClauseLike" />
+		<include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+		<include refid="orderByClause" />
+		<if test="start != null   ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="find" parameterType="Map" resultMap="resultMap">
+		select
+		id,channelName,
+		(select b.channelName from vod_phone_channel b
+		where
+		a.parentCode=b.channelCode ) name,
+		channelCode,levels,sequence ,
+		parentCode, status,
+		navigationtype,count,
+		date_format(create_time,'%Y-%m-%d') create_time,create_user,
+		date_format(update_time,'%Y-%m-%d') update_time,update_user,type,img,isshow_img,isshow_right,isshow_left,anotherName,labelType
+		from
+		vod_phone_channel a
+		where 1=1
+		<if test="ids != null and ids!=''">
+			and a.channelCode in(${ids})
+		</if>
+		<include refid="whrClauseLike" />
+		<include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+		<include refid="orderByClause" />
+		<if test="start != null   ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="generatePosition" parameterType="Map" resultType="java.lang.Integer">
+		select case when max(channelCode) is not null then max(channelCode) +
+		1 else max(channelCode) + 1 end as count
+		from vod_phone_channel
+		where
+		1=1
+	</select>
+	<select id="load" parameterType="java.lang.Integer" resultMap="resultMap">
+		select
+		<include refid="columns" />
+		from vod_phone_channel
+		where ID = #{id,jdbcType=INTEGER}
+	</select>
+	<!--INSERT/UPDATE/DELETE 执行语句 -->
+	<insert id="insert" parameterType="com.pbtd.manager.vod.phone.common.domain.Vodchannel">
+		insert into
+		vod_phone_channel
+		(
+		channelName,channelCode,levels,sequence , parentCode, status,
+		navigationtype,count, create_time,create_user,type,anotherName,labelType
+		)
+		values
+		(
+		#{channelName,jdbcType=VARCHAR},
+		#{channelCode,jdbcType=INTEGER},
+		#{levels,jdbcType=INTEGER},
+		#{sequence,jdbcType=INTEGER},
+		#{parentCode,jdbcType=INTEGER},
+		#{status,jdbcType=INTEGER},
+		#{navigationtype,jdbcType=INTEGER},
+		#{count,jdbcType=INTEGER},now(),
+		#{create_user,jdbcType=VARCHAR},
+		#{type,jdbcType=INTEGER},
+		#{anotherName,jdbcType=VARCHAR},
+		#{labelType,jdbcType=INTEGER}
+		)
+	</insert>
+	<!-- 插入频道 -->
+	<insert id="insertPrimary">
+		insert into vod_phone_channel (
+		levels,channelName,
+		channelCode,navigationtype,sequence) values
+		(
+		#{levels,jdbcType=INTEGER},
+		#{channelName,jdbcType=VARCHAR},
+		#{channelCode,jdbcType=INTEGER},1,#{sequence,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.pbtd.manager.vod.phone.common.domain.Vodchannel">
+		update vod_phone_channel
+		<set>
+			update_time=now(),
+			<if test="channelName != null ">
+				channelName = #{channelName,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null  and type>0 ">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="levels != null and levels>0">
+				levels = #{levels,jdbcType=INTEGER},
+			</if>
+			<if test="sequence != null and sequence>0">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="parentCode != null and parentCode>0 ">
+				parentCode = #{parentCode,jdbcType=INTEGER},
+			</if>
+			<if test="status != null and status>-1">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="navigationtype != null and navigationtype>0">
+				navigationtype = #{navigationtype,jdbcType=INTEGER},
+			</if>
+			<if test="count != null and count>0">
+				count = #{count,jdbcType=INTEGER},
+			</if>
+			<if test="update_user != null">
+				update_user = #{update_user,jdbcType=VARCHAR},
+			</if>
+			<if test="anotherName != null">
+				anotherName = #{anotherName,jdbcType=VARCHAR},
+			</if>
+			<if test="isshow_left != null and isshow_left>-1">
+				isshow_left = #{isshow_left,jdbcType=INTEGER},
+			</if>
+			<if test="isshow_right != null and isshow_right>-1">
+				isshow_right = #{isshow_right,jdbcType=INTEGER},
+			</if>
+			<if test="isshow_img != null and isshow_img>-1">
+				isshow_img = #{isshow_img,jdbcType=INTEGER},
+			</if>
+			<if test="labelType != null and labelType>-1">
+				labelType = #{labelType,jdbcType=INTEGER}
+			</if>
+		</set>
+		where ID = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updatesequence" parameterType="com.pbtd.manager.vod.phone.common.domain.Vodchannel">
+		update vod_phone_channel
+		<set>
+			update_time=now(),
+			<if test="channelName != null ">
+				channelName = #{channelName,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null  and type>0 ">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="levels != null and levels>0">
+				levels = #{levels,jdbcType=INTEGER},
+			</if>
+			<if test="sequence != null and sequence>0">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="parentCode != null and parentCode>0 ">
+				parentCode = #{parentCode,jdbcType=INTEGER},
+			</if>
+			<if test="labelType != null and labelType>0 ">
+				labelType = #{labelType,jdbcType=INTEGER}
+			</if>
+			 
+		</set>
+		where ID = #{id,jdbcType=INTEGER}
+	</update>
+	
+	
+	<update id="updatestatus" parameterType="Map">
+		update vod_phone_channel
+		set status = #{status,jdbcType=INTEGER}
+		where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deletes" parameterType="Map">
+		delete from vod_phone_channel
+		where 1=1
+		<include refid="whrClauseLike" />
+		<include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+	</delete>
+<!-- 频道排序 start -->
+	<update id="updatesequce" parameterType="Map">
+		update vod_phone_channel set
+		<choose>
+			<when test=" plus !=null and plus !=''">
+				sequence=sequence+1
+			</when>
+			<otherwise>
+				sequence=sequence-1
+			</otherwise>
+		</choose>
+		where
+		levels =#{levels,jdbcType=INTEGER}
+		<if test="parentCode != null  and levels !=1">
+			and parentCode = #{parentCode,jdbcType=INTEGER}
+		</if>
+		<if test="id != null  and id !='' ">
+			and id !=#{id,jdbcType=INTEGER}
+		</if>
+    		 <![CDATA[
+    		  and sequence>=#{minnum,jdbcType=INTEGER}
+    		  and sequence<=#{maxnum,jdbcType=INTEGER}
+    		]]>
+	</update>
+
+	<update id="addsequce" parameterType="Map">
+		update vod_phone_channel set
+		sequence=sequence+1
+		where levels
+		=#{levels,jdbcType=INTEGER} 
+    		  <![CDATA[  and sequence>=#{maxnum,jdbcType=INTEGER} ]]>
+		<if test="parentCode != null  and levels !=1">
+			and parentCode = #{parentCode,jdbcType=INTEGER}
+		</if>
+	</update>
+   <select id="findsequence" parameterType="Map" resultType="Map">
+		select  min(sequence) min, max(sequence) max
+		from vod_phone_channel a
+		<where>
+			<if test="levels != null">
+			and 	levels = #{levels,jdbcType=INTEGER}
+			</if>
+			<if test="id != null and id > -1">
+				and ID = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="parentCode != null  and levels !=1">
+			and parentCode = #{parentCode,jdbcType=INTEGER}
+		</if>
+		</where>
+			order by a.sequence
+	</select>
+	 <select id="findchannelmaxVSminsequence" parameterType="Map" resultType="Map">
+		select max(sequence) max, min(sequence) min
+		from vod_phone_channel a
+		<where>
+			<if test="id!=null ">
+				and a.id  in (${id})
+			</if>
+		</where>
+	</select>
+	<select id="findchannelsequencesum" parameterType="Map" resultType="Map">
+		select  sequence 
+		from vod_phone_channel a
+		<where>
+			<if test="id!=null ">
+				and a.id   in (${id})
+			</if>
+		</where>
+			order by a.sequence
+	</select>
+	<select id="findchannelsequence" parameterType="Map" resultType="Map">
+		select a.id,a.sequence
+		from vod_phone_channel a
+		<where>
+			<if test="id!=null ">
+				and a.id not in (${id})
+			</if>
+			<if test="levels != null and levels!='' ">
+			 and levels = #{levels,jdbcType=INTEGER}
+			</if>
+			<if test="parentCode != null and parentCode!=0">
+			and parentCode = #{parentCode,jdbcType=INTEGER}
+		   </if> 
+			<if test="max!=null and max!='' ">
+			       	<![CDATA[    and sequence<= #{max,jdbcType=INTEGER}]]>
+			</if>
+			<if test="min!=null and min!='' ">
+			        <![CDATA[    and sequence>= #{min,jdbcType=INTEGER}]]>
+			</if>
+		</where>
+		order by a.sequence
+	</select>
+	<!-- 标签排序 end-->
+<!-- 频道排序 end -->
+
+	<!-- 添加绑定信息 -->
+	<insert id="insertalbum" parameterType="Map">
+		insert into
+		vod_phone_channel_albuminfo
+		(
+		channelCode,seriesCode,sequence,status
+		)
+		values
+		(
+		#{channelCode,jdbcType=VARCHAR},
+		#{seriesCode,jdbcType=VARCHAR},#{sequence},#{status}
+		)
+	</insert>
+	<delete id="deletesalbum" parameterType="Map">
+		delete from vod_phone_channel_albuminfo
+		where 1=1
+		<if test="seriesCode != null and seriesCode !='' ">
+			and seriesCode=#{seriesCode,jdbcType=INTEGER}
+		</if>
+		<if test="channelCode != null and channelCode !='' ">
+			and channelCode=#{channelCode,jdbcType=INTEGER}
+		</if>
+		<if test="channelCodeid != null and channelCodeid !='' ">
+			and channelCode in(
+			 select  channelCode  from  vod_phone_channel where id=#{channelCodeid,jdbcType=INTEGER}
+			)
+		</if>
+		<if test="id != null and id !='' ">
+			and id=#{id,jdbcType=INTEGER}
+		</if>
+
+	</delete>
+	<!--更改绑定信息排序 start -->
+	<update id="updatealbumsequence" parameterType="Map">
+		update vod_phone_channel_albuminfo set
+		sequence=#{sequence,jdbcType=INTEGER}
+		where channelCode=#{channelCode,jdbcType=INTEGER}
+		and seriesCode =#{seriesCode,jdbcType=INTEGER}
+	</update>
+	<select id="findalbummaxVSminsequence" parameterType="Map" resultType="Map">
+		select max(sequence) max, min(sequence) min
+		from vod_phone_channel_albuminfo a
+		<where>
+			<if test="channelCode!=null ">
+				and channelCode=#{channelCode,jdbcType=INTEGER}
+			</if>
+			<if test="albumid!=null ">
+				and a.seriesCode   in (${albumid})
+			</if>
+		</where>
+	</select>
+	<select id="findalbumsequencesum" parameterType="Map" resultType="Map">
+		select  sequence 
+		from vod_phone_channel_albuminfo a
+		<where>
+			<if test="channelCode!=null ">
+				and channelCode=#{channelCode,jdbcType=INTEGER}
+			</if>
+			<if test="albumid!=null ">
+				and a.seriesCode   in (${albumid})
+			</if>
+		</where>
+			order by a.sequence
+	</select>
+	<select id="findalbumsequence" parameterType="Map" resultType="Map">
+		select a.seriesCode,a.sequence
+		from vod_phone_channel_albuminfo a
+		<where>
+			<if test="channelCode!=null ">
+				and channelCode=#{channelCode,jdbcType=INTEGER}
+			</if>
+			<if test="albumid!=null ">
+				and a.seriesCode not in (${albumid})
+			</if>
+			<if test="max!=null and max!='' ">
+			       	<![CDATA[    and sequence<= #{max,jdbcType=INTEGER}]]>
+			</if>
+			<if test="min!=null and min!='' ">
+			        <![CDATA[    and sequence>= #{min,jdbcType=INTEGER}]]>
+			</if>
+		</where>
+		order by a.sequence
+ </select>
+	<!-- 更改绑定信息排序 end -->
+
+	<!--绑定信息查询条数 -->
+	<select id="countalbum" parameterType="Map" resultType="java.lang.Integer">
+		select count(ID)
+		from vod_phone_channel_albuminfo a
+		left join vod_phone_albuminfo b on a.seriesCode=b.seriesCode
+		where 1=1
+		<if test="channelCode!=null ">
+			and channelCode=#{channelCode,jdbcType=INTEGER}
+		</if>
+		<if test="seriesCode!=null ">
+			and a.seriesCode=#{seriesCode,jdbcType=INTEGER}
+		</if>
+		<if test="seriesName != null and seriesName !='' ">
+			and b.seriesName like '%${seriesName}%'
+		</if>
+		<if test="status != null ">
+			and b.status=#{status,jdbcType=INTEGER}
+		</if>
+	</select>
+	<!--绑定信息查询列表 -->
+	<select id="pagealbum" parameterType="Map" resultType="Map">
+		select a.seriesCode,b.seriesName,b.ChannelName,b.actorName,
+		writerName,b.volumncount,b.currentnum,b.status,a.sequence
+		from vod_phone_channel_albuminfo a
+		left join vod_phone_albuminfo b on a.seriesCode=b.seriesCode
+		<where>
+			<if test="channelCode!=null ">
+				and channelCode=#{channelCode,jdbcType=INTEGER}
+			</if>
+			<if test="seriesCode!=null ">
+				and a.seriesCode=#{seriesCode,jdbcType=INTEGER}
+			</if>
+			<if test="seriesName != null and seriesName !='' ">
+				and b.seriesName like '%${seriesName}%'
+			</if>
+			<if test="status != null ">
+				and b.status=#{status,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by a.sequence
+		<if test="start != null  ">
+			limit #{start},#{pageSize}
+		</if>
+
+	</select>
+	<!--下发频道绑定的专辑的接口 -->
+	<select id="channelalbum" parameterType="Map" resultType="Map">
+		select id, seriesCode,
+		channelCode,status,sequence
+		from vod_phone_channel_albuminfo
+		<where>
+			<if test="channelCode != null and channelCode !='' ">
+				channelCode=#{channelCode,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by sequence
+		<if test="start != null   ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<update id="updateimg" parameterType="Map">
+		update vod_phone_channel
+		<set>
+			<if test="imgUrl != null  and imgUrl  !=''">
+				  img = #{imgUrl ,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where ID = #{id,jdbcType=INTEGER}
+	</update>
+	
+	
+	
+	
+	<!-- 以下为频道绑定标签sql -->
+	<select id="pagelabelforchannel" parameterType="Map" resultType="Map">
+	SELECT b.id id,b.channel,a.id as label,a.name labelname,c.name typename,a.type type,b.sequence sequence
+	from vod_labelchannel b 
+	LEFT JOIN vod_phone_label  a on b.label=a.id
+	left join vod_labeltype c on a.type=c.id 
+	where b.type='phone' and b.channel=#{channel,jdbcType=VARCHAR}
+      <if test="type!= null and type!='' ">
+	  and a.type = #{type,jdbcType=VARCHAR}
+	 </if>
+     ORDER BY c.sequence,b.sequence
+	 <if test="start != null   ">
+            limit #{start},#{pageSize}
+      </if>
+	</select>
+	<select id="countlabelforchannel" parameterType="Map" resultType="java.lang.Integer">
+	SELECT count(1)
+	from vod_labelchannel b 
+	LEFT JOIN vod_phone_label  a on b.label=a.id 
+	where b.type='phone'  and  b.channel=#{channel,jdbcType=VARCHAR}
+	 <if test="type!= null and type!='' ">
+	  and a.type = #{type,jdbcType=VARCHAR}
+	 </if>
+	  <if test="label!= null and label>0 ">
+	  and b.label = #{label,jdbcType=INTEGER}
+	 </if>
+	 
+	</select>
+	<insert id="addbindinglabel" parameterType="Map">
+	 insert into vod_labelchannel 
+	 (label,channel,type,sequence)
+	 values 
+	 (#{label,jdbcType=INTEGER},#{channel,jdbcType=INTEGER},'phone',#{sequence,jdbcType=INTEGER})
+	</insert>
+	<update id="updatebindinglabel" parameterType="Map">
+	 update vod_labelchannel 
+	 set
+	 sequence=#{sequence,jdbcType=INTEGER}
+	 where id=#{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deletebindinglabel" parameterType="Map">
+	delete from vod_labelchannel 
+	where type='phone'
+			<if test="id!=null and id!='' ">
+		  	   and	id=#{id,jdbcType=INTEGER}	
+			</if>
+			<if test="channelCodeid != null and channelCodeid !='' ">
+			and channel in(
+			 select  channelCode  from  vod_phone_channel where id=#{channelCodeid,jdbcType=INTEGER}
+			)
+			</if>
+			<if test="channel!=null and channel!='' ">
+				and channel=#{channel,jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!--  以下为绑定标签自动排序用 -->
+     <select id="findchannellabelmaxVSminsequence" parameterType="Map" resultType="Map">
+		SELECT  max(b.sequence) max, min(b.sequence) min
+			from vod_labelchannel b 
+			LEFT JOIN vod_phone_label  a on b.label=a.id 
+		 <where>
+		    b.type='phone'
+			<if test="id!=null and id!='' ">
+				and b.id  in (${id})
+			</if>
+			<if test="channel!=null and channel!='' ">
+				and b.channel=#{channel,jdbcType=VARCHAR}
+			</if>
+			<if test="type!= null and type!='' ">
+			 and a.type = #{type,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="findchannellabelsequencesum" parameterType="Map" resultType="Map">
+		select  sequence 
+		from vod_labelchannel  a
+		<where>
+			<if test="id!=null ">
+				and a.id   in (${id})
+			</if>
+		</where>
+			order by a.sequence
+	</select>
+	<select id="findchannellabelsequence" parameterType="Map" resultType="Map">
+			SELECT b.id,b.sequence
+			from vod_labelchannel b 
+			LEFT JOIN vod_phone_label  a on b.label=a.id 
+		<where>
+		      b.type='phone'
+			<if test="id!=null ">
+			and b.id not in (${id})
+			</if>
+			<if test="channel != null and channel!='' ">
+			 and b.channel = #{channel,jdbcType=VARCHAR}
+			</if>
+			<if test="type!= null and type!='' ">
+			 and a.type = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="max!=null and max!='' ">
+			       	<![CDATA[    and b.sequence<= #{max,jdbcType=INTEGER}]]>
+			</if>
+			<if test="min!=null and min!='' ">
+			        <![CDATA[    and b.sequence>= #{min,jdbcType=INTEGER}]]>
+			</if>
+		</where>
+		order by b.sequence
+	</select>
+</mapper>

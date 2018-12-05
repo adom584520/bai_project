@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.system.mapper.LoginInfoMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.system.domain.LoginInfo" >
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="status" property="status"/>
+        <result column="realname" property="realName"/>
+        <result column="level" property="level"/>
+        <result column="createdate" property="createDate"/>
+        <result column="contact_information" property="contactInformation"/>
+        <result column="create_loginInfo" property="createLoginInfo"/>
+    </resultMap>
+    
+    <select id="login" resultMap="baseResultMap">
+    	select id,username,status,realname,level,createdate,create_loginInfo,contact_information
+    	from sys_loginInfo
+    	where username=#{username} and password=#{password} and status=#{status}
+    </select>
+    
+    <sql id="queryLoginInfoListSql">
+    	<where>
+    		<if test="username!=null">
+    			and username = #{username}
+    		</if>
+    		<if test="level!=null">
+    			and level = #{level}
+    		</if>
+    		<if test="status!=null">
+    			and status = #{status}
+    		</if>
+    	</where>
+    </sql>
+    
+    <select id="queryCount" resultType="long">
+    	select count(id)
+    	from sys_loginInfo
+    	<include refid="queryLoginInfoListSql"/>
+    </select>
+    <select id="queryList" resultMap="baseResultMap">
+    	select id,username,status,realname,level,createdate,create_loginInfo,contact_information
+    	from sys_loginInfo
+    	<include refid="queryLoginInfoListSql"/>
+    	limit #{start},#{pageSize}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    	insert into sys_loginInfo
+    	(username,password,status,realname,level,createdate,create_loginInfo,contact_information)
+    	values(#{username},#{password},#{status},#{realName},#{level},#{createDate},
+    	#{createLoginInfo},#{contactInformation})
+    </insert>
+    
+    <update id="update">
+    	update sys_loginInfo
+    	set username=#{username},realname=#{realName},contact_information=#{contactInformation}
+    	where id = #{id}
+    </update>
+    
+    <delete id="delete">
+    	delete from sys_loginInfo
+    	where id = #{id}
+    </delete>
+    
+    <update id="updateStatus">
+    	update sys_loginInfo
+    	set status=#{status}
+    	where id = #{id}
+    </update>
+    
+    <select id="queryByUsername" resultMap="baseResultMap">
+    	select id,username,password,status,realname,level,createdate,create_loginInfo,contact_information
+    	from sys_loginInfo
+    	where username=#{username}
+    </select>
+    
+    <select id="queryAdmin" resultMap="baseResultMap">
+    	select id,username,status,realname,level,createdate,create_loginInfo
+    	from sys_loginInfo
+    	where username=#{username}
+    </select>
+    
+    <insert id="insertAdmin" useGeneratedKeys="true" keyProperty="id">
+    	insert into sys_loginInfo
+    	(username,password,status,realname,level,createdate,create_loginInfo,contact_information)
+    	values(#{username},#{password},#{status},#{realName},#{level},#{createDate},#{createLoginInfo},
+    	#{contactInformation})
+    </insert>
+    
+    <update id="resetPassword">
+    	update sys_loginInfo
+    	set password = #{password}
+    	where id = #{id}
+    </update>
+    
+    <update id="updateSelfInfo">
+    	update sys_loginInfo
+    	set username=#{username},realname=#{realName},contact_information=#{contactInformation}
+    	where id = #{id}
+    </update>
+    
+    <delete id="deleteBatch">
+    	delete from sys_loginInfo
+    	where id in 
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    
+    <select id="queryById" resultMap="baseResultMap">
+    	select id,username,password,status,realname,level,createdate,create_loginInfo,contact_information
+    	from sys_loginInfo
+    	where id=#{id}
+    </select>
+</mapper>

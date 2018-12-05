@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.UserActivitiesInfoMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.UserActivitiesInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="userId" property="userid" jdbcType="VARCHAR" />
+		<result column="activeNum" property="activenum" jdbcType="INTEGER" />
+		<result column="isNotWin" property="isnotwin" jdbcType="INTEGER" />
+		<result column="activeCode" property="activecode" jdbcType="VARCHAR" />
+		<result column="commendMobile" property="commendmobile" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, userId, activeNum, isNotWin, activeCode,
+		createTime,commendMobile,
+		updateTime
+	</sql>
+	<select id="selectByPrimary" resultMap="BaseResultMap"
+		parameterType="Map">
+		select
+		<include refid="Base_Column_List" />
+		from user_activities_info
+		<trim prefix="where " suffixOverrides="and">
+			<if test="userId != null">
+				userId = #{userId} and
+			</if>
+			<if test="activeCode != null">
+				activeCode = #{activeCode}
+			</if>
+		</trim>
+		limit 1
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		user_activities_info
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="Map">
+		insert into
+		user_activities_info (
+		userId,
+		activeNum,
+		isNotWin,
+		commendMobile,
+		activeCode,
+		createTime,
+		updateTime)
+		values (
+		#{userId,jdbcType=VARCHAR},
+		1,
+		0,
+		<choose>
+			<when test="userMobile != null and userMobile !=''">
+				#{userMobile},
+			</when>
+			<otherwise>
+				null,
+			</otherwise>
+		</choose>
+		#{activeCode,jdbcType=VARCHAR},
+		now(),
+		now())
+	</insert>
+
+	<update id="update" parameterType="Map">
+		update user_activities_info
+		<set>
+			isNotWin = 1
+		</set>
+		<trim prefix="where " suffixOverrides="and">
+			<if test="userId != null">
+				userId = #{userId} and
+			</if>
+			<if test="activeCode != null">
+				activeCode = #{activeCode}
+			</if>
+		</trim>
+	</update>
+	<update id="updateByPrimary" parameterType="Map">
+		update
+		user_activities_info
+		set activeNum = activeNum+1 , updateTime =
+		now()
+		<trim prefix="where " suffixOverrides="and">
+			<if test="userId != null">
+				userId = #{userId} and
+			</if>
+			<if test="activeCode != null">
+				activeCode = #{activeCode}
+			</if>
+		</trim>
+	</update>
+	<update id="updateReset" parameterType="Map">
+		update
+		user_activities_info
+		set activeNum = 0 , updateTime = now()
+		<trim prefix="where " suffixOverrides="and">
+			<if test="userId != null">
+				userId = #{userId} and
+			</if>
+			<if test="activeCode != null">
+				activeCode = #{activeCode}
+			</if>
+		</trim>
+	</update>
+</mapper>

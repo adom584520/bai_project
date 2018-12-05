@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>图片上传</title>
+<link rel="stylesheet" type="text/css" href="/js/common/jquery-easyui-1.5.2//themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/common/jquery-easyui-1.5.2/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/common/jquery-easyui-1.5.2/demo/demo.css">
+<link rel="stylesheet" type="text/css" href="/js/common/jquery-easyui-1.5.2/themes/color.css">
+<script type="text/javascript" src="/js/common/jquery-easyui-1.5.2/jquery.min.js"></script>
+<script type="text/javascript" src="/js/common/jquery-easyui-1.5.2/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/js/common/jquery-easyui-1.5.2/locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body>
+	<div id="fileuploadDialog">
+		<form id="uploadImageForm" method="post" enctype="multipart/form-data">
+			<div style="padding-left: 5px;padding-right: 5px">
+				<input id="fileupload" name="file" type="text" style="width:270px;height: 25px;padding-top: 10px;padding-left: 20px">
+				<label id="fileSize"></label><br>
+				<label style="color: red">只支持png、jpg格式,大小不超过10MB</label>
+				<div style="padding-top: 10px;width:400px">
+					<div style="width:200px; height:auto; float:left;display:inline">
+						<span>预览图：</span><img id="preview" src="" style="width: 180px;height: 180px">
+					</div>
+					<div style="width:200px; height:auto; float:right;display:inline">
+						<span>上传(原)图：</span><img id="echo" src="" style="width: 180px;height: 180px;">
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+<script type="text/javascript">
+//图片服务器域名
+var realmName = "http://image.cibnhz.com";
+var urlSetValue = parent.document.urlSetValue;
+var url = parent.document.imageValueUrl;
+if(url){
+	$("#echo").prop("src",url);
+}
+$('#fileupload').filebox({    
+    buttonText: '上传图片', 
+    buttonAlign: 'left',
+    accept:'.png,.jpg,.PNG,.JPG',
+    onChange:function(){
+    	var fileboxValue=$(this).filebox("getValue");
+    	if(fileboxValue){
+    		var file = $('input[name="file"][type="file"]').prop('files')[0];
+	    	//计算文件大小 
+	    	var fileSize = 0;
+	    	//如果文件大小大于1024字节X1024字节，则显示文件大小单位为MB，否则为KB  
+	    	if (file.size > 1024 * 1024) {  
+	    		fileSize = Math.round(file.size * 100 / (1024 * 1024)) / 100;  
+	    		if (fileSize > 10) {  
+	    			$.messager.alert('警告','文件超过10MB，禁止上传！'); 
+	    			return;  
+	    		}  
+	    		fileSize = fileSize.toString() + 'MB';  
+	    	}
+	    	else {
+	    		fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';  
+	    	}
+	    	document.getElementById('fileSize').innerHTML = "<span style='color:Blue'>文件大小:"+fileSize;
+    	    var reader = new FileReader();
+    	    reader.readAsDataURL(file)
+            reader.onload = function (e) {
+               var img = document.getElementById("preview");
+               img.src = reader.result;
+            }
+    	}
+    }
+});
+function upload(){
+	var value=$("#fileupload").filebox("getValue");
+	if(value){
+		$('#uploadImageForm').form('submit',{
+			url:"/fileupload/image",
+			success:function(data){
+				data = $.parseJSON(data);
+				if(data.success){
+					$.messager.alert('提示','上传成功！');
+					var imageUrl = realmName+data.message;
+					document.getElementById("echo").src = imageUrl;
+					parent.document.imageValueUrl=imageUrl
+				}else{
+					$.messager.alert('警告',data.message);
+				}
+			} 
+		});
+	}else{
+		$.messager.alert('警告','请选择需要上传的图片！');  
+	}
+}
+</script>
+</html>

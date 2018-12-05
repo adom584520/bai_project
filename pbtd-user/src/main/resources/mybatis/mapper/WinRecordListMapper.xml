@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.WinRecordListMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.WinRecordList">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="userId" property="userid" jdbcType="VARCHAR" />
+		<result column="userMobile" property="usermobile" jdbcType="CHAR" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+		<result column="prizeCode" property="prizecode" jdbcType="INTEGER" />
+		<result column="activeCode" property="activecode" jdbcType="VARCHAR" />
+		<result column="activeType" property="activetype" jdbcType="INTEGER" />
+		<result column="userAddress" property="useraddress" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.pbtd.playuser.domain.WinRecordList"
+		extends="BaseResultMap">
+		<result column="prizeName" property="prizename" jdbcType="VARBINARY" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, userId, userMobile, createTime, updateTime, prizeCode, activeCode,
+		activeType,
+		userAddress
+	</sql>
+	<sql id="Blob_Column_List">
+		prizeName
+	</sql>
+	
+	<insert id="insert" parameterType="com.pbtd.playuser.domain.WinRecordList">
+		insert into win_record_list (
+		userId,
+		userMobile,
+		createTime,
+		updateTime,
+		prizeCode,
+		activeCode,
+		prizeName)
+		values (
+		#{userid},
+		#{usermobile},
+		now(),
+		now(),
+		#{prizecode,jdbcType=INTEGER},
+		#{activecode,jdbcType=VARCHAR},
+		#{prizename}
+		)
+	</insert>
+	
+	<update id="update" parameterType="Map">
+		update win_record_list
+		<set>
+				activeType = 1,
+			<if test="userAddress != null">
+				userAddress = #{userAddress,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<trim prefix="where " suffixOverrides="and">
+			<if test="userid != null">
+				userId = #{userid} and
+			</if>
+			<if test="activeCode != null">
+				activeCode = #{activeCode}
+			</if>
+		</trim>
+	</update>
+	
+	
+	<select id="select"  parameterType="Map" resultMap="BaseResultMap">
+		select * from win_record_list
+		<trim prefix="where " suffixOverrides="and">
+			<if test="userid != null">
+				userId = #{userid} and
+			</if>
+			<if test="activeCode != null">
+				activeCode = #{activeCode}
+			</if>
+		</trim>
+		limit 1
+	</select>
+</mapper>

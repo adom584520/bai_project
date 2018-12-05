@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.phone.common.mapper.PlayPolicyalbumMapper">
+	
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(1) from youk_playpolicy  a
+		<where>
+			<if test="name != null and name !='' ">
+			(
+			(a.type = 2 and a.videoid IN (SELECT cpvideoId FROM vod_phone_albuminfovideo c WHERE c.dramaname LIKE '%${name}%'))
+			OR
+			(a.type = 1 and a.showid IN (SELECT cpseriescode FROM vod_phone_albuminfo d WHERE d.seriesName LIKE '%${name}%'))
+			)
+			</if>
+			<if test="channel!=null and channel !='' ">
+				and a.showid in 
+				(select cpseriescode from vod_phone_albuminfo where channel=#{channel,jdbcType=VARCHAR})
+			</if>
+			<if test="status!=null and status !='' ">
+				and a.showid in 
+				(select cpseriescode from vod_phone_albuminfo where status=#{status,jdbcType=VARCHAR})
+			</if>
+			<if test="tvstatus!=null and tvstatus !='' ">
+				and a.showid in 
+				(select cpseriescode from vod_phone_albuminfo where tvstatus=#{tvstatus,jdbcType=VARCHAR})
+			</if>
+			
+			<if test="isPositive!=null and isPositive!='' ">
+				and a.videoid in 
+				(select cpvideoId from vod_phone_albuminfovideo where isPositive  = #{isPositive})
+			</if>
+			<if test="isShow!=null and isShow!='' ">
+				and a.videoid in 
+				(select cpvideoId from vod_phone_albuminfovideo where isShow  = #{isShow})
+			</if>
+			<if test="type!=null and type !='' ">
+				and a.type = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="play!=null and play!='' ">
+				and a.play = #{play,jdbcType=VARCHAR}
+			</if>
+			<if test="videoid!=null and videoid!='' ">
+				and a.videoid = #{videoid,jdbcType=VARCHAR}
+			</if>
+			<if test="showid!=null and showid!='' ">
+				and a.showid = #{showid,jdbcType=VARCHAR}
+			</if>
+			<if test="start_create_time != null ">
+	           <![CDATA[ and   date_format(a.create_time,'%Y-%m-%d %H:%i:%s')>=
+	              date_format(#{start_create_time,jdbcType=DATE},'%Y-%m-%d %H:%i:%s')  
+	           ]]>
+	        </if>
+	        <if test="end_create_time != null ">
+	           <![CDATA[ and   date_format(a.create_time,'%Y-%m-%d %H:%i:%s')<=
+	              date_format(#{end_create_time,jdbcType=DATE},'%Y-%m-%d %H:%i:%s')  
+	           ]]>
+	        </if>
+		</where>
+	</select>
+	<select id="page" parameterType="Map" resultType="java.util.HashMap">
+		select a.id ,a.videoid mediaId ,a.type,date_format(a.create_time,'%Y-%m-%d %H:%i:%s') create_time,a.status,a.play,a.showid,b.dramaname title,b.drama,b.isPositive,'' channelname,b.isShow from youk_playpolicy a left join vod_phone_albuminfovideo b  
+		on a.videoid=b.cpvideoId   
+		   where   a.type=2
+		   <if test="channel!=null and channel !='' ">
+				and a.showid in 
+				(select cpseriescode from vod_phone_albuminfo where channel=#{channel,jdbcType=VARCHAR})
+			</if>
+			<if test="name != null and name !='' ">
+				and b.dramaname  like '%${name}%'
+			</if>
+			<if test="status!=null and status !='' ">
+				and a.showid in 
+				(select cpseriescode from vod_phone_albuminfo where status=#{status,jdbcType=VARCHAR})
+			</if>
+			<if test="tvstatus!=null and tvstatus !='' ">
+				and a.showid in 
+				(select cpseriescode from vod_phone_albuminfo where tvstatus=#{tvstatus,jdbcType=VARCHAR})
+			</if>
+			<if test="type!=null and type !='' ">
+				and a.type = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="play!=null and play!='' ">
+				and a.play = #{play,jdbcType=VARCHAR}
+			</if>
+			<if test="videoid!=null and videoid!='' ">
+				and a.videoid = #{videoid,jdbcType=VARCHAR}
+			</if>
+			<if test="showid!=null and showid!='' ">
+				and a.showid = #{showid,jdbcType=VARCHAR}
+			</if>
+			<if test="isPositive!=null and isPositive!='' ">
+				and b.isPositive = #{isPositive}
+			</if>
+			<if test="isShow!=null and isShow!='' ">
+				and b.isShow =  #{isShow}
+			</if>
+			<if test="start_create_time != null ">
+	           <![CDATA[ and   date_format(a.create_time,'%Y-%m-%d %H:%i:%s')>=
+	              date_format(#{start_create_time,jdbcType=DATE},'%Y-%m-%d %H:%i:%s')  
+	           ]]>
+	        </if>
+	        <if test="end_create_time != null ">
+	           <![CDATA[ and   date_format(a.create_time,'%Y-%m-%d %H:%i:%s')<=
+	              date_format(#{end_create_time,jdbcType=DATE},'%Y-%m-%d %H:%i:%s')  
+	           ]]>
+	        </if>
+		UNION
+		select a.id ,a.showid mediaId ,a.type,date_format(a.create_time,'%Y-%m-%d %H:%i:%s') create_time,a.status,a.play,a.showid
+		,b.seriesname title,'' drama,'' isPositive,b.channelname, '' isShow from   youk_playpolicy a
+		left join vod_phone_albuminfo b on a.showid=b.cpseriescode   
+		where     a.type=1
+		<if test="channel!=null and channel !='' ">
+				and a.showid in 
+				(select cpseriescode from vod_phone_albuminfo where channel=#{channel,jdbcType=VARCHAR})
+			</if>
+			<if test="name != null and name !='' ">
+				and b.seriesName like '%${name}%'
+			</if>
+			<if test="status!=null and status !='' ">
+				and a.showid in 
+				(select cpseriescode from vod_phone_albuminfo where status=#{status,jdbcType=VARCHAR})
+			</if>
+			<if test="isPositive!=null and isPositive!='' ">
+				and a.type = 2
+			</if>
+			<if test="isShow!=null and isShow!='' ">
+				and a.type = 2
+			</if>
+			<if test="tvstatus!=null and tvstatus !='' ">
+				and a.showid in 
+				(select cpseriescode from vod_phone_albuminfo where tvstatus=#{tvstatus,jdbcType=VARCHAR})
+			</if>
+			<if test="type!=null and type !='' ">
+				and a.type = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="play!=null and play!='' ">
+				and a.play = #{play,jdbcType=VARCHAR}
+			</if>
+			<if test="videoid!=null and videoid!='' ">
+				and a.videoid = #{videoid,jdbcType=VARCHAR}
+			</if>
+			<if test="showid!=null and showid!='' ">
+				and a.showid = #{showid,jdbcType=VARCHAR}
+			</if>
+			<if test="start_create_time != null ">
+	           <![CDATA[ and   date_format(a.create_time,'%Y-%m-%d %H:%i:%s')>=
+	              date_format(#{start_create_time,jdbcType=DATE},'%Y-%m-%d %H:%i:%s')  
+	           ]]>
+	        </if>
+	        <if test="end_create_time != null ">
+	           <![CDATA[ and   date_format(a.create_time,'%Y-%m-%d %H:%i:%s')<=
+	              date_format(#{end_create_time,jdbcType=DATE},'%Y-%m-%d %H:%i:%s')  
+	           ]]>
+	        </if>
+			order by create_time desc
+			<if test="pageSize!=null and pageSize!=''  ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+		<insert id="insert" parameterType="Map">
+		insert into youk_playpolicy
+		(mediaId ,type,play,showid,videoid )
+		values
+		(#{mediaId,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},
+		#{play,jdbcType=VARCHAR},#{showid,jdbcType=VARCHAR},#{videoid,jdbcType=VARCHAR}
+		)
+		</insert>
+		<delete id="deletes"  >
+		 delete from youk_playpolicy
+		</delete>
+		
+		<update id="updateyoukuisshow" parameterType="Map">
+		update vod_phone_albuminfovideo
+		set isshow=${isshow}
+
+		<if test="id_ != null and id_ !='' ">
+			where cpvideoid in
+			<foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		<if test="id !=null">
+			where cpvideoid in (${id})
+		</if>
+	</update>
+		
+		
+		<update id="update"  parameterType="Map">
+		 update  youk_playpolicy 
+		 <set>
+			 <if test="play!=null and play!='' ">
+					  play = #{play,jdbcType=VARCHAR},
+		     </if>
+		 </set>
+		 <where>
+		 	<if test="type!=null and type !='' ">
+				and type = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="videoid!=null and videoid!='' ">
+				and  videoid = #{videoid,jdbcType=VARCHAR}
+			</if>
+			<if test="showid!=null and showid!='' ">
+				and  showid = #{showid,jdbcType=VARCHAR}
+			</if>
+		 </where> 
+		</update>
+</mapper>

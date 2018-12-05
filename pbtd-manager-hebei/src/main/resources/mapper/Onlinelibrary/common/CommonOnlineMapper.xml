@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vodOnlinelibrary.mapper.CommonOnlineMapper">
+
+	<!-- 角标start -->
+	<insert id="insertcorner" parameterType="Map">
+		insert into
+		vod_corner
+		(
+		id,name,imgurl,create_time,create_user,status,bz,pos
+		)
+		values
+		(
+		#{id,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
+		#{imgurl,jdbcType=VARCHAR},
+		now(),
+		#{create_user,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},
+		#{bz,jdbcType=VARCHAR},
+		#{pos,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deletescorner" parameterType="Map">
+		delete from vod_corner
+	</delete>
+	<!-- 角标end -->
+	<!-- 付费包start -->
+	<insert id="insertCollectfeesbag" parameterType="Map">
+		insert into
+		vod_Collectfeesbag
+		(
+		id,code,name,starttime,endtime,type,discountrate,price,status
+		)
+		values
+		(
+		#{id,jdbcType=INTEGER},
+		#{code,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
+		#{starttime,jdbcType=DATE},
+		#{endtime,jdbcType=DATE},
+		#{type,jdbcType=INTEGER},
+		#{discountrate,jdbcType=FLOAT},
+		#{price,jdbcType=FLOAT},
+		#{status,jdbcType=INTEGER}
+		)
+	</insert>
+	<delete id="deletesCollectfeesbag" parameterType="Map">
+		delete from
+		vod_Collectfeesbag
+		where code= #{code,jdbcType=INTEGER}
+	</delete>
+	<!-- 付费包end -->
+	<!-- 演员start -->
+	<insert id="insertactors" parameterType="Map">
+		insert into
+		vod_actors
+		(
+		code,name,pinyin,pinyinsuoxie,status,actor,director,imgportrait,
+		backgroundimg,id,updatetime,birthDay,birthPlace,description
+		)
+		values
+		(
+		#{code,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{pinyin,jdbcType=VARCHAR},
+		#{pinyinsuoxie,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{actor,jdbcType=VARCHAR},
+		#{director,jdbcType=VARCHAR},
+		#{imgportrait,jdbcType=VARCHAR},
+		#{backgroundimg,jdbcType=VARCHAR},
+		#{id,jdbcType=VARCHAR},
+		#{updatetime,jdbcType=VARCHAR},
+		#{birthDay,jdbcType=VARCHAR},
+		#{birthPlace,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deletesactors" parameterType="Map">
+		delete from vod_actors
+		where code=#{code,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deletesmasterplateSon" parameterType="Map">
+		truncate table
+		vod_masterplate_son
+
+	</delete>
+	<!-- 模版 -->
+	<insert id="insertmasterplateSon" parameterType="Map">
+		INSERT INTO
+		`vod_masterplate_son` (
+		`id`,
+		`masterplateId`,
+		`count`,
+		`masterplateNum`,
+		`name`
+		)
+		VALUES
+		(
+		#{id},
+		#{masterplateId},
+		#{count},
+		#{masterplateNum},
+		#{name});
+	</insert>
+	
+	<!-- 系统参数 -->
+	<delete id="deletesSysParam" parameterType="Map">
+		truncate table
+		sys_param
+
+	</delete>
+	<!-- 模版 -->
+	<insert id="insertSysParam" parameterType="Map">
+		INSERT INTO
+		`sys_param` (
+		`id`,
+		`platform`,
+		`key`,
+		`value`
+		)
+		VALUES
+		(
+		#{id},
+		#{platform},
+		#{keydata},
+		#{valuedata});
+	</insert>
+</mapper>

@@ -1,0 +1,242 @@
+html {
+	font-size: 125%;
+	/* 20÷16=125% min-font-size:12px bug*/
+	width: 100%;
+	height: 100%;
+}
+
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 1em;
+	font: inherit;
+	vertical-align: baseline;
+	font-family: "Microsoft YaHei";
+}
+
+body {
+	font-family: "Microsoft YaHei";
+	font-size: 0.7rem;
+	color: #333;
+	line-height: 1.2erm;
+	width: 100%;
+	height: 100%;
+	min-width: 1000px;
+	min-height: 600px;
+	background: white;
+}
+
+em {
+	font-style: normal
+}
+
+li {
+	list-style: none
+}
+
+a {
+	text-decoration: none;
+	outline: 0;
+	color: #333 !important;
+}
+
+img {
+	border: none;
+	vertical-align: top;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+input,
+textarea {
+	font-family: "Microsoft YaHei";
+	padding: 0;
+}
+
+textarea {
+	resize: none;
+	overflow: auto;
+}
+
+textarea:focus {
+	outline: none;
+}
+
+input:focus {
+	outline: none;
+}
+
+ul,
+ol {
+	list-style: none;
+}
+
+a {
+	text-decoration: none !important;
+	color: #333333;
+}
+
+.box,.box1,.box3{
+	width: 70%;
+	height: auto;
+	margin: 0 auto;
+}
+.box4{
+	width: 70%;
+	height: auto;
+	margin: 100px auto;
+}
+.top {
+	width: 100%;
+	height: 160px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.list {
+	display: inline-block;
+	width: auto;
+	height: 160px;
+	border: 1px dashed #CCCCCC;
+	box-sizing: border-box;
+	text-align: center;
+	line-height: 160px;
+}
+
+.list img {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+}
+
+.bottom {
+	width: 100%;
+	height: 160px;
+	display: flex;
+	flex-flow: nowrap;
+	margin-top: 20px;
+}
+
+.box .bottom .list {
+	width: 313px;
+	height: 160px;
+	margin-left: 30px;
+}
+
+.box1 .bottom .list {
+	width: 142px;
+	height: 160px;
+	margin-left: 30px;
+}
+
+#moban {
+	width: auto;
+	height: auto;
+	margin: 100px auto;
+	/*border: 1px solid #CCCCCC;*/
+}
+.box3 {
+	display: flex;
+	justify-content: space-between;
+	flex-flow: nowrap;
+}
+.box3 .left{
+	width: 300px;
+	height: 340px;
+}
+.box3 .right{
+	width: 660px;
+	height: 160px;
+}
+.box3 .right .list{
+	float: left;
+	width: 150px;
+	height: 160px;
+	margin-left: 20px;
+}
+.box4 .list{
+	float: left;
+	width: 150px;
+	height: 160px;
+	margin-left: 20px;
+}

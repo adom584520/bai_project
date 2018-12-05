@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.system.mapper.RecommandPicMapper">
+
+    <!-- 模糊查询 -->
+    <sql id="whrClauseLike">
+        <if test="id != null and id > -1">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="name != null and name != ''">
+            and name like '%${name}%'  
+        </if>
+        <if test="type != null and type != ''">
+            and type=#{type,jdbcType=INTEGER} 
+        </if>
+       <if test="channel_id != null and channel_id != ''">
+            and channel_id=#{channel_id,jdbcType=VARCHAR} 
+        </if>
+         <if test="target_code != null and target_code != ''">
+            and target_code=#{target_code,jdbcType=VARCHAR} 
+        </if>
+         <if test="status != null and status != ''">
+            and status=#{status,jdbcType=BOOLEAN}
+        </if> 
+        <if test="sequence != null and sequence != ''">
+            and sequence=#{sequence,jdbcType=BOOLEAN}
+        </if> 
+          
+    </sql>
+    <sql id="whrClauseLikeMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <!-- 精确查询 -->
+    <sql id="whrClauseEqual">
+       <if test="id != null and id > -1">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="name != null and name != ''">
+            and name=#{name,jdbcType="VARCHAR"}  
+        </if>
+        <if test="type != null and type != ''">
+            and type=#{type,jdbcType=INTEGER} 
+        </if>
+       <if test="channel_id != null and channel_id != ''">
+            and channel_id=#{channel_id,jdbcType=VARCHAR} 
+        </if>
+         <if test="target_code != null and target_code != ''">
+            and target_code=#{target_code,jdbcType=VARCHAR} 
+        </if>
+         <if test="status != null and status != ''">
+            and status=#{status,jdbcType=BOOLEAN}
+        </if> 
+          <if test="sequence != null and sequence != ''">
+            and sequence=#{sequence,jdbcType=BOOLEAN}
+        </if> 
+    </sql>
+    <sql id="whrClauseEqualMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+<select id="showAll" resultType="com.pbtd.manager.vod.system.domain.RecommandPic">
+ select id,type,channel_id,name,imageUrl,target_code,status,sequence,viewPoint from vod_recommandPic
+ where 1=1
+  <if test="status != null and status != '' ">
+			and	  status=#{status,jdbcType=VARCHAR}
+ </if>
+ <if test="update_time != null and update_time != '' ">
+			and	  date_format(update_time,'%Y-%m-%d') = #{update_time,jdbcType=DATE}
+ </if>
+ limit #{start},#{pageSize} 
+</select>
+<insert id="add" parameterType="com.pbtd.manager.vod.system.domain.RecommandPic" >
+ insert into vod_recommandPic
+ (type,channel_id,name,imageUrl,target_code,status,sequence,playurl,weburl,viewPoint,update_time,update_user)
+ values
+ (
+ #{type,jdbcType=INTEGER},
+ #{channel_id,jdbcType=VARCHAR},
+ #{name,jdbcType=VARCHAR},
+ #{imageUrl,jdbcType=VARCHAR},
+ #{target_code,jdbcType=VARCHAR},
+ #{status,jdbcType=BOOLEAN},
+ #{sequence,jdbcType=INTEGER},
+ #{playurl,jdbcType=VARCHAR},
+ #{weburl,jdbcType=VARCHAR},
+ #{viewPoint,jdbcType=VARCHAR},
+ #{update_time,jdbcType=VARCHAR},
+ #{update_user,jdbcType=VARCHAR}
+ )
+</insert>
+<update id="modify" parameterType="com.pbtd.manager.vod.system.domain.RecommandPic">
+	 update vod_recommandPic 
+		 <set>
+			 <if test="type!=null">
+			 type=#{type,jdbcType=INTEGER},
+			 </if>
+			 <if test="channel_id!=null ">
+			 channel_id=#{channel_id,jdbcType=VARCHAR},
+			 </if>
+			 <if test="name!=null ">
+			 name=#{name,jdbcType=VARCHAR},
+			 </if>
+			 <if test="target_code!=null ">
+			 target_code=#{target_code,jdbcType=VARCHAR},
+			 </if>
+			 <if test="status!=null ">
+				 status=#{status,jdbcType=VARCHAR},
+			 </if>
+			 <if test="sequence!=null ">
+				 sequence=#{sequence,jdbcType=INTEGER},
+			 </if>
+			 <if test="playurl!=null ">
+				 playurl=#{playurl,jdbcType=VARCHAR},
+			 </if>
+			 <if test="weburl!=null ">
+				 weburl=#{weburl,jdbcType=VARCHAR},
+			 </if>
+			 <if test="viewPoint!=null ">
+				 viewPoint=#{viewPoint,jdbcType=VARCHAR},
+			 </if>
+			  <if test="update_user!=null ">
+				 update_user=#{update_user,jdbcType=VARCHAR},
+				 update_time=now(),
+			 </if>
+		 </set>
+	 where id=#{id,jdbcType=INTEGER}
+</update>
+<update id="updateStatus" parameterType="Map">
+		update vod_recommandPic
+		set status = #{status,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+ <delete id="deletes" parameterType="Map">
+ delete from vod_recommandPic 
+ where 1=1
+      <include refid="whrClauseLike" />
+      <include refid="whrClauseEqual" />
+	  <include refid="whrClauseLikeMore" />
+ </delete>	
+<select id="queryByChannel_id" resultType="com.pbtd.manager.vod.system.domain.RecommandPic" >
+ select  id,type,name,imageUrl,target_code,status,viewPoint from vod_recommandPic where channel_id=#{channel_id}
+</select>
+ <update id="updateImg">
+   update vod_recommandPic set imageUrl=#{imageUrl} where id=#{id}
+ </update>
+   <select id="generatePosition" parameterType="Map" resultType="java.lang.Integer">
+        select max(id) + 1 as count
+        from  vod_recommandPic  
+        where 1=1
+    </select>
+    <select id="load" parameterType="java.lang.Integer" resultType="com.pbtd.manager.vod.system.domain.RecommandPic">
+         select id,type,channel_id,name,imageUrl,target_code,status,sequence, playurl,weburl,viewPoint from  vod_recommandPic  
+        where id= #{id,jdbcType=INTEGER}
+    </select>
+     <select id="count" parameterType="Map" resultType="java.lang.Integer">
+        select count(id)
+        from  vod_recommandPic 
+        where 1=1
+         <if test="status != null and status != '' ">
+			and	  status=#{status,jdbcType=VARCHAR}
+ 		</if>
+        <if test="update_time != null and update_time != '' ">
+			and
+			 date_format(update_time,'%Y-%m-%d') = #{update_time,jdbcType=DATE}
+		 </if>   
+    </select>
+      <select id="find" parameterType="Map" resultType="Map">
+       select id,type,channel_id,name,imageUrl,target_code,status,sequence, playurl,weburl,viewPoint,update_time,update_user from  vod_recommandPic
+        where 1=1
+        <if test="channel_id!=null and channel_id!=-1">
+        and channel_id=#{channel_id,jdbcType=VARCHAR}
+        </if>
+        <if test="name!=null">
+        and name like '%${name}%'
+        </if>
+        <if test="target_code!=null">
+        and target_code=#{target_code,jdbcType=VARCHAR}
+        </if>
+        <if test="status!=null">
+        and status=#{status,jdbcType=VARCHAR}
+        </if>
+       order by sequence
+       limit #{start},#{pageSize} 	
+    </select>
+    <resultMap type="java.util.HashMap" id="BaseMap">
+    <result property="channelCode" column="channelCode" />
+    <result property="channelName" column="channelName" />
+    </resultMap>
+    <select id="queryChannelInfo" resultMap="BaseMap">
+     select channelCode,channelName from vod_phone_channel where levels=1
+    </select>
+    <select id="findmaxVSminsequence" parameterType="Map" resultType="Map">
+		select max(sequence) max, min(sequence) min
+		from vod_recommandpic a
+		<where>
+			<if test="id!=null ">
+				and a.id  in (${id})
+			</if>
+		</where>
+	</select>
+	<select id="findsequencesum" parameterType="Map" resultType="Map">
+		select  sequence 
+		from vod_recommandpic a
+		<where>
+			<if test="id!=null ">
+				and a.id   in (${id})
+			</if>
+		</where>
+			order by a.sequence
+	</select>
+	<select id="findsequence" parameterType="Map" resultType="Map">
+		select a.id,a.sequence
+		from vod_recommandpic a
+		<where>
+			<if test="id!=null ">
+				and a.id not in (${id})
+			</if>
+			<if test="max!=null and max!='' ">
+			       	<![CDATA[    and sequence<= #{max,jdbcType=INTEGER}]]>
+			</if>
+			<if test="min!=null and min!='' ">
+			        <![CDATA[    and sequence>= #{min,jdbcType=INTEGER}]]>
+			</if>
+		</where>
+		order by a.sequence
+	</select>
+</mapper>

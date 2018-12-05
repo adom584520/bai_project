@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.ActivitiesSignInMapper">
+	<resultMap id="baseResultMap" type="com.pbtd.playuser.domain.ActivitiesSignIn">
+		<id column="id" property="id" />
+		<result column="userId" property="userId" />
+		<result column="signInTime" property="signInTime" />
+		<result column="createTime" property="createTime" />
+		<result column="fluxNumber" property="fluxNumber" />
+	</resultMap>
+	<sql id="column">
+		id,userId,signInTime,createTime,fluxNumber
+	</sql>
+
+	<select id="queryCountByUserIdTime" resultType="long">
+		select count(*)
+		from activity_sign_in
+		where userId = #{userId} and signInTime = #{time}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert
+		into activity_sign_in
+		(userId,signInTime,createTime,fluxNumber)
+		values(#{userId},#{signInTime},#{createTime},#{fluxNumber})
+	</insert>
+	 
+	 <select id="queryConutByUserId" resultType="long">
+		select count(distinct signInTime)
+		from activity_sign_in
+		where userId = #{userId} and date_format(createTime,'%Y-%m')&lt;=date_format(now(),'%Y-%m')
+	</select>
+	<select id="queryListByUserId" resultMap="baseResultMap">
+		select distinct signInTime signInTime,id,userId,createTime,fluxNumber
+		from activity_sign_in
+		where userId = #{userId} and date_format(createTime,'%Y-%m')&lt;=date_format(now(),'%Y-%m')
+	</select>
+</mapper>

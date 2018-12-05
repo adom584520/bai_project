@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.user.mapper.UserPlayHistoryInfoPhoneMapper">
+	<resultMap id="BaseResultMap"
+		type="com.pbtd.manager.user.domain.UserPlayHistoryInfoPhone">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="userId" property="userid" jdbcType="CHAR" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="playpos" property="playpos" jdbcType="INTEGER" />
+		<result column="playTime" property="playtime" jdbcType="INTEGER" />
+		<result column="dram" property="dram" jdbcType="INTEGER" />
+		<result column="dramaname" property="dramaname" jdbcType="VARCHAR" />
+		<result column="seriesName" property="seriesname" jdbcType="VARCHAR" />
+		<result column="pictureurl1" property="pictureurl1" jdbcType="VARCHAR" />
+		<result column="pictureurl2" property="pictureurl2" jdbcType="VARCHAR" />
+		<result column="duration" property="duration" jdbcType="INTEGER" />
+		<result column="viewPoint" property="viewpoint" jdbcType="VARCHAR" />
+		<result column="seriesCode" property="seriescode" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="channellist" property="channellist" jdbcType="VARCHAR" />
+		<result column="channelName" property="channelname" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, userId, createTime, playpos, playTime, dram, dramaname,
+		seriesName,
+		pictureurl1,
+		pictureurl2, duration, viewPoint, seriesCode,
+		status, channellist, channelName
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from user_play_history_info_phone
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		user_play_history_info_phone
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.pbtd.manager.user.domain.UserPlayHistoryInfoPhone">
+		insert into user_play_history_info_phone (id, userId,
+		createTime,
+		playpos, playTime, dram,
+		dramaname, seriesName, pictureurl1,
+		pictureurl2, duration, viewPoint,
+		seriesCode, status, channellist,
+		channelName)
+		values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=CHAR},
+		#{createtime,jdbcType=TIMESTAMP},
+		#{playpos,jdbcType=INTEGER},
+		#{playtime,jdbcType=INTEGER}, #{dram,jdbcType=INTEGER},
+		#{dramaname,jdbcType=VARCHAR}, #{seriesname,jdbcType=VARCHAR},
+		#{pictureurl1,jdbcType=VARCHAR},
+		#{pictureurl2,jdbcType=VARCHAR},
+		#{duration,jdbcType=INTEGER}, #{viewpoint,jdbcType=VARCHAR},
+		#{seriescode,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+		#{channellist,jdbcType=VARCHAR},
+		#{channelname,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.pbtd.manager.user.domain.UserPlayHistoryInfoPhone">
+		insert into user_play_history_info_phone
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userid != null">
+				userId,
+			</if>
+			<if test="createtime != null">
+				createTime,
+			</if>
+			<if test="playpos != null">
+				playpos,
+			</if>
+			<if test="playtime != null">
+				playTime,
+			</if>
+			<if test="dram != null">
+				dram,
+			</if>
+			<if test="dramaname != null">
+				dramaname,
+			</if>
+			<if test="seriesname != null">
+				seriesName,
+			</if>
+			<if test="pictureurl1 != null">
+				pictureurl1,
+			</if>
+			<if test="pictureurl2 != null">
+				pictureurl2,
+			</if>
+			<if test="duration != null">
+				duration,
+			</if>
+			<if test="viewpoint != null">
+				viewPoint,
+			</if>
+			<if test="seriescode != null">
+				seriesCode,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="channellist != null">
+				channellist,
+			</if>
+			<if test="channelname != null">
+				channelName,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="userid != null">
+				#{userid,jdbcType=CHAR},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="playpos != null">
+				#{playpos,jdbcType=INTEGER},
+			</if>
+			<if test="playtime != null">
+				#{playtime,jdbcType=INTEGER},
+			</if>
+			<if test="dram != null">
+				#{dram,jdbcType=INTEGER},
+			</if>
+			<if test="dramaname != null">
+				#{dramaname,jdbcType=VARCHAR},
+			</if>
+			<if test="seriesname != null">
+				#{seriesname,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureurl1 != null">
+				#{pictureurl1,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureurl2 != null">
+				#{pictureurl2,jdbcType=VARCHAR},
+			</if>
+			<if test="duration != null">
+				#{duration,jdbcType=INTEGER},
+			</if>
+			<if test="viewpoint != null">
+				#{viewpoint,jdbcType=VARCHAR},
+			</if>
+			<if test="seriescode != null">
+				#{seriescode,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="channellist != null">
+				#{channellist,jdbcType=VARCHAR},
+			</if>
+			<if test="channelname != null">
+				#{channelname,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.pbtd.manager.user.domain.UserPlayHistoryInfoPhone">
+		update user_play_history_info_phone
+		<set>
+			<if test="userid != null">
+				userId = #{userid,jdbcType=CHAR},
+			</if>
+			<if test="createtime != null">
+				createTime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="playpos != null">
+				playpos = #{playpos,jdbcType=INTEGER},
+			</if>
+			<if test="playtime != null">
+				playTime = #{playtime,jdbcType=INTEGER},
+			</if>
+			<if test="dram != null">
+				dram = #{dram,jdbcType=INTEGER},
+			</if>
+			<if test="dramaname != null">
+				dramaname = #{dramaname,jdbcType=VARCHAR},
+			</if>
+			<if test="seriesname != null">
+				seriesName = #{seriesname,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureurl1 != null">
+				pictureurl1 = #{pictureurl1,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureurl2 != null">
+				pictureurl2 = #{pictureurl2,jdbcType=VARCHAR},
+			</if>
+			<if test="duration != null">
+				duration = #{duration,jdbcType=INTEGER},
+			</if>
+			<if test="viewpoint != null">
+				viewPoint = #{viewpoint,jdbcType=VARCHAR},
+			</if>
+			<if test="seriescode != null">
+				seriesCode = #{seriescode,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="channellist != null">
+				channellist = #{channellist,jdbcType=VARCHAR},
+			</if>
+			<if test="channelname != null">
+				channelName = #{channelname,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.pbtd.manager.user.domain.UserPlayHistoryInfoPhone">
+		update user_play_history_info_phone
+		set userId =
+		#{userid,jdbcType=CHAR},
+		createTime = #{createtime,jdbcType=TIMESTAMP},
+		playpos = #{playpos,jdbcType=INTEGER},
+		playTime =
+		#{playtime,jdbcType=INTEGER},
+		dram = #{dram,jdbcType=INTEGER},
+		dramaname = #{dramaname,jdbcType=VARCHAR},
+		seriesName =
+		#{seriesname,jdbcType=VARCHAR},
+		pictureurl1 =
+		#{pictureurl1,jdbcType=VARCHAR},
+		pictureurl2 =
+		#{pictureurl2,jdbcType=VARCHAR},
+		duration =
+		#{duration,jdbcType=INTEGER},
+		viewPoint =
+		#{viewpoint,jdbcType=VARCHAR},
+		seriesCode =
+		#{seriescode,jdbcType=INTEGER},
+		status = #{status,jdbcType=INTEGER},
+		channellist = #{channellist,jdbcType=VARCHAR},
+		channelName =
+		#{channelname,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+
+	<select id="playusercount" parameterType="Map" resultType="INTEGER">
+		<if test="user != null">
+			select count(1) from (
+		</if>
+		select
+		count(1)
+		from user_play_history_info_phone
+		<where>
+			<if test="starttime != null">
+				and createTime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createTime &lt; #{endtime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="usernetStatus != null">
+				and netStatus = #{usernetStatus,jdbcType=VARCHAR}
+			</if>
+			<if test="user != null">
+				group by userId
+			</if>
+		</where>
+		<if test="user != null">
+			) b
+		</if>
+	</select>
+	<select id="mobilecount" parameterType="Map" resultType="INTEGER">
+		SELECT count(1) from (
+		select count(1)
+		from user_play_history_info_phone
+		<where>
+			<if test="starttime != null">
+				and createTime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createTime &lt; #{endtime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="mobile != null">
+				and userId = #{mobile,jdbcType=VARCHAR}
+			</if>
+		</where>
+		GROUP BY seriesCode
+		) b
+	</select>
+	<select id="selectmobilecount" resultType="java.util.Map"
+		parameterType="Map">
+		select
+		userId,createTime,seriesCode,seriesName,channellist,channelName,
+		count(1) playcount from user_play_history_info_phone
+		<where>
+			<if test="starttime != null">
+				and createTime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createTime &lt; #{endtime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="mobile != null">
+				and userId = #{mobile,jdbcType=VARCHAR}
+			</if>
+		</where>
+		GROUP BY seriesCode
+		<if test="start != null and pageSize != null">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="selectmobileseriescount" resultType="java.util.Map"
+		parameterType="Map">
+		select
+		userId,createTime,playLength,playpos,dram,dramaname,seriesCode,seriesName,channellist,channelName,definition,netStatus,versionNum
+		from user_play_history_info_phone
+		<where>
+			<if test="starttime != null">
+				and createTime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createTime &lt; #{endtime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="mobile != null">
+				and userId = #{mobile,jdbcType=VARCHAR}
+			</if>
+			<if test="seriesCode != null">
+				and seriesCode = #{seriesCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+		<if test="start != null and pageSize != null">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="mobileseriespagecount" parameterType="Map" resultType="INTEGER">
+		select
+		count(1)
+		from user_play_history_info_phone
+		<where>
+			<if test="starttime != null">
+				and createTime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createTime &lt; #{endtime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="mobile != null">
+				and userId = #{mobile,jdbcType=VARCHAR}
+			</if>
+			<if test="seriesCode != null">
+				and seriesCode = #{seriesCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectuserkeepcount" resultType="INTEGER" parameterType="Map">
+		SELECT count(1) from (
+		SELECT
+		count(1) cc,
+		userId
+		FROM
+		(
+		SELECT
+		userId,
+		DATE(createTime),count(1)
+		FROM
+		`user_play_history_info_phone`
+		WHERE
+		userId is not null
+		<if test="starttime != null">
+				and createTime &gt; #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createTime &lt;= #{endtime,jdbcType=TIMESTAMP}
+			</if>
+		GROUP BY
+		DATE(createTime),
+		userId
+		) a
+		GROUP BY
+		userId
+		) b where b.cc = #{count}
+	</select>
+	<select id="playtimecount" parameterType="Map" resultType="FLOAT">
+		SELECT sum(ss1) AS SU FROM
+		(SELECT
+		sum(playLength) /60000 ss1,
+		date(createTime) cre
+		FROM
+		`user_play_history_info_phone`
+		<where>
+			<if test="starttime != null">
+				and createTime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createTime &lt; #{endtime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="netStatus != null">
+				and netStatus = #{netStatus,jdbcType=VARCHAR}
+			</if>
+		</where>
+		UNION
+		SELECT
+		sum(a.playpos)/1000/60 ss1,
+		createTime
+		FROM
+		(
+		SELECT
+		SUBSTRING_INDEX(
+		GROUP_CONCAT(
+		dramaname
+		ORDER BY
+		playpos DESC
+		),
+		',',
+		1
+		) AS
+		dramaname,
+		max(playpos) AS playpos,
+		date(createTime) createTime
+		FROM
+		user_play_history_info_phone
+		<where>
+			<if test="starttime != null">
+				and createTime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createTime &lt; #{endtime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="netStatus != null">
+				and netStatus = #{netStatus,jdbcType=VARCHAR}
+			</if>
+		</where>
+		AND playlength IS NULL
+		GROUP BY
+		userId,
+		dramaname
+		) a
+		) b;
+	</select>
+
+
+	<select id="select" resultType="java.util.Map" parameterType="Map">
+		SELECT
+		M.seriesCode,m.dramaname,m.channellist,m.channelName,m.con,m.pos,n.usercon
+		FROM
+		(
+		SELECT
+		seriesCode,
+		dramaname,
+		channellist,
+		channelName,
+		count(1) con,
+		FORMAT(SUM(case when playLength is null then playpos else playLength
+		end) / 1000 / 60,2) pos
+		FROM
+		`user_play_history_info_phone` a
+		WHERE
+		createTime LIKE #{starttime}
+		GROUP BY
+		seriesCode
+		ORDER BY
+		con DESC
+		) M
+		LEFT
+		JOIN (
+		SELECT
+		count(1)
+		usercon,
+		seriesCode
+		FROM
+		(
+		SELECT
+		count(1) con,
+		seriesCode
+		FROM
+		user_play_history_info_phone
+		WHERE
+		createTime LIKE
+		#{starttime}
+		GROUP BY
+		userId,
+		seriesCode
+		) c
+		GROUP BY
+		c.seriesCode
+		) N ON
+		M.seriesCode =
+		N.seriesCode;
+	</select>
+</mapper>

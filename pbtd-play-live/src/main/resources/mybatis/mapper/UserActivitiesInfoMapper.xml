@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.UserActivitiesInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playlive.domain.UserActivitiesInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="VARCHAR" />
+    <result column="activeNum" property="activenum" jdbcType="INTEGER" />
+    <result column="isNotWin" property="isnotwin" jdbcType="INTEGER" />
+    <result column="activeName" property="activename" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, activeNum, isNotWin, activeName, createTime, updateTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_activities_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_activities_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pbtd.playlive.domain.UserActivitiesInfo" >
+    insert into user_activities_info (id, userId, activeNum, 
+      isNotWin, activeName, createTime, 
+      updateTime)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{activenum,jdbcType=INTEGER}, 
+      #{isnotwin,jdbcType=INTEGER}, #{activename,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pbtd.playlive.domain.UserActivitiesInfo" >
+    insert into user_activities_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="activenum != null" >
+        activeNum,
+      </if>
+      <if test="isnotwin != null" >
+        isNotWin,
+      </if>
+      <if test="activename != null" >
+        activeName,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="activenum != null" >
+        #{activenum,jdbcType=INTEGER},
+      </if>
+      <if test="isnotwin != null" >
+        #{isnotwin,jdbcType=INTEGER},
+      </if>
+      <if test="activename != null" >
+        #{activename,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playlive.domain.UserActivitiesInfo" >
+    update user_activities_info
+    <set >
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="activenum != null" >
+        activeNum = #{activenum,jdbcType=INTEGER},
+      </if>
+      <if test="isnotwin != null" >
+        isNotWin = #{isnotwin,jdbcType=INTEGER},
+      </if>
+      <if test="activename != null" >
+        activeName = #{activename,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playlive.domain.UserActivitiesInfo" >
+    update user_activities_info
+    set userId = #{userid,jdbcType=VARCHAR},
+      activeNum = #{activenum,jdbcType=INTEGER},
+      isNotWin = #{isnotwin,jdbcType=INTEGER},
+      activeName = #{activename,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

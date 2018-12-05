@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.vod.tv.mould.mapper.VodTvLinkAlbumListMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.manager.vod.tv.mould.domain.VodTvLinkAlbumList" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="moduleId" property="moduleid" jdbcType="INTEGER" />
+    <result column="seriesCode" property="seriescode" jdbcType="BIGINT" />
+    <result column="masterplateNum" property="masterplatenum" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, moduleId, seriesCode, masterplateNum
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from vod_tv_link_album_list
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from vod_tv_link_album_list
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pbtd.manager.vod.tv.mould.domain.VodTvLinkAlbumList" >
+    insert into vod_tv_link_album_list (id, moduleId, seriesCode, 
+      masterplateNum)
+    values (#{id,jdbcType=INTEGER}, #{moduleid,jdbcType=INTEGER}, #{seriescode,jdbcType=BIGINT}, 
+      #{masterplatenum,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pbtd.manager.vod.tv.mould.domain.VodTvLinkAlbumList" >
+    insert into vod_tv_link_album_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="moduleid != null" >
+        moduleId,
+      </if>
+      <if test="seriescode != null" >
+        seriesCode,
+      </if>
+      <if test="masterplatenum != null" >
+        masterplateNum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="moduleid != null" >
+        #{moduleid,jdbcType=INTEGER},
+      </if>
+      <if test="seriescode != null" >
+        #{seriescode,jdbcType=BIGINT},
+      </if>
+      <if test="masterplatenum != null" >
+        #{masterplatenum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.manager.vod.tv.mould.domain.VodTvLinkAlbumList" >
+    update vod_tv_link_album_list
+    <set >
+      <if test="moduleid != null" >
+        moduleId = #{moduleid,jdbcType=INTEGER},
+      </if>
+      <if test="seriescode != null" >
+        seriesCode = #{seriescode,jdbcType=BIGINT},
+      </if>
+      <if test="masterplatenum != null" >
+        masterplateNum = #{masterplatenum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.manager.vod.tv.mould.domain.VodTvLinkAlbumList" >
+    update vod_tv_link_album_list
+    set moduleId = #{moduleid,jdbcType=INTEGER},
+      seriesCode = #{seriescode,jdbcType=BIGINT},
+      masterplateNum = #{masterplatenum,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="select"  parameterType="Map" resultType="Map">
+		select
+		b.seriesCode,
+		b.seriesName,
+		CONCAT(#{imgtitle},b.pictureurl1) pictureurl1,
+		CONCAT(#{imgtitle},b.pictureurl2) pictureurl2,
+		CONCAT(#{imgtitle},b.pictureurl3) pictureurl3,
+		CONCAT(#{imgtitle},b.pictureurl4) pictureurl4,
+		b.score,
+		b.description,
+		b.viewPoint,
+		b.duration,
+		b.corner,
+		b.isvip,
+		b.volumncount,
+		b.currentnum ,a.imgStatus,
+		CONCAT(#{imgtitle},a.imgurl1) imgurl1,
+		CONCAT(#{imgtitle},a.imgurl2) imgurl2,
+		CONCAT(#{imgtitle},a.imgurl3) imgurl3,
+		CONCAT(#{imgtitle},a.imgurl4) imgurl4
+		from vod_tv_module_album a	left join vod_phone_albuminfo b 
+		on a.seriesCode = b.seriesCode	where
+		a.moduleId = #{moduleId}	
+		and a.masterplateNum = #{masterplateNum}
+		and b.status = 1
+		and a.seriesCode = b.seriesCode
+		limit #{size}
+	</select>
+  <select id="selectOne"  parameterType="Map" resultType="com.pbtd.manager.vod.tv.mould.domain.VodTvLinkAlbumList">
+		select
+		<include refid="Base_Column_List" />
+		from vod_tv_module_album
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+</mapper>

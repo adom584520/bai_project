@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.ActivitiesUpgradeMapper">
+	<resultMap id="baseResultMap" type="com.pbtd.playuser.domain.ActivitiesUpgrade">
+		<id column="id" property="id" />
+		<result column="userId" property="userId" />
+		<result column="activeCode" property="activeCode" />
+		<result column="flux" property="flux" />
+		<result column="version" property="version" />
+		<result column="createTime" property="createTime" />
+	</resultMap>
+	<sql id="column">
+		id,userId,activeCode,flux,version,createTime
+	</sql>
+
+	<select id="queryOneByUserId" resultMap="baseResultMap">
+		select <include refid="column"/>
+		from activitier_upgrade
+		where userId = #{userId}
+		limit 0,1
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert
+		into activitier_upgrade
+		(userId,activeCode,flux,version,createTime)
+		values(#{userId},#{activeCode},#{flux},#{version},#{createTime})
+	</insert>
+</mapper>

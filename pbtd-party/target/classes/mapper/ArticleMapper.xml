@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.ArticleMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.domain.Article" >
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="type" property="type"/>
+        <result column="images" property="image"/>
+        <result column="group_id" property="groupId"/>
+        <result column="group_name" property="groupName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="logininfo_name" property="logininfoName"/>
+    </resultMap>
+    
+    <sql id="queryAndLimit">
+    	<where>
+    		<if test="groupId!=null">
+    			and a.group_id = #{groupId}
+    		</if>
+    		<if test="type!=null">
+    			and a.type = #{type}
+    		</if>
+    	</where>
+    </sql>
+    
+    <sql id="columns">
+    	a.id,a.title,a.content,a.type,a.images,a.group_id,a.create_time,a.modify_time,a.logininfo_name,
+    	g.group_name group_name
+    </sql>
+    <select id="queryCount" resultType="long">
+    	select count(*)
+    	from pb_article a left join pb_group g
+    	on(a.group_id=g.id)
+    	<include refid="queryAndLimit"/>
+    </select>
+    
+    <select id="queryList" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from pb_article a left join pb_group g
+    	on(a.group_id=g.id)
+    	<include refid="queryAndLimit"/>
+    	order by a.modify_time desc,a.id asc
+    	limit #{start},#{pageSize}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    	insert into pb_article
+    	(title,content,type,images,group_id,create_time,modify_time,logininfo_name)
+    	values(#{title},#{content},#{type},#{image},#{groupId},
+    	#{createTime},#{modifyTime},#{logininfoName})
+    </insert>
+    
+    <update id="update">
+    	update pb_article
+    	set title = #{title},content = #{content},type = #{type},images = #{image},
+    	group_id = #{groupId},modify_time=#{modifyTime}
+    	where id = #{id}
+    </update>
+    
+    <delete id="delete">
+    	delete from pb_article
+    	where id = #{id}
+    </delete>
+    
+    <delete id="deleteBatch">
+    	delete from pb_article
+    	where id in 
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    
+    <select id="queryArticleListTime" resultType="string">
+		select DATE_FORMAT(create_time,'%Y-%c-%d %k:%i') createTime 
+		from pb_article
+		where type = #{classId} and group_id = #{groupId}
+		order by create_time desc
+	</select>
+	<select id="queryArticleListId" resultType="long">
+		select id from pb_article
+		where type = #{classId} and group_id = #{groupId}
+		order by create_time desc
+	</select>
+	<resultMap id="baseColumn" type="com.pbtd.manager.dto.ArticleDTO" >
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="type" property="classId"/>
+        <result column="images" property="images"/>
+        <result column="group_id" property="bussId"/>
+        <result column="create_time" property="createDate"/>
+    </resultMap>
+	<select id="queryOne" resultMap="baseColumn">
+		select id,title,content,type,images,group_id,DATE_FORMAT(create_time,'%Y-%c-%d %k:%i') create_time
+		from pb_article
+		where type = #{classId} and group_id = #{groupId}
+		order by create_time desc
+		limit 0,1 
+	</select>
+	<select id="queryArticleById" resultMap="baseColumn">
+		select id,title,content,type,images,group_id,DATE_FORMAT(create_time,'%Y-%c-%d %k:%i') create_time
+		from pb_article
+		where id = #{id}
+	</select>
+</mapper>

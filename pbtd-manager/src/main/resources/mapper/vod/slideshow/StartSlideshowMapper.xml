@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.vod.phone.slideshow.mapper.StartSlideshowMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.vod.phone.slideshow.domain.StartSlideshow" >
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="show_type" property="showType"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="target_code" property="targetCode"/>
+        <result column="playurl" property="playurl"/>
+        <result column="weburl" property="weburl"/>
+        <result column="skip_time" property="skipTime"/>
+        <result column="status" property="status"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    
+    <sql id="columns">
+    	id,name,type,show_type,image_url,target_code,playurl,weburl,status,update_user,update_time,skip_time
+    </sql>
+    <sql id="queryAndlimit">
+    	<where>
+    		<if test="status!=null">
+    			and status = #{status}
+    		</if>
+    		<if test="targetCode!=null">
+    			and target_code like concat("%",#{targetCode},"%")
+    		</if>
+    		<if test="update_time != null and update_time != '' ">
+			and date_format(update_time,'%Y-%m-%d') = #{update_time,jdbcType=DATE}
+		 </if> 
+    	</where>
+    </sql>
+    <select id="queryCount" resultType="long">
+    	select count(*)
+    	from vod_phone_start_slideshow
+    	<include refid="queryAndlimit"/>
+    </select>
+    <select id="queryList" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from vod_phone_start_slideshow
+    	<include refid="queryAndlimit"/>
+    	<if test="start!=null and start!=''">
+    	limit #{start},#{pageSize}
+    	</if>
+    </select>
+      <select id="queryListforinterface" resultMap="baseResultMap">
+    	select  id,name,type,show_type,image_url,target_code,playurl,weburl,status,update_user
+    	from vod_phone_start_slideshow
+    	<include refid="queryAndlimit"/>
+    	<if test="start!=null and start!=''">
+    	limit #{start},#{pageSize}
+    	</if>
+    </select>
+    
+    <select id="queryById" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from vod_phone_start_slideshow
+    	where id = #{id}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    	insert into vod_phone_start_slideshow
+    	(name,image_url,target_code,playurl,weburl,status,type,show_type,update_user,update_time,skip_time)
+    	values(#{name},#{imageUrl},#{targetCode},#{playurl},#{weburl},#{status},#{type},#{showType},
+    	#{updateUser},#{updateTime},#{skipTime})
+    </insert>
+    
+    <update id="update">
+    	update vod_phone_start_slideshow
+    	set name=#{name},target_code=#{targetCode},playurl=#{playurl},
+    	weburl=#{weburl},status=#{status},update_user=#{updateUser},show_type=#{showType},
+    	update_time=#{updateTime},type=#{type},skip_time=#{skipTime}
+    	where id = #{id}
+    </update>
+    
+    <delete id="delete">
+    	delete from vod_phone_start_slideshow
+    	where id = #{id}
+    </delete>
+    
+    <delete id="deleteBatch">
+    	delete from vod_phone_start_slideshow
+    	where id in 
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    
+    <update id="updateImageUrl">
+    	update vod_phone_start_slideshow
+    	set image_url=#{imageUrl}
+    	where id = #{id}
+    </update>
+    
+    <update id="uplineOrDownLine">
+    	update vod_phone_start_slideshow
+    	set status=#{status}
+    	where id = #{id} 
+    </update>
+    
+    <select id="queryByStatus" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from vod_phone_start_slideshow
+    	where status = #{status}
+    </select>
+</mapper>

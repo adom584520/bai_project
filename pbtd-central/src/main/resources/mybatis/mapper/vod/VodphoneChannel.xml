@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.playclick.integrate.mapper.VodphoneChannelMapper">
+    <resultMap id="resultMap" type="com.pbtd.playclick.integrate.domain.VodChannel">
+        <result column="ID" property="id" jdbcType="INTEGER" />      
+        <result column="PARENTCODE" property="parentcode" jdbcType="VARCHAR" /> 
+         <result column="PARENTNAME" property="parentname" jdbcType="VARCHAR" /> 
+        <result column="LEVELS" property="levels" jdbcType="INTEGER" />      
+        <result column="CATEGORYCODE" property="categorycode" jdbcType="VARCHAR" />      
+        <result column="NAME" property="name" jdbcType="VARCHAR" />      
+        <result column="ALIASNAME" property="aliasname" jdbcType="VARCHAR" />      
+        <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />      
+        <result column="SERVICEGROUPCODE" property="servicegroupcode" jdbcType="VARCHAR" />      
+        <result column="PACKAGECODES" property="packagecodes" jdbcType="VARCHAR" />      
+        <result column="PACKAGECOUNT" property="packagecount" jdbcType="INTEGER" />      
+        <result column="SEQUENCE" property="sequence" jdbcType="INTEGER" />      
+        <result column="BJ" property="bj" jdbcType="INTEGER" />      
+        <result column="STATUS" property="status" jdbcType="INTEGER" />      
+        <result column="BZ" property="bz" jdbcType="VARCHAR" />      
+        <result column="STARTTIME" property="starttime" jdbcType="DATE" />      
+        <result column="STARUSER" property="staruser" jdbcType="VARCHAR" />      
+        <result column="UPDATETIME" property="updatetime" jdbcType="DATE" />      
+        <result column="UPDATEUSER" property="updateuser" jdbcType="VARCHAR" />   
+        <result column="type" property="type" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="columns" >
+        ID,
+        PARENTCODE,
+       LEVELS,
+         CATEGORYCODE,
+         NAME ,
+        ALIASNAME,
+        DESCRIPTION,
+        SERVICEGROUPCODE,
+        PACKAGECODES,
+        PACKAGECOUNT,
+        SEQUENCE,
+        BJ,
+        STATUS,
+        BZ,
+        STARTTIME,
+        STARUSER,
+        UPDATETIME,
+        UPDATEUSER,type
+    </sql>
+    <!-- 模糊查询 -->
+    <sql id="whrClauseLike">
+        <if test="id != null and id > -1">
+            and ID = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="levels != null and levels > -1">
+            and LEVELS = #{levels,jdbcType=INTEGER}
+        </if>
+        <if test="categorycode != null and categorycode != ''">
+            and CATEGORYCODE  like CONCAT('%', #{categorycode,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="name != null and name != ''">
+            and NAME like  CONCAT('%', #{name,jdbcType=VARCHAR}, '%')  
+        </if>
+        <if test="aliasname != null and aliasname != ''">
+            and ALIASNAME like  CONCAT('%', #{aliasname,jdbcType=VARCHAR}, '%') 
+        </if>
+        <if test="servicegroupcode != null and servicegroupcode != ''">
+            and SERVICEGROUPCODE like CONCAT('%', #{servicegroupcode,jdbcType=VARCHAR}, '%') 
+        </if>
+        <if test="packagecodes != null and packagecodes != ''">
+            and PACKAGECODES like CONCAT('%', #{packagecodes,jdbcType=VARCHAR}, '%') 
+        </if>
+        <if test="packagecount != null and packagecount > -1">
+            and PACKAGECOUNT = #{packagecount,jdbcType=INTEGER}
+        </if>
+        <if test="sequence != null and sequence > -1">
+            and SEQUENCE = #{sequence,jdbcType=INTEGER}
+        </if>
+        <if test="bj != null and bj > -1">
+            and BJ = #{bj,jdbcType=INTEGER}
+        </if>
+        <if test="status != null and status > -1">
+            and STATUS = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="starttime != null and starttime != ''">
+           	and STARTTIME &gt;= #{starttime,jdbcType=DATE}
+        </if>
+        <if test="updatetime != null and updatetime != ''">
+            and UPDATETIME = #{updatetime,jdbcType=DATE}
+        </if>	
+    </sql>
+    <sql id="whrClauseLikeMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <!-- 精确查询 -->
+    <sql id="whrClauseEqual">
+        <if test="id != null and id > -1">
+            and ID = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="parentcode != null and parentcode != ''">
+            and PARENTCODE = #{parentcode,jdbcType=VARCHAR}
+        </if>
+        <if test="levels != null and levels > -1">
+            and LEVELS = #{levels,jdbcType=INTEGER}
+        </if>
+        <if test="categorycode != null and categorycode != ''">
+            and CATEGORYCODE = #{categorycode,jdbcType=VARCHAR}
+        </if>
+          <if test="type != null and type != ''">
+            and type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null and name != ''">
+            and NAME = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="aliasname != null and aliasname != ''">
+            and ALIASNAME = #{aliasname,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null and description != ''">
+            and DESCRIPTION = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="servicegroupcode != null and servicegroupcode != ''">
+            and SERVICEGROUPCODE = #{servicegroupcode,jdbcType=VARCHAR}
+        </if>
+        <if test="packagecodes != null and packagecodes != ''">
+            and PACKAGECODES = #{packagecodes,jdbcType=VARCHAR}
+        </if>
+        <if test="packagecount != null and packagecount > -1">
+            and PACKAGECOUNT = #{packagecount,jdbcType=INTEGER}
+        </if>
+        <if test="sequence != null and sequence > -1">
+            and SEQUENCE = #{sequence,jdbcType=INTEGER}
+        </if>
+        <if test="bj != null and bj > -1">
+            and BJ = #{bj,jdbcType=INTEGER}
+        </if>
+        <if test="status != null and status > -1">
+            and STATUS = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="bz != null and bz != ''">
+            and BZ = #{bz,jdbcType=VARCHAR})
+        </if>
+        <if test="starttime != null and starttime != ''">
+           	and STARTTIME &gt;= #{starttime,jdbcType=DATE}
+        </if>
+        <if test="staruser != null and staruser != ''">
+            and STARUSER = #{staruser,jdbcType=VARCHAR}
+        </if>
+        <if test="updatetime != null and updatetime != ''">
+            and UPDATETIME = #{updatetime,jdbcType=DATE}
+        </if>	
+        <if test="updateuser != null and updateuser != ''">
+            and UPDATEUSER = #{updateuser,jdbcType=VARCHAR}
+        </if>
+    </sql>
+    <sql id="whrClauseEqualMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <sql id="orderByClause">
+    	<choose>
+        	<when test="sort != null and sort != ''">
+        		order by ${sort} <if test="order != null and order != ''">${order}</if>
+        	</when>
+        	<otherwise>
+        		order by ID asc
+        	</otherwise>
+        </choose>
+    </sql>
+    <!--SElECT查询语句-->
+    <select id="count" parameterType="Map" resultType="java.lang.Integer">
+        select count(ID)
+        from  vod_channel  
+        where 1=1
+        <if test="id != null and id > -1">
+            and ID = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="levels != null and levels > -1">
+            and LEVELS = #{levels,jdbcType=INTEGER}
+        </if>
+        <if test="type != null and type != ''">
+            and type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="categorycode != null and categorycode != ''">
+            and CATEGORYCODE  like CONCAT('%', #{categorycode,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="name != null and name != ''">
+            and NAME like  CONCAT('%', #{name,jdbcType=VARCHAR}, '%')  
+        </if>
+        <if test="aliasname != null and aliasname != ''">
+            and ALIASNAME like  CONCAT('%', #{aliasname,jdbcType=VARCHAR}, '%') 
+        </if>
+        <if test="servicegroupcode != null and servicegroupcode != ''">
+            and SERVICEGROUPCODE like CONCAT('%', #{servicegroupcode,jdbcType=VARCHAR}, '%') 
+        </if>
+        <if test="packagecodes != null and packagecodes != ''">
+            and PACKAGECODES like CONCAT('%', #{packagecodes,jdbcType=VARCHAR}, '%') 
+        </if>
+         <if test="parentcode != null and parentcode != ''">
+            and PARENTCODE = #{parentcode,jdbcType=VARCHAR}
+        </if>
+        <if test="packagecount != null and packagecount > -1">
+            and PACKAGECOUNT = #{packagecount,jdbcType=INTEGER}
+        </if>
+        <if test="sequence != null and sequence > -1">
+            and SEQUENCE = #{sequence,jdbcType=INTEGER}
+        </if>
+        <if test="bj != null and bj > -1">
+            and BJ = #{bj,jdbcType=INTEGER}
+        </if>
+        <if test="status != null and status > -1">
+            and STATUS = #{status,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="page" parameterType="Map" resultMap="resultMap">
+         select DISTINCT
+         a.ID,b.NAME PARENTNAME , a.LEVELS, a.CATEGORYCODE,0 PARENTCODE ,
+         a.NAME , a.ALIASNAME,a.DESCRIPTION,  a.SERVICEGROUPCODE,  a.PACKAGECODES,   a.PACKAGECOUNT,
+        a.SEQUENCE,   a.BJ, a.STATUS, a.BZ, a.STARTTIME, a.STARUSER, a.UPDATETIME,  a.UPDATEUSER,a.TYPE
+        from  vod_channel a
+        left join   vod_labeltype b on a.type=b.id 
+        where 1=1
+        <if test="id != null and id > -1">
+            and a.ID = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="levels != null and levels > -1">
+            and a.LEVELS = #{levels,jdbcType=INTEGER}
+        </if>
+        <if test="type != null and type != ''">
+            and type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="categorycode != null and categorycode != ''">
+            and a.CATEGORYCODE  like CONCAT('%', #{categorycode,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="name != null and name != ''">
+            and a.NAME like  CONCAT('%', #{name,jdbcType=VARCHAR}, '%')  
+        </if>
+        <if test="aliasname != null and aliasname != ''">
+            and a.ALIASNAME like  CONCAT('%', #{aliasname,jdbcType=VARCHAR}, '%') 
+        </if>
+        <if test="servicegroupcode != null and servicegroupcode != ''">
+            and a.SERVICEGROUPCODE like CONCAT('%', #{servicegroupcode,jdbcType=VARCHAR}, '%') 
+        </if>
+        <if test="packagecodes != null and packagecodes != ''">
+            and a.PACKAGECODES like CONCAT('%', #{packagecodes,jdbcType=VARCHAR}, '%') 
+        </if>
+         <if test="parentcode != null and parentcode != ''">
+            and PARENTCODE = #{parentcode,jdbcType=VARCHAR}
+        </if>
+        <if test="packagecount != null and packagecount > -1">
+            and a.PACKAGECOUNT = #{packagecount,jdbcType=INTEGER}
+        </if>
+        <if test="sequence != null and sequence > -1">
+            and a.SEQUENCE = #{sequence,jdbcType=INTEGER}
+        </if>
+        <if test="bj != null and bj > -1">
+            and a.BJ = #{bj,jdbcType=INTEGER}
+        </if>
+        <if test="status != null and status > -1">
+            and a.STATUS = #{status,jdbcType=INTEGER}
+        </if>
+         order by starttime desc
+            	 limit #{start},#{pageSize}
+    </select>
+    <select id="find" parameterType="Map" resultMap="resultMap">
+         select DISTINCT
+         a.ID,b.NAME PARENTNAME , a.LEVELS, a.CATEGORYCODE,
+         a.NAME , a.ALIASNAME,a.DESCRIPTION,  a.SERVICEGROUPCODE,  a.PACKAGECODES,   a.PACKAGECOUNT,
+        a.SEQUENCE,   a.BJ, a.STATUS, a.BZ, a.STARTTIME, a.STARUSER, a.UPDATETIME,  a.UPDATEUSER,a.type
+        from  vod_channel a
+        left join   vod_labeltype b on a.type=b.id 
+        where 1=1
+        <if test="id != null and id > -1">
+            and a.ID = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="levels != null and levels > -1">
+            and a.LEVELS = #{levels,jdbcType=INTEGER}
+        </if>
+        <if test="type != null and type != ''">
+            and type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="categorycode != null and categorycode != ''">
+            and a.CATEGORYCODE  like CONCAT('%', #{categorycode,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="name != null and name != ''">
+            and a.NAME like  CONCAT('%', #{name,jdbcType=VARCHAR}, '%')  
+        </if>
+        <if test="aliasname != null and aliasname != ''">
+            and a.ALIASNAME like  CONCAT('%', #{aliasname,jdbcType=VARCHAR}, '%') 
+        </if>
+        <if test="servicegroupcode != null and servicegroupcode != ''">
+            and a.SERVICEGROUPCODE like CONCAT('%', #{servicegroupcode,jdbcType=VARCHAR}, '%') 
+        </if>
+        <if test="packagecodes != null and packagecodes != ''">
+            and a.PACKAGECODES like CONCAT('%', #{packagecodes,jdbcType=VARCHAR}, '%') 
+        </if>
+        <if test="packagecount != null and packagecount > -1">
+            and a.PACKAGECOUNT = #{packagecount,jdbcType=INTEGER}
+        </if>
+        <if test="sequence != null and sequence > -1">
+            and a.SEQUENCE = #{sequence,jdbcType=INTEGER}
+        </if>
+        <if test="bj != null and bj > -1">
+            and a.BJ = #{bj,jdbcType=INTEGER}
+        </if>
+        <if test="status != null and status > -1">
+            and a.STATUS = #{status,jdbcType=INTEGER}
+        </if>
+            	 limit #{start},#{pageSize}
+    </select>
+    <select id="generatePosition" parameterType="Map" resultType="java.lang.Integer">
+         select case when max(CAST(categoryCode as SIGNED)) is not null 
+         then max(CAST(categoryCode as SIGNED)) + 1 else 10 end as c
+        from  vod_channel  
+        where 1=1
+        <include refid="whrClauseEqual" />
+        <include refid="whrClauseEqualMore" />
+    </select>
+    <select id="load" parameterType="java.lang.Integer" resultMap="resultMap">
+        select 
+        <include refid="columns" />
+        from  vod_channel  
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <!--INSERT/UPDATE/DELETE 执行语句-->
+    <insert id="insert" parameterType="com.pbtd.playclick.integrate.domain.VodChannel">
+        insert into 
+        vod_channel 
+        (
+     	PARENTCODE,
+		LEVELS,
+		CATEGORYCODE,
+		NAME,
+		ALIASNAME,
+		DESCRIPTION,
+		SERVICEGROUPCODE,
+		PACKAGECODES,
+		PACKAGECOUNT,
+		SEQUENCE,
+		BJ,
+		STATUS,
+		BZ,
+		STARTTIME,
+		STARUSER,
+		UPDATETIME,
+		UPDATEUSER,type
+        )
+        values 
+        (
+        #{parentcode,jdbcType=VARCHAR},
+        #{levels,jdbcType=INTEGER},
+        #{categorycode,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR},
+        #{aliasname,jdbcType=VARCHAR},
+        #{description,jdbcType=VARCHAR},
+        #{servicegroupcode,jdbcType=VARCHAR},
+        #{packagecodes,jdbcType=VARCHAR},
+        #{packagecount,jdbcType=INTEGER},
+        #{sequence,jdbcType=INTEGER},
+        #{bj,jdbcType=INTEGER},
+        #{status,jdbcType=INTEGER},
+        #{bz,jdbcType=VARCHAR},
+        #{starttime,jdbcType=DATE},
+        #{staruser,jdbcType=VARCHAR},
+        #{updatetime,jdbcType=DATE},
+        #{updateuser,jdbcType=VARCHAR},
+         #{type,jdbcType=INTEGER}
+        )
+    </insert>
+    <update id="update" parameterType="com.pbtd.playclick.integrate.domain.VodChannel">
+        update vod_channel
+        <set>
+	        <if test="parentcode != null">
+	        	 PARENTCODE =#{parentcode,jdbcType=VARCHAR},
+	        </if>
+	        <if test="levels != null and levels >-1">
+	        	 LEVELS =#{levels,jdbcType=INTEGER},
+	        </if>
+	         <if test="type != null and type >-1">
+	        	 type =#{type,jdbcType=INTEGER},
+	        </if>
+	        <if test="categorycode != null">
+	        	 CATEGORYCODE=#{categorycode,jdbcType=VARCHAR},
+	        </if>
+	        <if test="name != null">
+	        	 NAME =#{name,jdbcType=VARCHAR},
+	        </if>
+	        <if test="aliasname != null">
+	        	ALIASNAME=#{aliasname,jdbcType=VARCHAR},
+	        </if>
+	        <if test="description != null">
+	        	DESCRIPTION=#{description,jdbcType=VARCHAR},
+	        </if>
+	        <if test="servicegroupcode != null">
+	        	SERVICEGROUPCODE=#{servicegroupcode,jdbcType=VARCHAR},
+	        </if>
+	        <if test="packagecodes != null">
+	        	PACKAGECODES=#{packagecodes,jdbcType=VARCHAR},
+	        </if>
+	        <if test="packagecount != null  and packagecount >-1">
+	        	PACKAGECOUNT=#{packagecount,jdbcType=INTEGER},
+	        </if>
+	        <if test="sequence != null and sequence >-1">
+	        	SEQUENCE=#{sequence,jdbcType=INTEGER},
+	        </if>
+	        <if test="bj != null and bj >-1">
+	        	BJ=#{bj,jdbcType=INTEGER},
+	        </if>
+	        <if test="status != null and status >-1">
+	        	STATUS=#{status,jdbcType=INTEGER},
+	        </if>
+	        <if test="bz != null">
+	        	BZ=#{bz,jdbcType=VARCHAR},
+	        </if>
+	        <if test="starttime != null">
+	        	STARTTIME=#{starttime,jdbcType=DATE},
+	        </if>
+	        <if test="staruser != null">
+	        	STARUSER=#{staruser,jdbcType=VARCHAR},
+	        </if>
+	        <if test="updatetime != null">
+	        	UPDATETIME=#{updatetime,jdbcType=DATE},
+	        </if>
+	        <if test="updateuser != null">
+	        	UPDATEUSER=#{updateuser,jdbcType=VARCHAR},
+	        </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <delete id="deletes" parameterType="Map" >
+        delete from vod_channel
+        where 1=1
+        <include refid="whrClauseEqual" />
+        <include refid="whrClauseEqualMore" /> 
+    </delete>
+     <select id="generatePositiontype" parameterType="Map" resultType="java.lang.Integer">
+        select num from  vod_labeltype  
+        where id=#{type,jdbcType=INTEGER}
+    </select>
+</mapper>

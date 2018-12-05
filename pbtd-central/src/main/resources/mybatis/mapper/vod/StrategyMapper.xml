@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.playclick.integrate.mapper.StrategyMapper">
+	<resultMap id="resultMap" type="com.pbtd.playclick.integrate.domain.Strategy">
+		<result column="ID" property="id" jdbcType="INTEGER" />
+		<result column="NAME" property="Name" jdbcType="VARCHAR" />
+		<result column="PRIORITY" property="priority" jdbcType="INTEGER" />
+		<result column="FIELD1" property="Field1" jdbcType="VARCHAR" />
+		<result column="FIELDNAME1" property="FieldName1" jdbcType="VARCHAR" />
+		<result column="FIELD2" property="Field2" jdbcType="VARCHAR" />
+		<result column="FIELDNAME2" property="FieldName2" jdbcType="VARCHAR" />
+		<result column="FIELD3" property="Field3" jdbcType="VARCHAR" />
+		<result column="FIELDNAME3" property="FieldName3" jdbcType="VARCHAR" />
+		<result column="FIELD4" property="Field4" jdbcType="VARCHAR" />
+		<result column="FIELDNAME4" property="FieldName4" jdbcType="VARCHAR" />
+		<result column="CPCODE" property="Cpcode" jdbcType="VARCHAR" />
+		<result column="STATUS" property="Status" jdbcType="INTEGER" />
+
+	</resultMap>
+	<sql id="columns">
+		ID ,
+		NAME,
+		PRIORITY,
+		FIELD1,
+		FIELDNAME1,
+		FIELD2,
+		FIELDNAME2,
+		FIELD3,
+		FIELDNAME3,
+		FIELD4,
+		FIELDNAME4,
+		CPCODE,
+		STATUS
+	</sql>
+	<!-- 模糊查询 -->
+	<sql id="whrClauseLike">
+		<if test="id != null and id > -1">
+			and ID = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="name != null and name != ''">
+			and NAME like CONCAT('%', #{Name,jdbcType=VARCHAR}) , '%')
+		</if>
+		<if test="priority != null and priority > -1">
+			and PRIORITY = #{priority,jdbcType=INTEGER}
+		</if>
+		<if test="Status != null and Status > -1">
+			and "STATUS" = #{Status,jdbcType=INTEGER}
+		</if>
+	</sql>
+	<sql id="whrClauseLikeMore">
+		<if test="id_ != null">
+			and "ID" in
+			<foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=INTEGER}
+			</foreach>
+		</if>
+	</sql>
+	<!-- 精确查询 -->
+	<sql id="whrClauseEqual">
+		<if test="id != null and id > -1">
+			and ID = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="Name != null and Name != ''">
+			and NAME = #{Name,jdbcType=VARCHAR}
+		</if>
+		<if test="priority != null and priority > -1">
+			and PRIORITY = #{priority,jdbcType=INTEGER}
+		</if>
+		<if test="Field1 != null and Field1 != ''">
+			and FIELD1 = #{Field1,jdbcType=VARCHAR}
+		</if>
+		<if test="FieldName1 != null and FieldName1 != ''">
+			and FIELDNAME1 = #{FieldName1,jdbcType=VARCHAR}
+		</if>
+		<if test="Field2 != null and Field2 != ''">
+			and FIELD2 = #{Field2,jdbcType=VARCHAR}
+		</if>
+		<if test="FieldName2 != null and FieldName2 != ''">
+			and FIELDNAME2 = #{FieldName2,jdbcType=VARCHAR}
+		</if>
+		<if test="Field3 != null and Field3 != ''">
+			and FIELD3 = #{Field3,jdbcType=VARCHAR}
+		</if>
+		<if test="FieldName3 != null and FieldName3 != ''">
+			and FIELDNAME3 = #{FieldName3,jdbcType=VARCHAR}
+		</if>
+		<if test="Field4 != null and Field4 != ''">
+			and FIELD4 = #{Field4,jdbcType=VARCHAR}
+		</if>
+		<if test="FieldName4 != null and FieldName4 != ''">
+			and FIELDNAME4 = #{FieldName4,jdbcType=VARCHAR}
+		</if>
+		<if test="cpcode != null and cpcode != ''">
+			and CPCODE = #{cpcode,jdbcType=INTEGER}
+		</if>
+		<if test="Status != null and Status > -1">
+			and STATUS = #{Status,jdbcType=INTEGER}
+		</if>
+	</sql>
+	<sql id="whrClauseEqualMore">
+		<if test="id_ != null">
+			and ID in
+			<foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=INTEGER}
+			</foreach>
+		</if>
+
+	</sql>
+	<sql id="orderByClause">
+		<choose>
+			<when test="sort != null and sort != ''">
+				order by ${sort}
+				<if test="order != null and order != ''">${order}</if>
+			</when>
+			<otherwise>
+				order by "ID" asc
+			</otherwise>
+		</choose>
+	</sql>
+	<!--SElECT查询语句 -->
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(ID)
+		from STRATEGY
+		where 1=1
+		<include refid="whrClauseLike" />
+		<include refid="whrClauseLikeMore" />
+	</select>
+	<select id="page" parameterType="Map" resultMap="resultMap">
+		select
+		<include refid="columns" />
+		from STRATEGY
+		where 1=1
+		<include refid="whrClauseLike" />
+		<include refid="whrClauseLikeMore" />
+		order by PRIORITY desc
+		limit #{start},#{pageSize}
+	</select>
+	<select id="find" parameterType="Map" resultMap="resultMap">
+		select
+		<include refid="columns" />
+		from STRATEGY
+		where 1=1
+		<include refid="whrClauseEqual" />
+		<include refid="whrClauseEqualMore" />
+		order by PRIORITY desc
+		limit #{start},#{pageSize}
+	</select>
+	<select id="generatePosition" parameterType="Map" resultType="java.lang.Integer">
+		select case when max(POSITION) is not null then max(POSITION) + 10
+		else 10 end as POSITION
+		from STRATEGY
+		where 1=1
+		<include refid="whrClauseEqual" />
+		<include refid="whrClauseEqualMore" />
+	</select>
+	<select id="load" parameterType="java.lang.Integer" resultMap="resultMap">
+		select
+		<include refid="columns" />
+		from STRATEGY
+		where ID = #{id,jdbcType=INTEGER}
+	</select>
+	<!--INSERT/UPDATE/DELETE 执行语句 -->
+	<insert id="insert" parameterType="com.pbtd.playclick.integrate.domain.Strategy">
+		insert into
+		STRATEGY
+		(
+		NAME ,
+		PRIORITY ,
+		FIELD1 ,
+		FIELDNAME1 ,
+		FIELD2 ,
+		FIELDNAME2 ,
+		FIELD3 ,
+		FIELDNAME3 ,
+		FIELD4 ,
+		FIELDNAME4 ,
+		CPCODE ,
+		STATUS
+		)
+		values
+		(
+		#{Name,jdbcType=VARCHAR},
+		#{priority,jdbcType=INTEGER},
+		#{Field1,jdbcType=VARCHAR},
+		#{FieldName1,jdbcType=VARCHAR},
+		#{Field2,jdbcType=VARCHAR},
+		#{FieldName2,jdbcType=VARCHAR},
+		#{Field3,jdbcType=VARCHAR},
+		#{FieldName3,jdbcType=VARCHAR},
+		#{Field4,jdbcType=VARCHAR},
+		#{FieldName4,jdbcType=VARCHAR},
+		#{Cpcode,jdbcType=VARCHAR},
+		#{Status,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="update" parameterType="com.pbtd.playclick.integrate.domain.Strategy">
+		update STRATEGY
+		<set>
+			<if test="Name != null">
+				NAME =#{Name,jdbcType=VARCHAR},
+			</if>
+			<if test="priority != null">
+				PRIORITY =#{priority,jdbcType=INTEGER},
+			</if>
+			<if test="Field1 != null">
+				FIELD1 =#{Field1,jdbcType=VARCHAR},
+			</if>
+			<if test="FieldName1 != null">
+				FIELDNAME1 =#{FieldName1,jdbcType=VARCHAR},
+			</if>
+			<if test="Field2 != null">
+				FIELD2 =#{Field2,jdbcType=VARCHAR},
+			</if>
+			<if test="FieldName2!= null">
+				FIELDNAME2 =#{FieldName2,jdbcType=VARCHAR},
+			</if>
+			<if test="Field3 != null">
+				FIELD3 =#{Field3,jdbcType=VARCHAR},
+			</if>
+			<if test="FieldName3 != null">
+				FIELDNAME3 =#{FieldName3,jdbcType=VARCHAR},
+			</if>
+			<if test="Field4!= null">
+				FIELD4 =#{Field4,jdbcType=VARCHAR},
+			</if>
+			<if test="FieldName4 != null">
+				FIELDNAME4 =#{FieldName4,jdbcType=VARCHAR},
+			</if>
+			<if test="cpcode != null">
+				CPCODE =#{cpcode,jdbcType=INTEGER},
+			</if>
+			<if test="Status!= null">
+				STATUS =#{Status,jdbcType=INTEGER},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deletes" parameterType="Map">
+		delete from STRATEGY
+		where 1=1
+		<include refid="whrClauseEqual" />
+		<include refid="whrClauseEqualMore" />
+	</delete>
+
+
+  
+	 
+	 
+	   
+ 
+ 
+	<!-- 查询上线映射关系 -->
+	<select id="findvodmapping" parameterType="Map" resultType="Map">
+		select DISTINCT
+		CASE cpcode WHEN '1' THEN b1.chnName WHEN '2' THEN
+		b.chnName WHEN '5' THEN b2.chnName end cp_chnname,cp_chnId,
+		CASE cpcode
+		WHEN '1' THEN c1.tagName WHEN '2' THEN c.tagName WHEN '5' THEN
+		c2.tagName end cp_tagname,cp_tagId,
+		e.`Name`
+		phone_chnname,phone_chnId,e1.`Name` phone_tagname,phone_tagId,
+		cpcode
+		from vod_mapping a
+		left join yh_vod_channel b on a.cp_chnId=b.chnId
+		left join gg_vod_channel b1 on a.cp_chnId=b1.chnId
+		left join
+		youk_vod_channel b2 on a.cp_chnId=b2.chnId
+		left join yh_vod_label c on
+		a.cp_tagId=c.tagId
+		left join gg_vod_label c1 on a.cp_tagId=c1.tagId
+		left join youk_vod_label c2 on a.cp_tagId=c2.tagId
+		left join
+		vod_channel e on a.phone_chnId=e.categoryCode and e.levels=1
+		left join vod_channel e1 on a.phone_tagId=e1.categoryCode and
+		e1.levels=2
+		where a.status=1
+			<if test="cpcode!=null and cpcode!=''">
+			and a.cpcode =#{cpcode,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<!-- 爬取汇聚数据偏移值 -->
+	   <select id="getoffset" parameterType="Map" resultType="Map">
+	 select album_offset,album_offsettime,albumvideo_offset,albumvideo_offsettime 
+	  from album_offset
+	</select>
+	<update id="updateoffset" parameterType="Map">
+	update album_offset
+	<set>
+		 <if test="album_offset != null and album_offset !=''">
+		        album_offset = #{album_offset,jdbcType=INTEGER},
+		      album_offsettime=now(),
+		  </if>
+		  <if test="seq_vod_album != null and seq_vod_album !=''">
+		        album_offset = nextval('seq_vod_album')-1,
+		      album_offsettime=now(),
+		 </if>
+		  <if test="albumvideo_offset != null and albumvideo_offset !=''">
+		        albumvideo_offset = #{albumvideo_offset,jdbcType=INTEGER},
+		        albumvideo_offsettime=now(),
+		 </if>
+	</set>
+	</update>
+	<!-- end -->
+</mapper>

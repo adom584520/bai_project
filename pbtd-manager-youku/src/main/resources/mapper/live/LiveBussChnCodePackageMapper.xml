@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LiveBussChnCodePackageMapper">
+	<resultMap id="BaseResultMap"
+		type="com.pbtd.manager.live.domain.LiveBussChnCodePackage">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="bussId" property="bussid" jdbcType="INTEGER" />
+		<result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+		<result column="chnCodeNum" property="chncodenum" jdbcType="INTEGER" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+		<result column="chnCodeStatus" property="chncodestatus"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BaseChannelMap" type="com.pbtd.manager.live.domain.LiveChannel">
+		<id column="channelId" property="channelid" jdbcType="INTEGER" />
+		<result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+		<result column="chnName" property="chnname" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, bussId, chnCode, chnCodeNum, createTime, updateTime,
+		chnCodeStatus
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.pbtd.manager.live.domain.LiveBussChnCodePackage">
+		select
+		<include refid="Base_Column_List" />
+		from live_buss_chncode_package
+		<where>
+			<trim suffixOverrides="AND">
+				<if test="bussid != null">
+					bussId = #{bussid,jdbcType=INTEGER} AND
+				</if>
+				<if test="chncode != null">
+					chnCode = #{chncode,jdbcType=VARCHAR} AND
+				</if>
+				<if test="chncodenum != null">
+					chnCodeNum = #{chncodenum,jdbcType=INTEGER} AND
+				</if>
+				<if test="createtime != null">
+					createTime = #{createtime,jdbcType=TIMESTAMP} AND
+				</if>
+				<if test="updatetime != null">
+					updateTime = #{updatetime,jdbcType=TIMESTAMP} AND
+				</if>
+				<if test="chncodestatus != null">
+					chnCodeStatus = #{chncodestatus,jdbcType=INTEGER}
+				</if>
+			</trim>
+		</where>
+	</select>
+
+	<update id="update" parameterType="com.pbtd.manager.live.domain.LiveBussChnCodePackage">
+		update live_buss_chncode_package
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="bussid != null">
+				bussId = #{bussid,jdbcType=INTEGER},
+			</if>
+			<if test="chncode != null">
+				chnCode = #{chncode,jdbcType=VARCHAR},
+			</if>
+			<if test="chncodenum != null">
+				chnCodeNum = #{chncodenum,jdbcType=INTEGER},
+			</if>
+			<if test="chncodestatus != null">
+				chnCodeStatus = #{chncodestatus,jdbcType=INTEGER},
+			</if>
+
+		</trim>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<insert id="creates" parameterType="Map">
+		insert into
+		live_buss_chncode_package (
+		bussId,
+		channelId,
+		chnCode,
+		chnCodeNum,
+		createTime,
+		updateTime,
+		chnCodeStatus
+		)
+		values (
+		#{bussid,jdbcType=INTEGER},
+		#{channelid,jdbcType=INTEGER},
+		#{chncode,jdbcType=VARCHAR},
+		#{chncodenum,jdbcType=INTEGER},
+		now(),
+		now(),
+		0
+		)
+	</insert>
+	<insert id="insert" parameterType="com.pbtd.manager.live.domain.LiveBussChnCodePackage">
+		insert into
+		live_buss_chncode_package (
+		bussId,
+		chnCode,
+		chnCodeNum,
+		createTime,
+		updateTime,
+		chnCodeStatus
+		)
+		values (
+		#{bussid,jdbcType=INTEGER},
+		#{chncode,jdbcType=VARCHAR},
+		#{chncodenum,jdbcType=INTEGER},
+		now(),
+		now(),
+		#{chncodestatus,jdbcType=INTEGER},
+		}
+		)
+	</insert>
+
+
+	<delete id="deletes" parameterType="Map">
+		delete from live_buss_chncode_package
+		<where>
+			<if test="id_ != null">
+				and channelid in
+				<foreach collection="id_" index="index" item="item" open="("
+					separator="," close=")">
+					#{item,jdbcType=INTEGER}
+				</foreach>
+			</if>
+			<if test="bussid != null">
+				and bussId = #{bussid,jdbcType=INTEGER} 
+			</if>
+		</where>
+	</delete>
+	
+
+
+	<select id="load" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_buss_chncode_package
+		where id =
+		#{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getMaxBussNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select count(*) from live_buss_chncode_package
+		where bussId = #{bussid,jdbcType=INTEGER}
+	</select>
+
+
+	<select id="find" parameterType="Map" resultMap="BaseResultMap">
+		select   a.bussId,a.chnCode,a.channelId,a.chnCodeNum,a.createTime,a.updateTime,a.chnCodeStatus,    b.name bussname 
+		from live_buss_chncode_package a  JOIN  live_buss_info b 
+		ON a.bussId = b.bussId
+		<trim prefix="WHERE" suffixOverrides="AND">
+			<if test="bussid != null">
+				a.bussId = #{bussid,jdbcType=INTEGER} AND
+			</if>
+			<if test="chncode != null">
+				a.chnCode like #{chncode,jdbcType=VARCHAR}
+			</if>
+		</trim>
+		limit #{start},#{pageSize}
+	</select>
+	<select id="finds" parameterType="Map" resultMap="BaseChannelMap">
+		select  channelId,chnCode , chnName from live_channel where chnCode not in (
+		select chnCode from live_buss_chncode_package
+		<where>
+			<if test="bussid != null">
+				bussId = #{bussid,jdbcType=VARCHAR}
+			</if>
+		</where>
+		)
+		limit #{start},#{pageSize}
+	</select>
+
+
+	<select id="counts" parameterType="Map" resultType="java.lang.Integer">
+		select count(*) from  live_channel where chnCode not in (
+		select chnCode from live_buss_chncode_package
+		<where>
+			<if test="bussid != null">
+				bussId = #{bussid,jdbcType=VARCHAR}
+			</if>
+		</where>
+		)
+	</select>
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(*) from live_buss_chncode_package
+		<where>
+			<if test="bussid != null">
+				bussId = #{bussid,jdbcType=VARCHAR}
+			</if>
+			<if test="chncode != null">
+				and chnCode like #{chncode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+</mapper>

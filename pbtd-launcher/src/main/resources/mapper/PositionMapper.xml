@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.launcher.mapper.PositionMapper">
+	<resultMap id="baseResultMap" type="com.pbtd.launcher.domain.Mac">
+		<id column="id" property="id" />
+		<result column="mac_name" property="macName" />
+		<result column="logininfo_name" property="loginInfoName" />
+		<result column="group_id" property="groupId" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+</mapper>

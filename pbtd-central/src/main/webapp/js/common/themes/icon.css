@@ -1,0 +1,44 @@
+.icon-project {
+	background: url('icons/project.png') no-repeat;
+}
+
+.icon-template {
+	background: url('icons/template.png') no-repeat;
+}
+
+.icon-pre {
+	background: url('icons/pre.png') no-repeat;
+}
+
+.icon-next {
+	background: url('icons/next.png') no-repeat;
+}
+
+.icon-config {
+	background: url('icons/config.png') no-repeat;
+}
+
+.icon-setting {
+	background: url('icons/setting.png') no-repeat;
+}
+
+.icon-generate {
+	background: url('icons/generate.png') no-repeat;
+}
+.icon-back {
+	background: url('icons/back.png') no-repeat;
+}
+
+.icon-preview {
+	background: url('icons/preview.png') no-repeat;
+}
+
+.icon-popup {
+	background: url('icons/popup.gif') no-repeat scroll right 2px;
+	padding-right: 20px;
+	display: inline-block;
+}
+
+.icon-external {
+	background: url('icons/external.gif') no-repeat;
+}

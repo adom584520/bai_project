@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.BindingInfoMapper">
+	<resultMap id="baseResultMap" type="com.pbtd.manager.domain.BindingInfo">
+		<result column="pUserId" property="pUserId" />
+		<result column="tvUserId" property="tvUserId" />
+		<result column="pSystem" property="pSystem" />
+		<result column="tvSystem" property="tvSystem" />
+		<result column="pToken" property="pToken" />
+		<result column="tvToken" property="tvToken" />
+		<result column="pProName" property="pProName" />
+		<result column="tvProName" property="tvProName" />
+		<result column="pNum" property="pNum" />
+		<result column="tvMac" property="tvMac" />
+		<result column="pName" property="pName" />
+		<result column="tvName" property="tvName" />
+		<result column="cpId" property="cpId" />
+		<result column="status" property="status" />
+		<result column="bz" property="bz" />
+		<result column="create_time" property="create_time" />
+		<result column="update_time" property="update_time" />
+
+	</resultMap>
+
+	<sql id="column">
+		pUserId,tvUserId,pSystem,tvSystem,pToken,tvToken,pProName,tvProName,pNum,tvMac,
+		pName,tvName,cpId,status,bz,create_time,update_time
+	</sql>
+
+	<select id="queryByPhoneId" resultMap="baseResultMap">
+		select
+		<include refid="column" />
+		from push_user
+		where pUserId = #{phoneId}
+	</select>
+
+	<select id="queryByTvId" resultMap="baseResultMap">
+		select
+		<include refid="column" />
+		from push_user
+		where tvUserId = #{tvId}
+	</select>
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.inject.phone.mapper.InjectPhonePriorityMapper">
+	
+	
+	<!--SElECT查询语句 -->
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(1)
+		from inject_phone_priority
+		where 1=1
+		<if test="channelCode!=null">
+			and channelCode=#{channelCode}
+		</if>
+	</select>
+	
+	<select id="find" parameterType="Map" resultType="Map">
+		select a.id,a.channelCode,a.priority,a.updatetime,a.modifier,b.channelName
+		from inject_phone_priority a 
+		left join vod_phone_channel b
+		on a.channelCode=b.channelCode
+		where 1=1
+		<if test="channelCode!=null">
+			and a.channelCode=#{channelCode}
+		</if>
+	</select>
+	
+	<select id="findById" parameterType="Map" resultType="Map">
+		select a.id,a.channelCode,a.priority,a.updatetime,a.modifier,b.channelName
+		from inject_phone_priority a 
+		left join vod_phone_channel b
+		on a.channelCode=b.channelCode
+		where 1=1
+		and a.id=#{id}
+	</select>
+	
+	<!-- 查询已录入频道列表 -->
+	<select id="findChannels"  resultType="Map">		
+		select a.channelCode,b.channelName
+		from inject_phone_priority a 
+		left join vod_phone_channel b
+		on a.channelCode=b.channelCode
+	</select>
+	
+	<!-- 查询全部频道列表(除去新增) -->
+	<select id="findPartChannels"  resultType="Map">								
+		select a.channelCode,a.channelName
+		from  vod_phone_channel a 
+		where not EXISTS (select 1 from inject_phone_priority b where a.channelCode=b.channelCode)
+	</select>
+	
+	<!-- 查询全部频道列表 -->
+	<select id="findAllChannels"  resultType="Map">								
+		select a.channelCode,a.channelName
+		from  vod_phone_channel a 
+	</select>
+	
+	<!-- 保存新增频道优先级 -->
+	<insert id="savePriority" parameterType="Map">
+		insert into inject_phone_priority(channelCode,priority,updatetime,modifier)
+		values(#{channelCode},#{priority},#{updatetime},#{modifier})
+	</insert>
+	
+	<!-- 删除频道优先级 -->
+	<delete id="deletePriority" parameterType="Map">
+		delete from inject_phone_priority  
+		where id=#{id}
+	</delete>
+	
+	<!-- 更新频道优先级 -->
+	<update id="updatePriority" parameterType="Map">
+		update inject_phone_priority t 
+		set t.priority=#{priority},
+		t.updatetime=#{updatetime},
+		t.modifier=#{modifier}
+		WHERE t.id=#{id}
+	</update>
+	
+	
+	 
+</mapper>

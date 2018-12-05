@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LiveCibnEpgMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.live.domain.LiveCibnEpg">
+		<id column="epgId" property="epgid" jdbcType="INTEGER" />
+		<result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+		<result column="playUrl" property="playurl" jdbcType="VARCHAR" />
+		<result column="startTime" property="starttime" jdbcType="BIGINT" />
+		<result column="endTime" property="endtime" jdbcType="BIGINT" />
+		<result column="duration" property="duration" jdbcType="BIGINT" />
+		<result column="epgName" property="epgname" jdbcType="VARCHAR" />
+		<result column="showName" property="showname" jdbcType="VARCHAR" />
+		<result column="weekDay" property="weekday" jdbcType="VARCHAR" />
+		<result column="startDate" property="startdate" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		epgId, chnCode, playUrl, startTime, endTime, duration,
+		epgName, showName,
+		weekDay,
+		startDate
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.pbtd.manager.live.domain.LiveCibnEpg">
+		select
+		<include refid="Base_Column_List" />
+		from live_cibn_epg
+		<trim prefix="where " suffixOverrides="and">
+			<if test="chncode != null">
+				chnCode = #{chncode,jdbcType=INTEGER} and
+			</if>
+			<if test="epgname != null">
+				epgName = #{epgname,jdbcType=INTEGER} and
+			</if>
+			<if test="starttime != null">
+				startTime = #{starttime,jdbcType=INTEGER} 
+			</if>
+		</trim>
+		limit 1
+	</select>
+
+	<insert id="insert" parameterType="com.pbtd.manager.live.domain.LiveCibnEpg">
+		insert into live_cibn_epg
+		(
+		chnCode, playUrl,
+		startTime, endTime, duration,
+		epgName,
+		showName, weekDay,
+		startDate)
+		values (
+		#{chncode,jdbcType=VARCHAR},
+		#{playurl,jdbcType=VARCHAR},
+		#{starttime,jdbcType=BIGINT}, #{endtime,jdbcType=BIGINT},
+		#{duration,jdbcType=BIGINT},
+		#{epgname,jdbcType=VARCHAR},
+		#{showname,jdbcType=VARCHAR},
+		#{weekday,jdbcType=VARCHAR},
+		#{startdate,jdbcType=VARCHAR})
+	</insert>
+	<delete id="delete" parameterType="Map">
+	delete	FROM live_cibn_epg where chnCode = #{chnCode} and startDate = #{startDate} ;
+	
+	</delete>
+	
+	<select id="getcibnepg" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT
+		*
+		FROM
+		live_cibn_epg 
+	</select>
+
+</mapper>

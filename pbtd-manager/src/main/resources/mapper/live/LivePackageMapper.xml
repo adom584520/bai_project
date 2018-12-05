@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LivePackageMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.live.domain.LivePackage">
+		<id column="id" property="packageid" jdbcType="INTEGER" />
+		<result column="packageName" property="packagename" jdbcType="VARCHAR" />
+		<result column="startTime" property="starttime" jdbcType="INTEGER" />
+		<result column="endTime" property="endtime" jdbcType="INTEGER" />
+		<result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+		<result column="packageOrder" property="packageorder" jdbcType="INTEGER" />
+		<result column="tagId" property="tagid" jdbcType="INTEGER" />
+		<result column="packagePoster" property="packageposter"
+			jdbcType="VARCHAR" />
+		<result column="packageStatus" property="packagestats" jdbcType="INTEGER" />
+		<result column="packageCode" property="packagecode" jdbcType="VARCHAR" />
+		<result column="packageCover" property="packagecover" jdbcType="VARCHAR" />
+		<result column="createTime" property="createtime" jdbcType="INTEGER" />
+		<result column="updateTime" property="updatetime" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id as packageid, packageName, startTime, endTime, chnCode,
+		packageOrder,tagId,
+		packagePoster,
+		packageStatus, packageCode, packageCover,
+		createTime, updateTime
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.pbtd.manager.live.domain.LivePackage">
+		select
+		<include refid="Base_Column_List" />
+		from live_package_source
+		<where>
+			<if test="packageid != null">
+				id = #{packageid,jdbcType=INTEGER}
+			</if>
+
+		</where>
+	</select>
+
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM live_package_source a
+
+		<trim prefix="WHERE" suffixOverrides="AND">
+			a.startTime > (unix_timestamp(now())*1000-60*60*24*1000*7) AND
+			<if test="chncode != null">
+				a.chnCode like '%${chncode}%' AND
+			</if>
+			<if test="packagename != null">
+				a.packageName like '%${packagename}%' AND
+			</if>
+		</trim>
+	</select>
+
+	<select id="find" parameterType="Map" resultMap="BaseResultMap">
+		select
+		a.id,
+		a.packageName,
+		a.startTime,
+		a.endTime,
+		a.chnCode,
+		a.packageOrder,
+		a.packagePoster,
+		a.packageStatus,
+		a.packageCode,
+		a.packageCover,
+		a.createTime,
+		a.updateTime
+		FROM
+		live_package_source a
+		<trim prefix="WHERE" suffixOverrides="AND">
+			a.startTime > (unix_timestamp(now())*1000-60*60*24*1000*7) AND
+			<if test="packagename != null">
+				a.packageName like '%${packagename}%' AND
+			</if>
+			<if test="chncode != null">
+				a.chnCode like '%${chncode}%'
+			</if>
+		</trim>
+		ORDER BY a.packageOrder ,a.startTime DESC
+		limit #{start},#{pageSize}
+	</select>
+
+	<select id="load" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_package_source
+		where id =
+		#{packageid,jdbcType=INTEGER}
+	</select>
+
+	<select id="getpackage" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select * from live_package_source a
+		WHERE
+		a.startTime > (unix_timestamp(now())*1000-60*60*24*1000*7)
+		ORDER BY
+		startTime;
+	</select>
+
+
+	<delete id="deletes" parameterType="java.lang.Integer">
+		delete from live_package_source
+		where id = #{packageid,jdbcType=INTEGER}
+	</delete>
+	
+	<delete id="deleteTimeOut" parameterType="java.lang.Integer">
+	
+	<![CDATA[ delete from live_package_source  where startTime < (unix_timestamp(now())*1000-60*60*24*1000*7) ]]>   
+	
+	</delete>
+
+	<update id="update" parameterType="com.pbtd.manager.live.domain.LivePackage">
+		update live_package_source
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="packagename != null">
+				packageName = #{packagename,jdbcType=VARCHAR} ,
+			</if>
+			<if test="starttime != null">
+				startTime = #{starttime,jdbcType=INTEGER} ,
+			</if>
+			<if test="endtime != null">
+				endTime = #{endtime,jdbcType=INTEGER} ,
+			</if>
+			<if test="chncode != null">
+				chnCode = #{chncode,jdbcType=VARCHAR} ,
+			</if>
+			<if test="packageorder != null">
+				packageOrder = #{packageorder,jdbcType=INTEGER} ,
+			</if>
+			<if test="packageposter != null">
+				packagePoster = #{packageposter,jdbcType=VARCHAR} ,
+			</if>
+			<if test="packagestats != null">
+				packageStatus = #{packagestats,jdbcType=INTEGER} ,
+			</if>
+			<if test="packagecode != null">
+				packageCode = #{packagecode,jdbcType=VARCHAR} ,
+			</if>
+			<if test="packagecover != null">
+				packageCover = #{packagecover,jdbcType=VARCHAR} ,
+			</if>
+			<if test="createtime != null">
+				createTime = #{createtime,jdbcType=INTEGER} ,
+			</if>
+		</trim>
+		where id = #{packageid,jdbcType=INTEGER}
+	</update>
+	<update id="updateupdown" parameterType="Map">
+		update live_package_source set
+		packageStatus=#{status,jdbcType=INTEGER}
+		where
+		id=#{id,jdbcType=INTEGER}
+	</update>
+	<update id="updatebyId" parameterType="java.lang.Integer">
+		update live_package_source set
+		packageOrder = 1
+		where id=#{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateleven" parameterType="java.lang.Integer">
+		update live_package_source set
+		packageOrder = 10000000
+		where packageOrder= 11
+	</update>
+
+	<update id="updatesequce" parameterType="Map">
+		update live_package_source set
+		<choose>
+			<when test=" plus !=null and plus !=''">
+				packageOrder = packageOrder+1
+			</when>
+			<otherwise>
+				packageOrder = packageOrder-1
+			</otherwise>
+		</choose>
+		where 1=1
+		<if test="id != null  and id !='' ">
+			and id !=#{id,jdbcType=INTEGER}
+		</if>
+    		 <![CDATA[
+    		  and packageOrder>=#{minnum,jdbcType=INTEGER}
+    		  and packageOrder<= 10
+    		]]>
+	</update>
+
+	<insert id="insert" parameterType="com.pbtd.manager.live.domain.LivePackage">
+		insert into live_package_source (
+		id,
+		tagId,
+		packageName,
+		startTime,
+		endTime,
+		chnCode,
+		packageOrder,
+		packagePoster,
+		packageStatus,
+		packageCode,
+		packageCover,
+		createTime,
+		updateTime)
+		values (
+		#{packageid,jdbcType=INTEGER},
+		#{tagid,jdbcType=INTEGER},		
+		#{packagename,jdbcType=VARCHAR},
+		#{starttime,jdbcType=INTEGER},
+		#{endtime,jdbcType=INTEGER},
+		#{chncode,jdbcType=VARCHAR},
+		#{packageorder,jdbcType=INTEGER},
+		#{packageposter,jdbcType=VARCHAR},
+		#{packagestats,jdbcType=INTEGER},
+		#{packagecode,jdbcType=VARCHAR},
+		#{packagecover,jdbcType=VARCHAR},
+		now(),
+		now()
+		)
+	</insert>
+
+</mapper>

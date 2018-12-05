@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.system.mapper.MovieurlMapper">
+
+    <!-- 模糊查询 -->
+    <sql id="whrClauseLike">
+        <if test="id != null and id > -1">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="name != null and name != ''">
+            and name like '%${name}%'  
+        </if>
+        <if test="title != null and title != ''">
+            and title=#{title,jdbcType=INTEGER} 
+        </if>
+         <if test="status != null and status != ''">
+            and status=#{status,jdbcType=INTEGER}
+        </if> 
+          
+    </sql>
+    <sql id="whrClauseLikeMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <!-- 精确查询 -->
+    <sql id="whrClauseEqual">
+       <if test="id != null and id > -1">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="name != null and name != ''">
+            and name=#{name,jdbcType=VARCHAR}  
+        </if>
+        <if test="title != null and title != ''">
+            and title=#{title,jdbcType=VARCHAR} 
+        </if>
+         <if test="levels != null and levels != ''">
+            and levels=#{levels,jdbcType=VARCHAR} 
+        </if>
+         <if test="status != null and status != ''">
+            and status=#{status,jdbcType=BOOLEAN}
+        </if> 
+    </sql>
+    <sql id="whrClauseEqualMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+ 
+<insert id="insert" parameterType="com.pbtd.manager.vod.system.domain.Movieurl" >
+ insert into vod_movieurl
+ (name,title,status,levels)
+ values
+ (
+ #{name,jdbcType=VARCHAR},
+ #{title,jdbcType=VARCHAR},
+ #{status,jdbcType=INTEGER},
+ #{levels,jdbcType=INTEGER}
+ )
+</insert>
+<update id="update" parameterType="com.pbtd.manager.vod.system.domain.Movieurl">
+	 update vod_movieurl 
+		 <set>
+			 <if test="title!=null">
+			 title=#{title,jdbcType=INTEGER},
+			 </if>
+			 <if test="status!=null ">
+				 status=#{status,jdbcType=VARCHAR},
+			 </if>
+			  <if test="name!=null ">
+				 name=#{name,jdbcType=VARCHAR},
+			 </if>
+			 <if test="levels!=null ">
+				 levels=#{levels,jdbcType=INTEGER},
+			 </if>
+		 </set>
+	 where id=#{id,jdbcType=INTEGER}
+</update>
+<update id="updateStatus" parameterType="Map">
+		update vod_movieurl
+		set status = #{status,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+ <delete id="deletes" parameterType="Map">
+ delete from vod_movieurl 
+ where 1=1
+      <include refid="whrClauseLike" />
+      <include refid="whrClauseEqual" />
+	  <include refid="whrClauseLikeMore" />
+ </delete>	
+ 
+    <select id="load" parameterType="java.lang.Integer" resultType="com.pbtd.manager.vod.system.domain.Movieurl">
+         select id,name,title,status,levels
+           from  vod_movieurl  
+           
+        where id= #{id,jdbcType=INTEGER}
+    </select>
+     <select id="count" parameterType="Map" resultType="java.lang.Integer">
+        select count(1)
+        from  vod_movieurl 
+        where 1=1
+          <include refid="whrClauseEqual" />
+    </select>
+      <select id="find" parameterType="Map" resultType="Map">
+       select id,name,title,status,levels
+       from  vod_movieurl
+        where 1=1
+       <include refid="whrClauseEqual" />
+         <if test="start!=null and start!=''">
+	       limit #{start},#{pageSize} 	
+         </if>
+    </select>
+     <select id="page" parameterType="Map" resultType="Map">
+       select id,name,title,status,levels 
+       from  vod_movieurl
+        where 1=1
+         <include refid="whrClauseEqual" />
+         <if test="start!=null and start!=''">
+	       limit #{start},#{pageSize} 	
+         </if>
+    </select>
+</mapper>

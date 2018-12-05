@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.inject.phone.mapper.InjectPhoneAlbumVideoVersionMapper">
+	
+	<!-- 根据seriesCode和drama,version查询是否存在 -->
+	<select id="findVersionBySeriesAndDramaAndVersion" parameterType="Map" resultType="Map">		
+		SELECT * from inject_phone_albuminfovideo_version a
+		where 1=1
+		and a.seriesCode=#{seriesCode}
+		and a.drama=#{drama}
+		and a.version=#{version}
+	</select>
+	
+	<!-- 保存中兴码率 -->
+	<select id="saveZxVideoVersion" parameterType="Map">
+		insert into inject_phone_albuminfovideo_version(seriesCode,drama,version,zxInjectState)
+		values(#{seriesCode},#{drama},#{version},#{zxInjectState})
+	</select>
+	
+	<!-- 保存华为码率 -->
+	<select id="saveHwVideoVersion" parameterType="Map">
+		insert into inject_phone_albuminfovideo_version(seriesCode,drama,version,hwInjectState)
+		values(#{seriesCode},#{drama},#{version},#{hwInjectState})
+	</select>
+	
+	<!-- 更新中兴码率 -->
+	<select id="updateZxVideoVersion" parameterType="Map">
+		update inject_phone_albuminfovideo_version t 
+		set	t.zxInjectState=#{zxInjectState}
+		where t.seriesCode=#{seriesCode}
+		and t.drama=#{drama}
+		and t.version=#{version}
+	</select>
+	
+	<!-- 更新华为码率 -->
+	<select id="updateHwVideoVersion" parameterType="Map">
+		update inject_phone_albuminfovideo_version t 
+		set	t.hwInjectState=#{hwInjectState}
+		where t.seriesCode=#{seriesCode}
+		and t.drama=#{drama}
+		and t.version=#{version}
+	</select>
+	
+	
+	<!-- 根据version状态更新剧集状态 中兴 -->
+	<update id="updateZxVideoStateFromVersion" parameterType="Map">
+		update inject_phone_albuminfovideo t join (
+			SELECT a.seriesCode,a.drama,(case when count(1)>0 then 1 else 0 end ) isZxSuccess
+			from inject_phone_albuminfovideo_version a
+			where a.seriesCode=#{seriesCode}
+			and a.drama=#{drama}
+			and a.zxInjectState=1
+			GROUP BY a.seriesCode,a.drama
+		) b on t.seriesCode=b.seriesCode and t.drama=b.drama
+		set t.zxInjectState=b.isZxSuccess
+		where t.seriesCode=#{seriesCode} and t.drama=#{drama}
+	</update>
+	
+	<!-- 根据version状态更新剧集状态 华为 -->
+	<update id="updateHwVideoStateFromVersion" parameterType="Map">
+		update inject_phone_albuminfovideo t join (
+			SELECT a.seriesCode,a.drama,(case when count(1)>0 then 1 else 0 end ) isHwSuccess
+			from inject_phone_albuminfovideo_version a
+			where a.seriesCode=#{seriesCode}
+			and a.drama=#{drama}
+			and a.hwInjectState=1
+			GROUP BY a.seriesCode,a.drama
+		) b on t.seriesCode=b.seriesCode and t.drama=b.drama
+		set t.hwInjectState=b.isHwSuccess
+		where t.seriesCode=#{seriesCode} and t.drama=#{drama}
+	</update>
+	
+</mapper>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.CpLiveFavoriteMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.domain.CpLiveFavorite" >
+        <id column="id" property="id"/>
+        <result column="deviceId" property="deviceId"/>
+        <result column="deviceType" property="deviceType"/>
+        <result column="chnCode" property="chnCode"/>
+        <result column="chnName" property="chnName"/>
+        <result column="packageCover" property="packageCover"/>
+        <result column="cpCode" property="cpCode"/>
+        <result column="createTime" property="createTime"/>
+    </resultMap>
+    
+    <sql id="column">
+    	id,deviceId,deviceType,chnCode,chnName,packageCover,cpCode,createTime
+    </sql>
+    
+    <delete id="deleteByDeviceId">
+    	delete from cp_live_favorite
+    	where deviceId=#{deviceId}
+    </delete>
+    
+    <insert id="insertBatch">
+    	insert into cp_live_favorite
+    	(deviceId,deviceType,chnCode,chnName,packageCover,cpCode,createTime)
+    	values
+    	<foreach collection="data" index="index" item="ph" separator=",">
+    		(#{deviceId},#{deviceType},#{ph.chnCode},#{ph.chnName},#{ph.packageCover},
+    		#{cpCode},NOW())
+    	</foreach>
+    </insert>
+    
+    <select id="queryByChnCode" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_live_favorite
+    	where deviceId=#{deviceId} and chnCode=#{chnCode}
+    </select>
+    
+    <insert id="insert">
+    	insert into cp_live_favorite
+    	(deviceId,deviceType,chnCode,chnName,packageCover,cpCode,createTime)
+    	values
+    	(#{deviceId},#{deviceType},#{chnCode},#{chnName},#{packageCover},
+   		#{cpCode},#{createTime})
+    </insert>
+    
+    <update id="update">
+    	update cp_live_favorite
+    	set chnName=#{chnName},packageCover=#{packageCover}
+    	where deviceId=#{deviceId} and chnCode=#{chnCode}
+    </update>
+    
+    <select id="queryContByDeviceId" resultType="long">
+    	select count(id)
+    	from cp_live_favorite
+    	where deviceId=#{deviceId}
+    </select>
+    
+    <select id="queryExcessList" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_live_favorite
+    	where deviceId=#{deviceId}
+    	order by createTime desc,id desc
+    	limit #{start},#{pageSize}
+    </select>
+    
+    <delete id="deleteBatch">
+    	delete from cp_live_favorite
+    	where id in
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    
+    <delete id="deleteByChnCode">
+    	delete from cp_live_favorite
+    	where deviceId=#{deviceId} and chnCode=#{chnCode}
+    </delete>
+    
+    <delete id="deleteBatchByChnCode">
+    	delete from cp_live_favorite
+    	where deviceId=#{deviceId} and chnCode in
+    	<foreach collection="list" open="(" close=")" separator="," item="chnCode" index="index">
+    		#{chnCode}
+    	</foreach>
+    </delete>
+</mapper>

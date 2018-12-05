@@ -1,0 +1,1275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.playclick.youku.mapper.YouKualbumMapper">
+
+	<select id="load" parameterType="Map"
+		resultType="com.pbtd.playclick.youku.domain.YouKualbum">
+		select
+		area,category,check_state_list, CONCAT(description)
+		description,director_list,episode_count,count,exclusive,huge_thumb_url,
+		huge_vthumb_url,keyword,keyword_list,license_list,paid,pay_type_list,performer_list,
+		price,release_date,show_id,small_thumb_url,small_vthumb_url,status,sub_category,title,
+		try_episodes,try_time,try_type,vod_fullprice,vod_ticket,thumb_url,vthumb_url,web_url,
+		youku_rating,
+		DATE_FORMAT(create_time, '%Y.%m.%d %H:%i:%s')
+		create_time,
+		DATE_FORMAT(update_time, '%Y.%m.%d %H:%i:%s') update_time,
+		categoryId,sub_categoryId,
+		DATE_FORMAT(storagetime, '%Y.%m.%d
+		%H:%i:%s') storagetime,isStorage
+		from
+		youk_vod_album a
+		<where>
+			<if test="category!=null and category!='' ">
+				and a.category = #{category,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryId!=null and categoryId!='' ">
+				and a.categoryId = #{categoryId,jdbcType=VARCHAR}
+			</if>
+			<if test="show_id!=null and show_id!='' ">
+				and a.show_id = #{show_id,jdbcType=VARCHAR}
+			</if>
+			<if test="title!=null and title!='' ">
+				and a.title = #{title,jdbcType=VARCHAR}
+			</if>
+			<if test="sub_categoryId!=null and sub_categoryId!='' ">
+				and a.sub_categoryId like '%${sub_categoryId}%'
+			</if>
+			<if test="keyword!=null and keyword!='' ">
+				and a.keyword like '%${keyword}%'
+			</if>
+		</where>
+	</select>
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(1) from youk_vod_album a
+		<where>
+			<if test="status_next!=null and status_next!='' ">
+				and a.status !=a.status_next
+			</if>
+			<if test="paid_next!=null and paid_next!='' ">
+				and a.paid!=a.paid_next
+			</if>
+			<if test="status!=null and status!='' ">
+				and a.status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="isStorage!=null and isStorage!='' ">
+				and a.isStorage = #{isStorage,jdbcType=VARCHAR}
+			</if>
+			<if test="category!=null and category!='' ">
+				and a.category = #{category,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryId!=null and categoryId!='' ">
+				and a.categoryId = #{categoryId,jdbcType=VARCHAR}
+			</if>
+			<if test="show_id!=null and show_id!='' ">
+				and a.show_id = #{show_id,jdbcType=VARCHAR}
+			</if>
+			<if test="title!=null and title!='' ">
+				and a.title like '%${title}%'
+			</if>
+			<if test="sub_categoryId!=null and sub_categoryId!='' ">
+				and a.sub_categoryId like '%${sub_categoryId}%'
+			</if>
+			<if test="keyword!=null and keyword!='' ">
+				and a.keyword like '%${keyword}%'
+			</if>
+			<if test="director_list!=null and director_list!='' ">
+				and a.director_list like '%${director_list}%'
+			</if>
+			<if test="performer_list!=null and performer_list!='' ">
+				and a.performer_list like '%${performer_list}%'
+			</if>
+
+			<if test="start_time!= null and end_time!=null  ">
+				and
+				(
+				(
+				date_format(storagetime,'%Y-%m-%d %H:%i:%s') >= #{start_time,jdbcType=VARCHAR}
+				and #{end_time,jdbcType=VARCHAR} >=date_format(storagetime,'%Y-%m-%d
+				%H:%i:%s')
+				)
+				or (
+				date_format(storagetime,'%Y-%m-%d %H:%i:%s') >=date_format(#{start_time,jdbcType=VARCHAR},'%Y-%m-%d
+				%H:%i:%s')
+				and #{end_time,jdbcType=VARCHAR} >=date_format(storagetime,'%Y-%m-%d
+				%H:%i:%s')
+				)
+				)
+			</if>
+			<if test="start_time!= null and  end_time==null">
+				and (
+				date_format(storagetime,'%Y-%m-%d %H:%i:%s') >= #{start_time,jdbcType=VARCHAR}
+				or date_format(storagetime,'%Y-%m-%d %H:%i:%s') >=
+				#{start_time,jdbcType=VARCHAR}
+				)
+			</if>
+			<if test="end_time!= null and  start_time==null">
+				and (
+				#{end_time,jdbcType=VARCHAR} >=date_format(storagetime,'%Y-%m-%d %H:%i:%s')
+				or #{end_time,jdbcType=VARCHAR} >= date_format(storagetime,'%Y-%m-%d
+				%H:%i:%s')
+				)
+			</if>
+
+
+
+			<if test="start_updatetime!= null and end_updatetime!=null  ">
+				and
+				(
+				(
+				date_format(update_time,'%Y-%m-%d %H:%i:%s') >= #{start_updatetime,jdbcType=VARCHAR}
+				and #{end_updatetime,jdbcType=VARCHAR}
+				>=date_format(update_time,'%Y-%m-%d %H:%i:%s')
+				)
+				or (
+				date_format(create_time,'%Y-%m-%d %H:%i:%s')
+				>=date_format(#{start_updatetime,jdbcType=VARCHAR},'%Y-%m-%d
+				%H:%i:%s')
+				and #{end_updatetime,jdbcType=VARCHAR}
+				>=date_format(create_time,'%Y-%m-%d %H:%i:%s')
+				)
+				)
+			</if>
+			<if test="start_updatetime!= null and  end_updatetime==null">
+				and (
+				date_format(update_time,'%Y-%m-%d %H:%i:%s') >= #{start_updatetime,jdbcType=VARCHAR}
+				or date_format(create_time,'%Y-%m-%d %H:%i:%s') >=
+				#{start_updatetime,jdbcType=VARCHAR}
+				)
+			</if>
+			<if test="end_updatetime!= null and  start_updatetime==null">
+				and (
+				#{end_updatetime,jdbcType=VARCHAR} >=date_format(update_time,'%Y-%m-%d %H:%i:%s')
+				or #{end_updatetime,jdbcType=VARCHAR} >=
+				date_format(create_time,'%Y-%m-%d %H:%i:%s')
+				)
+			</if>
+
+		</where>
+	</select>
+	<select id="page" parameterType="Map"
+		resultType="com.pbtd.playclick.youku.domain.YouKualbum">
+		select
+		area,category,check_state_list,CONCAT(description)
+		description,director_list,episode_count,count,exclusive,huge_thumb_url,
+		huge_vthumb_url,keyword,keyword_list,license_list,paid,pay_type_list,performer_list,
+		price,release_date,show_id,small_thumb_url,small_vthumb_url,status,sub_category,title,
+		try_episodes,try_time,try_type,vod_fullprice,vod_ticket,thumb_url,vthumb_url,web_url,
+		youku_rating,
+		DATE_FORMAT(create_time, '%Y.%m.%d %H:%i:%s')
+		create_time,
+		DATE_FORMAT(update_time, '%Y.%m.%d %H:%i:%s') update_time,
+		categoryId,sub_categoryId,
+		DATE_FORMAT(storagetime, '%Y.%m.%d
+		%H:%i:%s') storagetime,isStorage,status_next,paid_next
+		from
+		youk_vod_album a
+		<where>
+			<if test="status_next!=null and status_next!='' ">
+				and a.status !=a.status_next
+			</if>
+			<if test="paid_next!=null and paid_next!='' ">
+				and a.paid!=a.paid_next
+			</if>
+			<if test="status!=null and status!='' ">
+				and a.status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="isStorage!=null and isStorage!='' ">
+				and a.isStorage = #{isStorage,jdbcType=VARCHAR}
+			</if>
+			<if test="category!=null and category!='' ">
+				and a.category = #{category,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryId!=null and categoryId!='' ">
+				and a.categoryId = #{categoryId,jdbcType=VARCHAR}
+			</if>
+			<if test="show_id!=null and show_id!='' ">
+				and a.show_id = #{show_id,jdbcType=VARCHAR}
+			</if>
+			<if test="title!=null and title!='' ">
+				and a.title like '%${title}%'
+			</if>
+			<if test="sub_categoryId!=null and sub_categoryId!='' ">
+				and a.sub_categoryId like '%${sub_categoryId}%'
+			</if>
+			<if test="keyword!=null and keyword!='' ">
+				and a.keyword like '%${keyword}%'
+			</if>
+			<if test="director_list!=null and director_list!='' ">
+				and a.director_list like '%${director_list}%'
+			</if>
+			<if test="performer_list!=null and performer_list!='' ">
+				and a.performer_list like '%${performer_list}%'
+			</if>
+			<if test="start_time!= null and end_time!=null  ">
+				and
+				(
+				(
+				date_format(storagetime,'%Y-%m-%d %H:%i:%s') >= #{start_time,jdbcType=VARCHAR}
+				and #{end_time,jdbcType=VARCHAR} >=date_format(storagetime,'%Y-%m-%d
+				%H:%i:%s')
+				)
+				or (
+				date_format(storagetime,'%Y-%m-%d %H:%i:%s') >=date_format(#{start_time,jdbcType=VARCHAR},'%Y-%m-%d
+				%H:%i:%s')
+				and #{end_time,jdbcType=VARCHAR} >=date_format(storagetime,'%Y-%m-%d
+				%H:%i:%s')
+				)
+				)
+			</if>
+			<if test="start_time!= null and  end_time==null">
+				and (
+				date_format(storagetime,'%Y-%m-%d %H:%i:%s') >= #{start_time,jdbcType=VARCHAR}
+				or date_format(storagetime,'%Y-%m-%d %H:%i:%s') >=
+				#{start_time,jdbcType=VARCHAR}
+				)
+			</if>
+			<if test="end_time!= null and  start_time==null">
+				and (
+				#{end_time,jdbcType=VARCHAR} >=date_format(storagetime,'%Y-%m-%d %H:%i:%s')
+				or #{end_time,jdbcType=VARCHAR} >= date_format(storagetime,'%Y-%m-%d
+				%H:%i:%s')
+				)
+			</if>
+
+
+
+
+			<if test="start_updatetime!= null and end_updatetime!=null  ">
+				and
+				(
+				(
+				date_format(update_time,'%Y-%m-%d %H:%i:%s') >= #{start_updatetime,jdbcType=VARCHAR}
+				and #{end_updatetime,jdbcType=VARCHAR}
+				>=date_format(update_time,'%Y-%m-%d %H:%i:%s')
+				)
+				or (
+				date_format(create_time,'%Y-%m-%d %H:%i:%s')
+				>=date_format(#{start_updatetime,jdbcType=VARCHAR},'%Y-%m-%d
+				%H:%i:%s')
+				and #{end_updatetime,jdbcType=VARCHAR}
+				>=date_format(create_time,'%Y-%m-%d %H:%i:%s')
+				)
+				)
+			</if>
+			<if test="start_updatetime!= null and  end_updatetime==null">
+				and (
+				date_format(update_time,'%Y-%m-%d %H:%i:%s') >= #{start_updatetime,jdbcType=VARCHAR}
+				or date_format(create_time,'%Y-%m-%d %H:%i:%s') >=
+				#{start_updatetime,jdbcType=VARCHAR}
+				)
+			</if>
+			<if test="end_updatetime!= null and  start_updatetime==null">
+				and (
+				#{end_updatetime,jdbcType=VARCHAR} >=date_format(update_time,'%Y-%m-%d %H:%i:%s')
+				or #{end_updatetime,jdbcType=VARCHAR} >=
+				date_format(create_time,'%Y-%m-%d %H:%i:%s')
+				)
+			</if>
+		</where>
+		order by update_time desc,categoryId
+		<if test="pageSize!=null and pageSize!=''  ">
+			limit #{start},#{pageSize}
+		</if>
+
+
+
+	</select>
+	<select id="find" parameterType="Map"
+		resultType="com.pbtd.playclick.youku.domain.YouKualbum">
+		select
+		area,category,check_state_list,CONCAT(description)
+		description,director_list,episode_count,count,exclusive,huge_thumb_url,
+		huge_vthumb_url,keyword,keyword_list,license_list,paid,pay_type_list,performer_list,
+		price,release_date,show_id,small_thumb_url,small_vthumb_url,status,sub_category,title,
+		try_episodes,try_time,try_type,vod_fullprice,vod_ticket,thumb_url,vthumb_url,web_url,
+		youku_rating,
+		DATE_FORMAT(create_time, '%Y.%m.%d %H:%i:%s')
+		create_time,
+		DATE_FORMAT(update_time, '%Y.%m.%d %H:%i:%s') update_time,
+		categoryId,sub_categoryId,
+		DATE_FORMAT(storagetime, '%Y.%m.%d
+		%H:%i:%s') storagetime,isStorage,status_next,paid_next
+		from
+		youk_vod_album a
+		<where>
+			<if test="isStorage!=null and isStorage!='' ">
+				and a.isStorage = #{isStorage,jdbcType=VARCHAR}
+			</if>
+			<if test="status!=null and status!='' ">
+				and a.status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="category!=null and category!='' ">
+				and a.category = #{category,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryId!=null and categoryId!='' ">
+				and a.categoryId = #{categoryId,jdbcType=VARCHAR}
+			</if>
+			<if test="show_id!=null and show_id!='' ">
+				and a.show_id = #{show_id,jdbcType=VARCHAR}
+			</if>
+			<if test="title!=null and title!='' ">
+				and a.title like '%${title}%'
+			</if>
+			<if test="sub_categoryId!=null and sub_categoryId!='' ">
+				and a.sub_categoryId like '%${sub_categoryId}%'
+			</if>
+			<if test="keyword!=null and keyword!='' ">
+				and a.keyword like '%${keyword}%'
+			</if>
+			<if test="director_list!=null and director_list!='' ">
+				and a.director_list like '%${director_list}%'
+			</if>
+			<if test="performer_list!=null and performer_list!='' ">
+				and a.performer_list like '%${performer_list}%'
+			</if>
+			<if test="import==1">
+				and show_id not in(
+				select show_id from
+				youk_vod_albumvideo group by
+				show_id
+				)
+			</if>
+			<if test="start_time!= null and end_time!=null  ">
+				and
+				(
+				(
+				date_format(storagetime,'%Y-%m-%d %H:%i:%s') >= #{start_time,jdbcType=VARCHAR}
+				and #{end_time,jdbcType=VARCHAR} >=date_format(storagetime,'%Y-%m-%d
+				%H:%i:%s')
+				)
+				or (
+				date_format(storagetime,'%Y-%m-%d %H:%i:%s') >=date_format(#{start_time,jdbcType=VARCHAR},'%Y-%m-%d
+				%H:%i:%s')
+				and #{end_time,jdbcType=VARCHAR} >=date_format(storagetime,'%Y-%m-%d
+				%H:%i:%s')
+				)
+				)
+			</if>
+			<if test="start_time!= null and  end_time==null">
+				and (
+				date_format(storagetime,'%Y-%m-%d %H:%i:%s') >= #{start_time,jdbcType=VARCHAR}
+				or date_format(storagetime,'%Y-%m-%d %H:%i:%s') >=
+				#{start_time,jdbcType=VARCHAR}
+				)
+			</if>
+			<if test="end_time!= null and  start_time==null">
+				and (
+				#{end_time,jdbcType=VARCHAR} >=date_format(storagetime,'%Y-%m-%d %H:%i:%s')
+				or #{end_time,jdbcType=VARCHAR} >= date_format(storagetime,'%Y-%m-%d
+				%H:%i:%s')
+				)
+			</if>
+			<if test="start_updatetime!= null and end_updatetime!=null  ">
+				and
+				(
+				(
+				date_format(update_time,'%Y-%m-%d %H:%i:%s') >= #{start_updatetime,jdbcType=VARCHAR}
+				and #{end_updatetime,jdbcType=VARCHAR}
+				>=date_format(update_time,'%Y-%m-%d %H:%i:%s')
+				)
+				or (
+				date_format(create_time,'%Y-%m-%d %H:%i:%s')
+				>=date_format(#{start_updatetime,jdbcType=VARCHAR},'%Y-%m-%d
+				%H:%i:%s')
+				and #{end_updatetime,jdbcType=VARCHAR}
+				>=date_format(create_time,'%Y-%m-%d %H:%i:%s')
+				)
+				)
+			</if>
+			<if test="start_updatetime!= null and  end_updatetime==null">
+				and (
+				date_format(update_time,'%Y-%m-%d %H:%i:%s') >= #{start_updatetime,jdbcType=VARCHAR}
+				or date_format(create_time,'%Y-%m-%d %H:%i:%s') >=
+				#{start_updatetime,jdbcType=VARCHAR}
+				)
+			</if>
+			<if test="end_updatetime!= null and  start_updatetime==null">
+				and (
+				#{end_updatetime,jdbcType=VARCHAR} >=date_format(update_time,'%Y-%m-%d %H:%i:%s')
+				or #{end_updatetime,jdbcType=VARCHAR} >=
+				date_format(create_time,'%Y-%m-%d %H:%i:%s')
+				)
+			</if>
+
+		</where>
+		order by update_time desc,categoryId
+		<if test="pageSize!=null and pageSize!=''  ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+
+
+	<!--一一一一一一一一一一一一一一一一一一一一 视频一一一一一一一一一一一一一一一一一一一一一一一一一 -->
+
+	<select id="loadvideo" parameterType="Map"
+		resultType="com.pbtd.playclick.youku.domain.YouKualbumvideo">
+		select
+		category,definition_list,duration,license_list,paid,panorama,sequence,show_id,
+		small_thumb_url,source_type,status,thumb_url,title,video_id,video_stage,video_type,
+		web_url,
+		DATE_FORMAT(create_time, '%Y.%m.%d %H:%i:%s') create_time,
+		DATE_FORMAT(update_time, '%Y.%m.%d %H:%i:%s') update_time
+		from
+		youk_vod_albumvideo a
+		<where>
+			<if test="show_id!=null and show_id!='' ">
+				and a.show_id = #{show_id,jdbcType=VARCHAR}
+			</if>
+			<if test="title!=null and title!='' ">
+				and a.title like '%${title}%'
+			</if>
+			<if test="video_id!=null and video_id!='' ">
+				and a.video_id = #{video_id,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="countvideo" parameterType="Map" resultType="java.lang.Integer">
+		select count(1)
+		from youk_vod_albumvideo a
+		<where>
+			<if test="show_id!=null and show_id!='' ">
+				and a.show_id = #{show_id,jdbcType=VARCHAR}
+			</if>
+			<if test="title!=null and title!='' ">
+				and a.title like '%${title}%'
+			</if>
+			<if test="video_id!=null and video_id!='' ">
+				and a.video_id = #{video_id,jdbcType=VARCHAR}
+			</if>
+			<if test="video_type!=null and video_type!='' ">
+				and a.video_type = #{video_type,jdbcType=VARCHAR}
+			</if>
+			<if test="video_stage!=null and video_stage!='' ">
+				and a.video_stage = #{video_stage,jdbcType=VARCHAR}
+			</if>
+			<if test="paid!=null and paid!='' ">
+				and a.paid= #{paid,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="pagevideo" parameterType="Map"
+		resultType="com.pbtd.playclick.youku.domain.YouKualbumvideo">
+		select
+		category,definition_list,duration,license_list,paid,panorama,sequence,show_id,
+		small_thumb_url,source_type,status,thumb_url,title,video_id,video_stage,video_type,
+		web_url, DATE_FORMAT(create_time, '%Y.%m.%d %H:%i:%s') create_time,
+		DATE_FORMAT(update_time, '%Y.%m.%d %H:%i:%s')
+		update_time,status_next,paid_next
+		from
+		youk_vod_albumvideo a
+		<where>
+			<if test="show_id!=null and show_id!='' ">
+				and a.show_id = #{show_id,jdbcType=VARCHAR}
+			</if>
+			<if test="title!=null and title!='' ">
+				and a.title like '%${title}%'
+			</if>
+			<if test="video_id!=null and video_id!='' ">
+				and a.video_id = #{video_id,jdbcType=VARCHAR}
+			</if>
+			<if test="video_type!=null and video_type!='' ">
+				and a.video_type = #{video_type,jdbcType=VARCHAR}
+			</if>
+			<if test="video_stage!=null and video_stage!='' ">
+				and a.video_stage = #{video_stage,jdbcType=VARCHAR}
+			</if>
+			<if test="paid!=null and paid!='' ">
+				and a.paid= #{paid,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by CAST(sequence as SIGNED)
+
+	</select>
+	<select id="findvideo" parameterType="Map"
+		resultType="com.pbtd.playclick.youku.domain.YouKualbumvideo">
+		select
+		category,definition_list,duration,license_list,paid,panorama,sequence,show_id,
+		small_thumb_url,source_type,status,thumb_url,title,video_id,video_stage,video_type,
+		web_url,DATE_FORMAT(create_time, '%Y.%m.%d %H:%i:%s') create_time,
+		DATE_FORMAT(update_time, '%Y.%m.%d %H:%i:%s')
+		update_time,status_next,paid_next
+		from
+		youk_vod_albumvideo a
+		<where>
+			<if test="status_next!=null and status_next!='' ">
+				and a.status !=a.status_next
+			</if>
+			<if test="paid_next!=null and paid_next!='' ">
+				and a.paid!=a.paid_next
+			</if>
+			<if test="show_id!=null and show_id!='' ">
+				and a.show_id = #{show_id,jdbcType=VARCHAR}
+			</if>
+			<if test="title!=null and title!='' ">
+				and a.title like '%${title}%'
+			</if>
+			<if test="video_id!=null and video_id!='' ">
+				and a.video_id = #{video_id,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by CAST(sequence as SIGNED)
+
+	</select>
+
+
+	<select id="findvideoalbum" parameterType="Map" resultType="Map">
+		select
+		b.title
+		name,a.category,a.paid,a.sequence,a.show_id,a.status,a.title,a.video_id,a.status_next,a.paid_next
+		from youk_vod_albumvideo a
+		left join youk_vod_album b on
+		a.show_id=b.show_id
+		<where>
+			<if test="status_next!=null and status_next!='' ">
+				and a.status !=a.status_next
+			</if>
+			<if test="paid_next!=null and paid_next!='' ">
+				and a.paid!=a.paid_next
+			</if>
+			<if test="show_id!=null and show_id!='' ">
+				and a.show_id = #{show_id,jdbcType=VARCHAR}
+			</if>
+			<if test="title!=null and title!='' ">
+				and a.title like '%${title}%'
+			</if>
+			<if test="video_id!=null and video_id!='' ">
+				and a.video_id = #{video_id,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by a.sequence
+
+	</select>
+
+
+
+
+
+
+
+
+	<!-- 一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一优酷媒资获取一一一一一一一一一一一一一一一一一一一一一一一一一一一一v -->
+
+	<select id="findoffset" parameterType="Map" resultType="Map">
+		select
+		value,updatetime,media_minoffset,media_maxoffset
+		,min1,min2,min3,min4,min5,min6,min7,min8
+		,max1,max2,max3,max4,max5,max6,max7,max8
+		from youk_vod_offset
+	</select>
+	<update id="updateoffset" parameterType="Map">
+		update youk_vod_offset
+		<set>
+			<if test="value!=null and value!='' ">
+				value = #{value,jdbcType=VARCHAR},
+			</if>
+			<if test="media_minoffset!=null and media_minoffset!='' ">
+				media_minoffset = #{media_minoffset,jdbcType=VARCHAR},
+			</if>
+			<if test="media_maxoffset!=null and media_maxoffset!='' ">
+				media_maxoffset = #{media_maxoffset,jdbcType=VARCHAR},
+			</if>
+
+			<if test="min1!=null and min1!='' ">
+				min1 = #{min1,jdbcType=VARCHAR},
+			</if>
+			<if test="max1!=null and max1!='' ">
+				max1 = #{max1,jdbcType=VARCHAR},
+			</if>
+
+			<if test="min2!=null and min2!='' ">
+				min2 = #{min2,jdbcType=VARCHAR},
+			</if>
+			<if test="max2!=null and max2!='' ">
+				max2 = #{max2,jdbcType=VARCHAR},
+			</if>
+			<if test="min3!=null and min3!='' ">
+				min3 = #{min3,jdbcType=VARCHAR},
+			</if>
+			<if test="max3!=null and max3!='' ">
+				max3 = #{max3,jdbcType=VARCHAR},
+			</if>
+			<if test="min4!=null and min4!='' ">
+				min4 = #{min4,jdbcType=VARCHAR},
+			</if>
+			<if test="max4!=null and max4!='' ">
+				max4 = #{max4,jdbcType=VARCHAR},
+			</if>
+			<if test="min5!=null and min5!='' ">
+				min5 = #{min5,jdbcType=VARCHAR},
+			</if>
+			<if test="max5!=null and max5!='' ">
+				max5 = #{max5,jdbcType=VARCHAR},
+			</if>
+			<if test="min6!=null and min6!='' ">
+				min6 = #{min6,jdbcType=VARCHAR},
+			</if>
+			<if test="max6!=null and max6!='' ">
+				max6= #{max6,jdbcType=VARCHAR},
+			</if>
+			<if test="min7!=null and min7!='' ">
+				min7 = #{min7,jdbcType=VARCHAR},
+			</if>
+			<if test="max7!=null and max7!='' ">
+				max7= #{max7,jdbcType=VARCHAR},
+			</if>
+			<if test="min8!=null and min8!='' ">
+				min8 = #{min8,jdbcType=VARCHAR},
+			</if>
+			<if test="max8!=null and max8!='' ">
+				max8 = #{max8,jdbcType=VARCHAR},
+			</if>
+		</set>
+	</update>
+	<insert id="insert" parameterType="com.pbtd.playclick.youku.domain.YouKualbum">
+		insert into youk_vod_album
+		(area,category,categoryId,check_state_list,
+		description,director_list,episode_count,count,
+		exclusive,huge_thumb_url,huge_vthumb_url,keyword,
+		keyword_list,license_list,paid,pay_type_list,performer_list,
+		price,release_date,show_id,
+		small_thumb_url,small_vthumb_url,status,sub_category,sub_categoryId,title,
+		try_episodes,try_time,try_type,vod_fullprice,vod_ticket,
+		thumb_url,vthumb_url,web_url,youku_rating,status_next,paid_next
+		)
+		values
+		(#{area,jdbcType=VARCHAR},#{category,jdbcType=VARCHAR},#{categoryId,jdbcType=VARCHAR},
+		#{check_state_list,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+		#{director_list,jdbcType=VARCHAR},#{episode_count,jdbcType=VARCHAR},#{count,jdbcType=VARCHAR},
+		#{exclusive,jdbcType=VARCHAR}, #{huge_thumb_url,jdbcType=VARCHAR},
+		#{huge_vthumb_url,jdbcType=VARCHAR},#{keyword,jdbcType=VARCHAR},
+		#{keyword_list,jdbcType=VARCHAR}, #{license_list,jdbcType=VARCHAR},
+		#{paid,jdbcType=VARCHAR},#{pay_type_list,jdbcType=VARCHAR},
+		#{performer_list,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR},
+		#{release_date,jdbcType=VARCHAR},#{show_id,jdbcType=VARCHAR},
+		#{small_thumb_url,jdbcType=VARCHAR},
+		#{small_vthumb_url,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},#{sub_category,jdbcType=VARCHAR},#{sub_categoryId,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR}, #{try_episodes,jdbcType=VARCHAR},
+		#{try_time,jdbcType=VARCHAR},#{try_type,jdbcType=VARCHAR},
+		#{vod_fullprice,jdbcType=VARCHAR}, #{vod_ticket,jdbcType=VARCHAR},
+		#{thumb_url,jdbcType=VARCHAR},#{vthumb_url,jdbcType=VARCHAR},
+		#{web_url,jdbcType=VARCHAR}, #{youku_rating,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR}, #{paid,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.pbtd.playclick.youku.domain.YouKualbum">
+		update youk_vod_album
+		<set>
+			updatestatus=0,
+			<if test="category != null">
+				category = #{category,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryId != null">
+				categoryId = #{categoryId,jdbcType=VARCHAR},
+			</if>
+			<if test="check_state_list != null">
+				check_state_list = #{check_state_list,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="director_list != null">
+				director_list = #{director_list,jdbcType=VARCHAR},
+			</if>
+			<if test="episode_count != null">
+				episode_count = #{episode_count,jdbcType=VARCHAR},
+			</if>
+			<if test="count != null">
+				count = #{count,jdbcType=VARCHAR},
+			</if>
+			<if test="exclusive != null">
+				exclusive = #{exclusive,jdbcType=VARCHAR},
+			</if>
+			<if test="huge_thumb_url != null">
+				huge_thumb_url = #{huge_thumb_url,jdbcType=VARCHAR},
+			</if>
+			<if test="huge_vthumb_url != null">
+				huge_vthumb_url = #{huge_vthumb_url,jdbcType=VARCHAR},
+			</if>
+			<if test="keyword != null">
+				keyword = #{keyword,jdbcType=VARCHAR},
+			</if>
+			<if test="keyword_list != null">
+				keyword_list = #{keyword_list,jdbcType=VARCHAR},
+			</if>
+			<if test="license_list != null">
+				license_list = #{license_list,jdbcType=VARCHAR},
+			</if>
+			<if test="pay_type_list != null">
+				pay_type_list = #{pay_type_list,jdbcType=VARCHAR},
+			</if>
+			<if test="performer_list != null">
+				performer_list = #{performer_list,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				price = #{price,jdbcType=VARCHAR},
+			</if>
+			<if test="release_date != null">
+				release_date = #{release_date,jdbcType=VARCHAR},
+			</if>
+			<if test="small_thumb_url != null">
+				small_thumb_url = #{small_thumb_url,jdbcType=VARCHAR},
+			</if>
+			<if test="small_vthumb_url != null">
+				small_vthumb_url = #{small_vthumb_url,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="sub_category != null">
+				sub_category = #{sub_category,jdbcType=VARCHAR},
+			</if>
+			<if test="sub_categoryId != null">
+				sub_categoryId = #{sub_categoryId,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+				update_time = now(),
+			</if>
+			<if test="try_episodes != null">
+				try_episodes = #{try_episodes,jdbcType=VARCHAR},
+			</if>
+			<if test="try_time != null">
+				try_time = #{try_time,jdbcType=VARCHAR},
+			</if>
+			<if test="try_type != null">
+				try_type = #{try_type,jdbcType=VARCHAR},
+			</if>
+			<if test="vod_fullprice != null">
+				vod_fullprice = #{vod_fullprice,jdbcType=VARCHAR},
+			</if>
+			<if test="vod_ticket != null">
+				vod_ticket = #{vod_ticket,jdbcType=VARCHAR},
+			</if>
+			<if test="thumb_url != null">
+				thumb_url = #{thumb_url,jdbcType=VARCHAR},
+			</if>
+			<if test="vthumb_url != null">
+				vthumb_url = #{vthumb_url,jdbcType=VARCHAR},
+			</if>
+			<if test="web_url != null">
+				web_url = #{web_url,jdbcType=VARCHAR},
+			</if>
+			<if test="youku_rating != null">
+				youku_rating = #{youku_rating,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where show_id = #{show_id,jdbcType=VARCHAR}
+	</update>
+	<update id="updatecount" parameterType="Map">
+		update youk_vod_album
+		<set>
+			<if test="count != null">
+				updatestatus=0,
+				count = #{count,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where show_id = #{show_id,jdbcType=VARCHAR}
+	</update>
+	<update id="updategetcount" parameterType="Map">
+		update youk_vod_album
+		set
+		updatestatus=0, update_time=now(),count =(select
+		ifnull(max(CAST(REPLACE(video_stage,'-','') as SIGNED)),0) sequence
+		from youk_vod_albumvideo
+		where video_type='正片' and
+		show_id=#{show_id,jdbcType=VARCHAR})
+		where show_id =
+		#{show_id,jdbcType=VARCHAR}
+	</update>
+	<update id="updatealbumstatus" parameterType="com.pbtd.playclick.youku.domain.YouKualbum">
+		update youk_vod_album
+		<set>
+			<if test="status != null">
+				status_next = #{status,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where show_id=#{show_id,jdbcType=VARCHAR}
+	</update>
+
+
+	<update id="updatealbumpaid" parameterType="com.pbtd.playclick.youku.domain.YouKualbum">
+		update youk_vod_album
+		<set>
+			<if test="paid != null">
+				paid_next = #{paid,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where show_id=#{show_id,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updatealbumnext" parameterType="Map">
+		update youk_vod_album
+		<set>
+			<if test="paid_next != null">
+				paid = paid_next
+			</if>
+			<if test="status_next != null">
+				status = status_next
+			</if>
+		</set>
+		where show_id=#{show_id,jdbcType=VARCHAR}
+	</update>
+	<insert id="insertvideo" parameterType="com.pbtd.playclick.youku.domain.YouKualbumvideo">
+		insert into
+		youk_vod_albumvideo
+		(category,definition_list,duration,license_list,paid,panorama,
+		sequence,show_id,small_thumb_url,source_type,status,
+		thumb_url,title,video_id,video_stage,video_type,web_url,dramacode,status_next,paid_next
+		)
+		values
+		(#{category,jdbcType=VARCHAR},#{definition_list,jdbcType=VARCHAR},#{duration,jdbcType=VARCHAR},
+		#{license_list,jdbcType=VARCHAR},#{paid,jdbcType=VARCHAR},#{panorama,jdbcType=VARCHAR},
+		#{sequence,jdbcType=VARCHAR},#{show_id,jdbcType=VARCHAR},#{small_thumb_url,jdbcType=VARCHAR},
+		#{source_type,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{thumb_url,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR},#{video_id,jdbcType=VARCHAR},#{video_stage,jdbcType=VARCHAR},
+		#{video_type,jdbcType=VARCHAR},#{web_url,jdbcType=VARCHAR},#{dramacode,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},#{paid,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updatevideo" parameterType="com.pbtd.playclick.youku.domain.YouKualbumvideo">
+		update youk_vod_albumvideo
+		<set>
+			<if test="category != null">
+				category = #{category,jdbcType=VARCHAR},
+			</if>
+			<if test="definition_list != null">
+				definition_list = #{definition_list,jdbcType=VARCHAR},
+			</if>
+			<if test="duration != null">
+				duration = #{duration,jdbcType=VARCHAR},
+			</if>
+			<if test="license_list != null">
+				license_list = #{license_list,jdbcType=VARCHAR},
+			</if>
+			<if test="panorama != null">
+				panorama = #{panorama,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=VARCHAR},
+			</if>
+			<if test="small_thumb_url != null">
+				small_thumb_url = #{small_thumb_url,jdbcType=VARCHAR},
+			</if>
+			<if test="source_type != null">
+				source_type = #{source_type,jdbcType=VARCHAR},
+			</if>
+			<if test="thumb_url != null">
+				thumb_url = #{thumb_url,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="web_url != null">
+				web_url = #{web_url,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where video_id=#{video_id,jdbcType=VARCHAR}
+	</update>
+	<update id="updatevideostatus" parameterType="com.pbtd.playclick.youku.domain.YouKualbumvideo">
+		update youk_vod_albumvideo
+		<set>
+			<if test="status != null">
+				update_time=now(),status_next =
+				#{status,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where video_id=#{video_id,jdbcType=VARCHAR}
+	</update>
+	<update id="updatevideopaid" parameterType="com.pbtd.playclick.youku.domain.YouKualbumvideo">
+		update youk_vod_albumvideo
+		<set>
+			<if test="paid != null">
+				update_time=now(),paid_next = #{paid,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where video_id=#{video_id,jdbcType=VARCHAR}
+	</update>
+	<update id="updatealbumvideonext" parameterType="Map">
+		update youk_vod_albumvideo
+		<set>
+			<if test="paid_next != null">
+				paid = paid_next
+			</if>
+			<if test="status_next != null">
+				status = status_next
+			</if>
+		</set>
+		where show_id=#{show_id,jdbcType=VARCHAR}
+	</update>
+	<!-- 频道 标签 -->
+	<insert id="insertchannel" parameterType="Map">
+		insert into
+		youk_vod_channel
+		(chnName,bz,status)
+		values
+		(#{chnName,jdbcType=VARCHAR},#{bz,jdbcType=VARCHAR},1
+		)
+	</insert>
+	<select id="findchannel" parameterType="Map" resultType="Map">
+		select chnId,chnName from youk_vod_channel
+		<where>
+			<if test="chnName!=null and chnName !='' ">
+				and chnName = #{chnName,jdbcType=VARCHAR}
+			</if>
+			<if test="chnId!=null and chnId!='' ">
+				and chnId = #{chnId,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by chnId
+	</select>
+	<select id="findchannellist" parameterType="Map" resultType="Map">
+		select chnId,chnName from youk_vod_channel
+		<where>
+			<if test="chnName!=null and chnName !='' ">
+				and chnName = #{chnName,jdbcType=VARCHAR}
+			</if>
+			<if test="chnId!=null and chnId!='' ">
+				and chnId = #{chnId,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by chnId
+	</select>
+	<insert id="insertlabel" parameterType="Map">
+		insert into
+		youk_vod_label
+		(tagId,tagName,chnId)
+		values
+		(#{tagId,jdbcType=VARCHAR},#{tagName,jdbcType=VARCHAR},#{chnId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<select id="findlabel" parameterType="Map" resultType="Map">
+		select tagId,tagName,chnId from youk_vod_label
+		<where>
+			<if test="tagName!=null and tagName !='' ">
+				and tagName = #{tagName,jdbcType=VARCHAR}
+			</if>
+			<if test="tagId!=null and tagId!='' ">
+				and tagId = #{tagId,jdbcType=VARCHAR}
+			</if>
+			<if test="chnId!=null and chnId!='' ">
+				and chnId = #{chnId,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by chnId
+	</select>
+	<select id="findlabellist" parameterType="Map" resultType="Map">
+		select tagId,tagName,chnId from youk_vod_label
+		<where>
+			<if test="tagName!=null and tagName !='' ">
+				and tagName = #{tagName,jdbcType=VARCHAR}
+			</if>
+			<if test="tagId!=null and tagId!='' ">
+				and tagId = #{tagId,jdbcType=VARCHAR}
+			</if>
+			<if test="chnId!=null and chnId!='' ">
+				and chnId = #{chnId,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by chnId
+	</select>
+
+	<select id="getmaxvideoid" parameterType="Map" resultType="java.lang.Integer">
+		select ifnull(max(CAST(REPLACE(video_stage,'-','') as SIGNED)),0)
+		sequence from
+		youk_vod_albumvideo
+		where video_type='正片'
+		<if test="show_id!=null and show_id!='' ">
+			and show_id =#{show_id,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<delete id="deleteyoukviedeo">
+		delete from youk_vod_albumvideo where show_id
+		not in(
+		select show_id from youk_vod_album
+		)
+	</delete>
+
+	<!-- 播控 start -->
+	<select id="findPlayPolicyMsgsoffset" parameterType="Map"
+		resultType="Map">
+		select offset,update_time
+		from youk_playpolicy_offset
+	</select>
+	<update id="updatePlayPolicyMsgsoffset">
+		update youk_playpolicy_offset set offset=#{offset,jdbcType=VARCHAR}
+	</update>
+	<select id="countPlayPolicyMsgs" parameterType="Map"
+		resultType="java.lang.Integer">
+		select count(1) from youk_playpolicy a
+		<where>
+			<if test="name != null and name !='' ">
+				(
+				(a.type = 2 and a.videoid in (select video_id from youk_vod_albumvideo c
+				where c.title like '%${name}%'))
+				or
+				(a.type = 1 and a.showid in ( SELECT show_id FROM youk_vod_album d WHERE
+				d.title LIKE '%${name}%' ))
+				)
+			</if>
+			<if test="categoryId!=null and categoryId!='' ">
+				and a.showid in
+				(select show_id from youk_vod_album where
+				categoryId=#{categoryId,jdbcType=VARCHAR})
+			</if>
+			<if test="isPositive!=null and (isPositive =='1' or isPositive == 1 ) ">
+				and a.videoid in
+				(select video_id from youk_vod_albumvideo where video_type = '正片' group by
+				video_id )
+			</if>
+			<if test="isPositive!=null and (isPositive =='0' or isPositive == 0 ) ">
+				and a.videoid in
+				(select video_id from youk_vod_albumvideo where video_type != '正片' group by
+				video_id )
+			</if>
+			<if test="type!=null and type !='' ">
+				and a.type = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="status!=null and status!='' ">
+				and a.status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="play!=null and play!='' ">
+				and a.play = #{play,jdbcType=VARCHAR}
+			</if>
+			<if test="showid!=null and showid!='' ">
+				and a.showid = #{showid,jdbcType=VARCHAR}
+			</if>
+			<if test="videoid!=null and videoid!='' ">
+				and a.videoid = #{videoid,jdbcType=VARCHAR}
+			</if>
+			<if test="start_create_time != null ">
+	           <![CDATA[ and   date_format(a.create_time,'%Y-%m-%d %H:%i:%s')>=
+	              date_format(#{start_create_time,jdbcType=DATE},'%Y-%m-%d %H:%i:%s')  
+	           ]]>
+			</if>
+			<if test="end_create_time != null ">
+	           <![CDATA[ and   date_format(a.create_time,'%Y-%m-%d %H:%i:%s')<=
+	              date_format(#{end_create_time,jdbcType=DATE},'%Y-%m-%d %H:%i:%s')  
+	           ]]>
+			</if>
+		</where>
+	</select>
+	<select id="pagePlayPolicyMsgs" parameterType="Map" resultType="Map">
+		select a.id ,a.videoid mediaId ,a.type,DATE_FORMAT(a.create_time,
+		'%Y.%m.%d %H:%i:%s') create_time,a.status,a.play, a.showid,a.videoid
+		,b.title,b.video_stage,b.video_type from youk_playpolicy a
+		left join youk_vod_albumvideo b on a.mediaId=b.video_id
+		where a.type=2
+		<if test="categoryId!=null and categoryId!='' ">
+			and a.showid in
+			(select show_id from youk_vod_album where
+			categoryId=#{categoryId,jdbcType=VARCHAR})
+		</if>
+		<if test="name != null and name !='' ">
+			and b.title like '%${name}%'
+		</if>
+		<if test="isPositive!=null and (isPositive =='1' or isPositive == 1 ) ">
+			and a.videoid in
+			(select video_id from youk_vod_albumvideo where video_type = '正片' )
+		</if>
+		<if test="isPositive!=null and (isPositive =='0' or isPositive == 0 ) ">
+			and a.videoid in
+			(select video_id from youk_vod_albumvideo where video_type != '正片' )
+		</if>
+		<if test="type!=null and type !='' ">
+			and a.type = #{type,jdbcType=VARCHAR}
+		</if>
+		<if test="status!=null and status!='' ">
+			and a.status = #{status,jdbcType=VARCHAR}
+		</if>
+		<if test="play!=null and play!='' ">
+			and a.play = #{play,jdbcType=VARCHAR}
+		</if>
+		<if test="showid!=null and showid!='' ">
+			and a.showid = #{showid,jdbcType=VARCHAR}
+		</if>
+		<if test="videoid!=null and videoid!='' ">
+			and a.videoid = #{videoid,jdbcType=VARCHAR}
+		</if>
+		<if test="start_create_time != null ">
+	           <![CDATA[ and   date_format(a.create_time,'%Y-%m-%d %H:%i:%s')>=
+	              date_format(#{start_create_time,jdbcType=DATE},'%Y-%m-%d %H:%i:%s')  
+	           ]]>
+		</if>
+		<if test="end_create_time != null ">
+	           <![CDATA[ and   date_format(a.create_time,'%Y-%m-%d %H:%i:%s')<=
+	              date_format(#{end_create_time,jdbcType=DATE},'%Y-%m-%d %H:%i:%s')  
+	           ]]>
+		</if>
+		UNION
+		select a.id ,showid mediaId ,a.type,DATE_FORMAT(a.create_time,
+		'%Y.%m.%d %H:%i:%s') create_time,a.status,a.play, a.showid,a.videoid
+		,b.title,'' video_stage,'' video_type from youk_playpolicy a
+		left join
+		youk_vod_album b on a.mediaId=b.show_id
+		where a.type=1
+		<if test="categoryId!=null and categoryId!='' ">
+			and a.showid in
+			(select show_id from youk_vod_album where
+			categoryId=#{categoryId,jdbcType=VARCHAR})
+		</if>
+		<if test="isPositive !=null">
+			and a.type = 2
+		</if>
+		<if test="showid!=null and showid!='' ">
+			and a.showid = #{showid,jdbcType=VARCHAR}
+		</if>
+		<if test="name != null and name !='' ">
+			and b.title like '%${name}%'
+		</if>
+		<if test="type!=null and type !='' ">
+			and a.type = #{type,jdbcType=VARCHAR}
+		</if>
+		<if test="status!=null and status!='' ">
+			and a.status = #{status,jdbcType=VARCHAR}
+		</if>
+		<if test="play!=null and play!='' ">
+			and a.play = #{play,jdbcType=VARCHAR}
+		</if>
+		<if test="start_create_time != null ">
+	           <![CDATA[ and   date_format(a.create_time,'%Y-%m-%d %H:%i:%s')>=
+	              date_format(#{start_create_time,jdbcType=DATE},'%Y-%m-%d %H:%i:%s')  
+	           ]]>
+		</if>
+		<if test="end_create_time != null ">
+	           <![CDATA[ and   date_format(a.create_time,'%Y-%m-%d %H:%i:%s')<=
+	              date_format(#{end_create_time,jdbcType=DATE},'%Y-%m-%d %H:%i:%s')  
+	           ]]>
+		</if>
+		order by create_time desc
+		<if test="pageSize!=null and pageSize!=''  ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<insert id="insertPlayPolicyMsgs" parameterType="Map">
+		insert into
+		youk_playpolicy
+		(mediaId ,type,play ,showid,videoid)
+		values
+		(#{mediaId,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},1,
+		#{showid,jdbcType=VARCHAR},#{videoid,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deletePlayPolicyMsgs3">
+		delete from youk_playpolicy
+		<choose>
+			<when test="ye==1">
+				where id=#{id}
+			</when>
+			<otherwise>
+				where status=3
+				and (
+				(type=2 and videoid not in(select video_id from youk_vod_albumvideo))
+				or (type=1 and showid not in(select show_id from youk_vod_album ))
+				)
+			</otherwise>
+		</choose>
+	</delete>
+	<update id="udpatePlayPolicyMsgs">
+		update youk_playpolicy
+		<set>
+			<if test="status!=null and status!='' ">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="play!=null and play!='' ">
+				status=1,play = #{play,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<where>
+			<if test="type!=null and type!='' ">
+				and type = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="showid!=null and showid!='' ">
+				and showid = #{showid,jdbcType=VARCHAR}
+			</if>
+			<if test="videoid!=null and videoid!='' ">
+				and videoid = #{videoid,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</update>
+	<update id="udpatePlayPolicyMsgsstatus" parameterType="java.util.List">
+
+		<foreach collection="list" item="item" index="index"
+			separator=";">
+			update youk_playpolicy set status=1,play =
+			#{item.play,jdbcType=VARCHAR}
+			where 1=1
+			<choose>
+				<when test="item.type==1">
+					<if test="item.showid!=null and item.showid!='' ">
+						and type=1 and showid = #{item.showid,jdbcType=VARCHAR}
+					</if>
+				</when>
+				<when test="item.type==2">
+					<if test="item.videoid!=null and item.videoid!='' ">
+						and type=2 and videoid = #{item.videoid,jdbcType=VARCHAR}
+					</if>
+				</when>
+				<otherwise>
+					1=2
+				</otherwise>
+			</choose>
+		</foreach>
+	</update>
+	<!-- 播控 end -->
+
+
+	<!-- 优酷访问接口出错日志 start -->
+	<insert id="insertyouklogger" parameterType="Map">
+		insert into youk_logger
+		(operation_info,url,param_data,return_data,exception)
+		values
+		(#{operation_info,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},
+		#{param_data,jdbcType=VARCHAR},#{return_data,jdbcType=VARCHAR},
+		#{exception,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!-- 优酷访问接口出错日志 end -->
+
+	<!-- 保存增量接口数据 start -->
+	<insert id="save_mediamessage" parameterType="Map">
+		insert into youk_mediamessage
+		(offset,show_id,type,video_id,video_source_type,create_time)
+		values
+		(#{offset,jdbcType=VARCHAR},#{showId,jdbcType=VARCHAR},
+		#{type,jdbcType=VARCHAR},#{videoId,jdbcType=VARCHAR},#{videoSourceType,jdbcType=VARCHAR},
+		now()
+		)
+	</insert>
+	<select id="find_mediamessagevideo" parameterType="Map"
+		resultType="Map">
+		select show_id, video_id from youk_mediamessage where status=0 and video_id
+		is not null
+		group by video_id
+	</select>
+	<select id="find_mediamessageshow" parameterType="Map"
+		resultType="Map">
+		select DISTINCT show_id from youk_mediamessage
+		where show_id is not null
+	</select>
+	<update id="update_mediamessageshow" parameterType="Map">
+		update youk_mediamessage set status=1
+		where video_id is null and show_id=#{show_id,jdbcType=VARCHAR}
+	</update>
+	<update id="update_mediamessagevideo" parameterType="Map">
+		update youk_mediamessage set status=1 where
+		video_id=#{video_id,jdbcType=VARCHAR}
+	</update>
+	<delete id="delete_mediamessage">
+		delete from youk_mediamessage where status=1
+	</delete>
+	<!-- 保存增量接口数据 end -->
+	<!-- 定时任务是否启动中 start -->
+
+	<select id="find_quarzt" parameterType="Map" resultType="Map">
+		select * from quarzt_msg where type=#{type,jdbcType=VARCHAR}
+	</select>
+	<update id="update_quarzt" parameterType="Map">
+		update quarzt_msg set status=#{status,jdbcType=VARCHAR}
+		where  type=#{type,jdbcType=VARCHAR}
+	</update>
+	<!-- 定时任务是否启动中 end -->
+</mapper>

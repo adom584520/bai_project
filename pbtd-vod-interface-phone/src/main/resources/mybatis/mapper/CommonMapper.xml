@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.vodinterface.web.mapper.CommonMapper">
+  <!-- 频道 -->
+ <select id="getChannel" parameterType="Map"   resultType="Map"  >
+        select  channelCode,channelName,type,   img,isshow_img,labelType
+        from vod_phone_channel
+         where 
+         status=1 
+        <if test="levels != null and levels != ''">
+		      and levels=#{levels,jdbcType=VARCHAR}
+		</if>
+		<if test="parentCode != null and parentCode != ''">
+		      and parentCode=#{parentCode,jdbcType=VARCHAR}
+		</if>
+		<if test="channelCode != null and channelCode != ''">
+		      and channelCode=#{channelCode,jdbcType=VARCHAR}
+		</if>
+		order  by sequence asc
+    </select>
+     <select id="findChannel" parameterType="Map"   resultType="Map"  >
+        select a.channelCode,a.channelName,a.levels,a.parentCode,b.channelName parentName
+         ,a.navigationtype,a.type,a.count  ,
+           a.img,a.isshow_img,a.isshow_right,a.isshow_left 
+        from vod_phone_channel a 
+        left join vod_phone_channel b on a.parentCode=b.channelCode and b.levels=1
+    	where    a.status=1  
+        <if test="levels != null and levels != ''">
+		      and  a.levels=#{levels,jdbcType=VARCHAR}
+		</if>
+		 <if test="channelCode != null and channelCode != ''">
+		      and  a.channelCode=#{channelCode,jdbcType=VARCHAR}
+		</if>
+		<if test="parentCode != null and parentCode != ''">
+		      and  a.parentCode=#{parentCode,jdbcType=VARCHAR}
+		</if>
+		order  by  a.sequence asc
+    </select>
+     <!-- 标签-->
+    <select id="getLabel" parameterType="Map"   resultType="Map"  >
+       	select  a.id,a.name,a.level,a.type,a.anothername,a.labelPic
+       from vod_phone_label a 
+      left join vod_labelchannel b on a.id=b.label 
+       where status=1   and a.id=b.label and b.type='phone'
+		<if test="channel != null and channel != ''">
+		      and b.channel=#{channel,jdbcType=VARCHAR}
+		</if>
+      order  by a.type, b.sequence asc
+    </select>
+    <select id="getlabeltype" parameterType="Map" resultType="Map">
+     select id,name from vod_labeltype order by sequence
+    </select>
+    <!-- 专题 -->
+     <select id="getpgetspecial" parameterType="Map"   resultType="Map"  >
+    	 select id,name,imgurl,backgroundimg,viewPoint,describes,type,web_url,template,textcolor
+		 from vod_phone_special
+		 <where>
+		  <if test="special_id != null and special_id != ''">
+			      and id=#{special_id,jdbcType=INTEGER}
+			</if>
+			  <if test="status != null and status != ''">
+			      and status=#{status,jdbcType=INTEGER}
+			</if>
+		 </where>
+      order by sequence asc
+    </select>
+     <!-- 专题详情 -->
+     <select id="getpgetspecialvideo" parameterType="Map"   resultType="Map"  >
+    	select  b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,
+	    b.score,b.description,b.viewPoint,b.duration
+		,b.corner,b.cornerimg,b.isvip,b.isCollectfees
+		 from vod_phone_special_albuminfo a left join vod_phone_albuminfo b on a.seriesCode=b.seriesCode
+		 where b.status=1 and a.seriesCode=b.seriesCode 
+		 and a.special_id=#{special_id,jdbcType=INTEGER}
+		 order by a.sequence asc
+    </select>
+    <!-- 专区推荐图片 -->
+    <select id="recommandpic" parameterType="Map" resultType="Map">
+     select type,channel_id,name,imageUrl,target_code,weburl,playurl,viewPoint from vod_phone_recommandpic
+     where status=1
+     <if test="channel!=null and channel!=''">
+      and channel_id=#{channel,jdbcType=INTEGER}
+     </if>
+     order by sequence asc 
+    </select>
+    <!--专区推荐图片的标签 -->
+    <select id="recommandpiclabel" parameterType="Map" resultType="Map">
+      select id,name from vod_phone_label
+     where status=1  
+     <if test="type!=null and type!=''">
+    	 and type=#{type,jdbcType=INTEGER}
+     </if>
+      <if test="level!=null and level!=''">
+     	and level=#{level,jdbcType=INTEGER}
+     </if>
+     order by sequence
+    </select>
+    <!-- 底部导航 -->
+    <select id="bottomnavigation" parameterType="Map" resultType="Map">
+    select type,name,imgNor,imgSelect from vod_bottomnavigation
+    </select>
+    <!-- 获取logo -->
+    <select id="getlogo" resultType="Map">
+      select name,logo,instruction from vod_phone_logo
+      where 1=1
+      <if test="id!=null and id!=''">
+       and id=#{id,jdbcType=INTEGER}
+      </if>
+      <if test="name!=null and name!=''">
+       and name=#{name,jdbcType=INTEGER}
+      </if>
+    </select>
+    <select id="getonechannel" resultType="Map">
+      select channelName from vod_phone_channel
+      where channelCode = #{channelCode}
+    </select>
+      <!-- 文字推荐 -->
+    <select id="textrecommendation" parameterType="Map" resultType="Map">
+    select channelCode,seriesCode,seriesName,text,playurl,weburl,type,textPic,picStatus
+	 from vod_textrecommendation
+	 <where>
+		  <if test="channel!=null and channel!=''">
+		     and channelCode=#{channel,jdbcType=INTEGER}
+	     </if>
+     </where>
+    </select>
+    
+    <select id="slideshow" parameterType="Map" resultType="Map">
+    	select id,name,content_point,type,image_url,target_code,playurl,weburl,sequence,status,update_user
+    	from vod_phone_slideshow
+    	where status = #{status}
+    	order by sequence asc
+    </select>
+    
+    <select id="startSlideshow" parameterType="Map" resultType="Map">
+    	select id,name,type,show_type,image_url,target_code,playurl,weburl,status,update_user,skip_time
+    	from vod_phone_start_slideshow
+    	where status = #{status}
+    </select>
+    <!-- 获取用户定制频道接口 -->
+    <select id="pgetchannelforuser" parameterType="Map" resultType="Map">
+     select b.channelCode,b.channelName,b.type 
+     from vod_phone_channelforuser a left join vod_phone_channel b
+     on a.channelId=b.channelCode  
+     where b.levels=1 and userId=#{userId,jdbcType=VARCHAR}
+     <if test="channel!=null and channel!=''">
+      and a.channelId in (${channel})
+     </if>
+     order by b.sequence 
+    </select>
+     <select id="pgetchannelnotforuser" parameterType="Map" resultType="Map">
+       select  channelCode,channelName,type
+        from vod_phone_channel
+         where 
+         status=1 
+        <if test="levels != null and levels != ''">
+		      and levels=#{levels,jdbcType=VARCHAR}
+		</if>
+     <if test="channellist!=null and channellist!=''">
+      and channelCode not in (${channellist})
+     </if> 
+    </select>
+    <select id="findUser" parameterType="Map" resultType="Map" >
+    select GROUP_CONCAT(channelId) channelId  from vod_phone_channelforuser where userId=#{userId,jdbcType=VARCHAR}
+    </select>
+    <insert id="addchannelforuser" parameterType="Map">
+     insert into vod_phone_channelforuser 
+     (userId,channelId,create_time)
+     values
+     (#{userId,jdbcType=VARCHAR},#{channelId,jdbcType=INTEGER},now())
+    </insert>
+    <delete id="deletechannelforuser" parameterType="Map">
+    delete from vod_phone_channelforuser
+    where userId=#{userId,jdbcType=VARCHAR}
+    </delete>
+    <select id="findbychannel" parameterType="Map" resultType="Map">
+     select id from vod_phone_channel where channelCode in (${channel})
+    </select>   
+</mapper>

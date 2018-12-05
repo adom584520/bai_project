@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.launcher.mapper.MacMapper">
+	<resultMap id="baseResultMap" type="com.pbtd.launcher.domain.Mac">
+		<id column="id" property="id" />
+		<result column="mac_name" property="macName" />
+		<result column="logininfo_name" property="loginInfoName" />
+		<result column="group_id" property="groupId" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+
+	<sql id="columns">
+		id,mac_name,logininfo_name,group_id,create_time
+	</sql>
+	
+	<select id="queryByMac" resultMap="baseResultMap">
+		select id,mac_name,group_id
+		from launcher_mac
+		where mac_name = #{macName}
+	</select>
+
+</mapper>

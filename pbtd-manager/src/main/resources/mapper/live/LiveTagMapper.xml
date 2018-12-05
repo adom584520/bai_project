@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LiveTagMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.live.domain.LiveTag">
+		<id column="tagId" property="tagid" jdbcType="INTEGER" />
+		<result column="tagName" property="tagname" jdbcType="VARCHAR" />
+		<result column="tagStatus" property="tagstatus" jdbcType="INTEGER" />
+		<result column="tagOrder" property="tagorder" jdbcType="INTEGER" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		tagId, tagName, tagStatus, tagOrder, createTime, updateTime
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.pbtd.manager.live.domain.LiveTag">
+		select
+		<include refid="Base_Column_List" />
+		from live_Tag
+		<where>
+			<trim suffixOverrides="and">
+				<if test="tagname != null">
+					tagName = #{tagname,jdbcType=VARCHAR} and
+				</if>
+				<if test="tagstatus != null">
+					tagStatus = #{tagstatus,jdbcType=INTEGER} and
+				</if>
+				<if test="tagorder != null">
+					tagOrder = #{tagorder,jdbcType=INTEGER} and
+				</if>
+				<if test="createtime != null">
+					createTime = #{createtime,jdbcType=TIMESTAMP} and
+				</if>
+				<if test="updatetime != null">
+					updateTime = #{updatetime,jdbcType=TIMESTAMP} and
+				</if>
+			</trim>
+		</where>
+	</select>
+
+	<update id="update" parameterType="com.pbtd.manager.live.domain.LiveTag">
+		update live_Tag
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="tagname != null">
+				tagName = #{tagname,jdbcType=VARCHAR},
+			</if>
+			<if test="tagstatus != null">
+				tagStatus = #{tagstatus,jdbcType=INTEGER},
+			</if>
+			<if test="tagorder != null">
+				tagOrder = #{tagorder,jdbcType=INTEGER},
+			</if>
+			updateTime = now()
+		</trim>
+		where tagId = #{tagid,jdbcType=INTEGER}
+	</update>
+
+	<insert id="insert" parameterType="com.pbtd.manager.live.domain.LiveTag">
+		insert into live_tag (
+		tagName,
+		tagStatus,
+		tagOrder,
+		createTime,
+		updateTime
+		)
+		values (
+		#{tagname,jdbcType=VARCHAR},
+		#{tagstatus,jdbcType=INTEGER},
+		#{tagorder,jdbcType=INTEGER},
+		now(),
+		now()
+		)
+	</insert>
+
+
+	<delete id="deletes" parameterType="Map">
+		delete from live_tag
+		<where>
+			<if test="id_ != null">
+				and tagId in
+				<foreach collection="id_" index="index" item="item" open="("
+					separator="," close=")">
+					#{item,jdbcType=INTEGER}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+
+
+	<select id="load" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_Tag
+		where tagId = #{tagid,jdbcType=INTEGER}
+	</select>
+
+
+	<select id="find" parameterType="Map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from live_Tag
+		<trim prefix="WHERE" suffixOverrides="AND">
+			<if test="tagname != null">
+				tagName = #{tagname,jdbcType=VARCHAR} and
+			</if>
+			<if test="tagstatus != null">
+				tagStatus = #{tagstatus,jdbcType=INTEGER} and
+			</if>
+			<if test="tagorder != null">
+				tagOrder = #{tagorder,jdbcType=INTEGER} and
+			</if>
+			<if test="createtime != null">
+				createTime = #{createtime,jdbcType=TIMESTAMP} and
+			</if>
+			<if test="updatetime != null">
+				updateTime = #{updatetime,jdbcType=TIMESTAMP} and
+			</if>
+		</trim>
+		limit #{start},#{pageSize}
+	</select>
+
+
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(*) from live_tag
+		<where>
+			<if test="chnName != null">
+				groupName like #{chnName,jdbcType=VARCHAR}
+			</if>
+		</where>
+		limit #{start},#{pageSize}
+	</select>
+	<select id="gettag" parameterType="Map" resultMap="BaseResultMap">
+		select * from live_tag
+	</select>
+
+
+</mapper>

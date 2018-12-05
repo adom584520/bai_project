@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LiveBussInfoMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.live.domain.LiveBussInfo">
+		<id column="bussId" property="bussid" jdbcType="INTEGER" />
+		<result column="groupId" property="groupid" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="bussUser" property="bussuser" jdbcType="VARCHAR" />
+		<result column="bussPhone" property="bussphone" jdbcType="VARCHAR" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+		<result column="userId" property="userid" jdbcType="VARCHAR" />
+		<result column="parentId" property="parentid" jdbcType="VARCHAR" />
+		<result column="projectIp" property="projectip" jdbcType="VARCHAR" />
+		<result column="projectId" property="projectid" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		bussId, groupId, name, address, bussUser, bussPhone,
+		createTime, updateTime,
+		userId,
+		parentId,projectIp,projectId
+	</sql>
+	<select id="querybussinfocount" resultType="java.lang.Long">
+		select count(*) from
+		live_buss_info
+	</select>
+	<select id="querybussinfo" resultMap="BaseResultMap"
+		parameterType="com.pbtd.manager.live.domain.LiveBussInfo">
+		select * from live_buss_info
+	</select>
+
+	<update id="update" parameterType="com.pbtd.manager.live.domain.LiveBussInfo">
+		update live_buss_info
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="groupid != null">
+				groupId = #{groupid,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="bussuser != null">
+				bussUser = #{bussuser,jdbcType=VARCHAR},
+			</if>
+			<if test="bussphone != null">
+				bussPhone = #{bussphone,jdbcType=VARCHAR},
+			</if>
+			updateTime = now(),
+			<if test="userid != null">
+				userId = #{userid,jdbcType=VARCHAR},
+			</if>
+			<if test="parentid != null">
+				parentId = #{parentid,jdbcType=VARCHAR},
+			</if>
+			<if test="projectip != null">
+				projectIp = #{projectip,jdbcType=VARCHAR},
+			</if>
+			<if test="projectid != null">
+				projectId = #{projectid,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where bussId = #{bussid,jdbcType=INTEGER}
+	</update>
+
+	<insert id="insert" parameterType="com.pbtd.manager.live.domain.LiveBussInfo">
+		insert into live_buss_info (
+		groupId,
+		name,
+		address,
+		bussUser,
+		bussPhone,
+		createTime,
+		updateTime,
+		userId,
+		parentId,
+		projectIp,
+		projectId
+		)
+		values (
+		#{groupid},
+		#{name},
+		#{address},
+		#{bussuser},
+		#{bussphone},
+		now(),
+		now(),
+		#{userid},
+		#{parentid},
+		#{projectip},
+		#{projectid}
+		)
+	</insert>
+
+
+	<delete id="deletes" parameterType="Map">
+		delete from live_buss_info
+		<where>
+			<if test="id_ != null">
+				and bussId in
+				<foreach collection="id_" index="index" item="item" open="("
+					separator="," close=")">
+					#{item,jdbcType=INTEGER}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+
+
+	<select id="load" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_buss_info
+		where bussId = #{id,jdbcType=INTEGER}
+	</select>
+
+
+	<select id="find" parameterType="Map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from live_buss_info
+		<trim prefix="WHERE" suffixOverrides="AND">
+			<if test="groupid != null">
+				groupId = #{groupid,jdbcType=INTEGER} AND
+			</if>
+			<if test="name != null">
+				name like #{name,jdbcType=VARCHAR} AND
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR} AND
+			</if>
+			<if test="bussuser != null">
+				bussUser = #{bussuser,jdbcType=VARCHAR} AND
+			</if>
+			<if test="bussphone != null">
+				bussPhone = #{bussphone,jdbcType=VARCHAR} AND
+			</if>
+			<if test="userid != null">
+				userId = #{userid,jdbcType=VARCHAR} AND
+			</if>
+			<if test="parentid != null">
+				parentId = #{parentid,jdbcType=VARCHAR} AND
+			</if>
+		</trim>
+		limit #{start},#{pageSize}
+	</select>
+
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(*) from live_buss_info
+		<where>
+			<if test="name != null">
+				name like #{name,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	
+  <select id="selectByValue" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    *
+    from live_buss_info
+    where projectId = #{projectid,jdbcType=INTEGER}
+  </select>
+
+</mapper>

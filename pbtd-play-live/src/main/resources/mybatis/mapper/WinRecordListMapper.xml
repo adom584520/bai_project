@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playlive.domain.WinRecordListMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playlive.domain.WinRecordList" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="VARCHAR" />
+    <result column="userMobile" property="usermobile" jdbcType="CHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="prizeCode" property="prizecode" jdbcType="INTEGER" />
+    <result column="activeName" property="activename" jdbcType="VARCHAR" />
+    <result column="activeType" property="activetype" jdbcType="INTEGER" />
+    <result column="userAddress" property="useraddress" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.pbtd.playlive.domain.WinRecordList" extends="BaseResultMap" >
+    <result column="prizeName" property="prizename" jdbcType="VARBINARY" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, userMobile, createTime, updateTime, prizeCode, activeName, activeType, 
+    userAddress
+  </sql>
+  <sql id="Blob_Column_List" >
+    prizeName
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from win_record_list
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from win_record_list
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pbtd.playlive.domain.WinRecordList" >
+    insert into win_record_list (id, userId, userMobile, 
+      createTime, updateTime, prizeCode, 
+      activeName, activeType, userAddress, 
+      prizeName)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{usermobile,jdbcType=CHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{prizecode,jdbcType=INTEGER}, 
+      #{activename,jdbcType=VARCHAR}, #{activetype,jdbcType=INTEGER}, #{useraddress,jdbcType=VARCHAR}, 
+      #{prizename,jdbcType=VARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pbtd.playlive.domain.WinRecordList" >
+    insert into win_record_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="usermobile != null" >
+        userMobile,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+      <if test="prizecode != null" >
+        prizeCode,
+      </if>
+      <if test="activename != null" >
+        activeName,
+      </if>
+      <if test="activetype != null" >
+        activeType,
+      </if>
+      <if test="useraddress != null" >
+        userAddress,
+      </if>
+      <if test="prizename != null" >
+        prizeName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="usermobile != null" >
+        #{usermobile,jdbcType=CHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="prizecode != null" >
+        #{prizecode,jdbcType=INTEGER},
+      </if>
+      <if test="activename != null" >
+        #{activename,jdbcType=VARCHAR},
+      </if>
+      <if test="activetype != null" >
+        #{activetype,jdbcType=INTEGER},
+      </if>
+      <if test="useraddress != null" >
+        #{useraddress,jdbcType=VARCHAR},
+      </if>
+      <if test="prizename != null" >
+        #{prizename,jdbcType=VARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playlive.domain.WinRecordList" >
+    update win_record_list
+    <set >
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="usermobile != null" >
+        userMobile = #{usermobile,jdbcType=CHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="prizecode != null" >
+        prizeCode = #{prizecode,jdbcType=INTEGER},
+      </if>
+      <if test="activename != null" >
+        activeName = #{activename,jdbcType=VARCHAR},
+      </if>
+      <if test="activetype != null" >
+        activeType = #{activetype,jdbcType=INTEGER},
+      </if>
+      <if test="useraddress != null" >
+        userAddress = #{useraddress,jdbcType=VARCHAR},
+      </if>
+      <if test="prizename != null" >
+        prizeName = #{prizename,jdbcType=VARBINARY},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pbtd.playlive.domain.WinRecordList" >
+    update win_record_list
+    set userId = #{userid,jdbcType=VARCHAR},
+      userMobile = #{usermobile,jdbcType=CHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      prizeCode = #{prizecode,jdbcType=INTEGER},
+      activeName = #{activename,jdbcType=VARCHAR},
+      activeType = #{activetype,jdbcType=INTEGER},
+      userAddress = #{useraddress,jdbcType=VARCHAR},
+      prizeName = #{prizename,jdbcType=VARBINARY}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playlive.domain.WinRecordList" >
+    update win_record_list
+    set userId = #{userid,jdbcType=VARCHAR},
+      userMobile = #{usermobile,jdbcType=CHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      prizeCode = #{prizecode,jdbcType=INTEGER},
+      activeName = #{activename,jdbcType=VARCHAR},
+      activeType = #{activetype,jdbcType=INTEGER},
+      userAddress = #{useraddress,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

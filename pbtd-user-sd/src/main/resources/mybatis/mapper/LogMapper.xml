@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.LogMapper">
+	<resultMap id="baseResultMap" type="com.pbtd.playuser.domain.Log">
+		<id column="id" property="id" />
+		<result column="client_ip" property="clientIp" />
+		<result column="operation_info" property="operationInfo" />
+		<result column="url" property="url" />
+		<result column="type" property="type" />
+		<result column="method" property="method" />
+		<result column="start_time" property="startTime" />
+		<result column="return_time" property="returnTime" />
+		<result column="consuming_time" property="consumingTime" />
+		<result column="http_status_code" property="httpStatusCode" />
+		<result column="param_data" property="paramData" />
+		<result column="return_data" property="returnData" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+
+	<sql id="column">
+		id,client_ip,operation_info,url,type,method,start_time,return_time,consuming_time,
+		http_status_code,param_data,return_data,create_time
+	</sql>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into user_log
+		(client_ip,operation_info,url,type,method,start_time,return_time,consuming_time,
+		http_status_code,param_data,return_data,create_time)
+		values(#{clientIp},#{operationInfo},#{url},#{type},#{method},#{startTime},
+		#{returnTime},#{consumingTime},#{httpStatusCode},#{paramData},#{returnData},#{createTime})
+	</insert>
+
+</mapper>

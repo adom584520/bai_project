@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.live.getEpg.LivePackageEpgMapper">
+
+	<select id="select" resultType="com.pbtd.manager.live.domain.getEpg.LivePackageEpg">
+		select * from live_package a where  a.startTime > (UNIX_TIMESTAMP()*1000  - 1000*60*60*24)  ORDER BY startTime
+	</select>
+</mapper>

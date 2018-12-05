@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yh.search.phone.mapper.PingYinMapper">
+	<select id="getItemList" resultType="com.yh.search.phone.bean.PingYinSearch">
+		SELECT
+		seriesName,
+		seriesCode,
+		pinyin,
+		pinyinsuoxie,
+		status
+		FROM
+		vod_phone_albuminfo
+	</select>
+
+	<select id="getItemById" parameterType="String"
+		resultType="com.yh.search.phone.bean.PingYinSearch">
+		SELECT
+		seriesName,
+		seriesCode,
+		pinyin,
+		pinyinsuoxie,
+		status
+		FROM
+		vod_phone_albuminfo
+		WHERE
+		seriesCode = #{seriesCode}
+		
+	</select>
+</mapper>

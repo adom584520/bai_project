@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.page.mapper.JsonInterfaceMapper">
+
+	<insert id="insertvideointerface" parameterType="Map">
+		insert into
+		vod_phone_albumvideo_interface
+		(id,seriesCode,drama,dramaname,dramaviewPoint,Resolution,Definition,SourceType,
+		Type,duration,priority,Injectiontime,pic,title,description,
+		zxdispatchurl,zxversionlist,zxfileurl,zxmovieUrl,zxversion,
+		hwversionlist,hwversion,hwmovieUrl,hwfileurl,isShow,isPositive
+		,create_time,
+		create_user,hwdispatchurl,dramasequence,isCollectfees,collectfeesbag,cpvideoId,offset,videopaid)
+		values
+		( #{id} ,
+		#{seriesCode},#{drama},#{dramaname},#{dramaviewPoint},#{Resolution},#{Definition},#{SourceType},
+		#{Type},#{duration},#{priority},#{Injectiontime},#{pic},#{title},#{description},
+		#{zxdispatchurl},#{zxversionlist},#{zxfileurl},#{zxmovieUrl},#{zxversion},
+		#{hwversionlist},#{hwversion},#{hwmovieUrl},#{hwfileurl},#{isShow},#{isPositive},now(),#{create_user}
+		,#{hwdispatchurl},#{dramasequence},#{isCollectfees},#{collectfeesbag},#{cpvideoId}
+		,#{offset},1)
+	</insert>
+	<delete id="deletevideointerface" parameterType="Map">
+		delete from
+		vod_phone_albumvideo_interface
+	</delete>
+
+	<insert id="insertalbuminterface" parameterType="Map">
+		insert into
+		vod_phone_album_interface
+		( seriesCode )
+		values
+		( #{seriesCode})
+	</insert>
+	<update id="updatealbuminterface" parameterType="Map">
+		update vod_phone_album_interface
+		<set>
+			<choose>
+				<when test="updatestatus!='' and updatestatus!=null">
+					updatestatus=#{updatestatus},
+				</when>
+				<otherwise>
+					updatestatus=1,create_time=now(),
+				</otherwise>
+			</choose>
+		</set>
+		<where>
+			<if test="seriesCode!='' and seriesCode!=null ">
+				and seriescode=#{seriesCode}
+			</if>
+		</where>
+	</update>
+	<delete id="deletealbuminterface" parameterType="Map">
+		delete from
+		vod_phone_album_interface
+		where seriescode=#{seriesCode}
+	</delete>
+	<select id="countalbuminterface" parameterType="Map"
+		resultType="java.lang.Integer">
+		select count(1) from vod_phone_album_interface
+		where
+		seriescode=#{seriesCode}
+	</select>
+</mapper>
+
+

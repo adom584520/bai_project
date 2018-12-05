@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.vodinterface.web.mapper.VodPhoneModuleMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.vodinterface.web.domain.VodPhoneModule" >
+    <id column="moduleId" property="moduleid" jdbcType="INTEGER" />
+	    <result column="masterplateId" property="masterplateid" jdbcType="INTEGER" />
+	    <result column="sequence" property="sequence" jdbcType="INTEGER" />
+	    <result column="channel" property="channel" jdbcType="INTEGER" />
+	    <result column="describes" property="describes" jdbcType="VARCHAR" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="linkchannel" property="linkchannel" jdbcType="INTEGER" />
+	    <result column="linktype" property="linktype" jdbcType="INTEGER" />
+	    <result column="linklabel" property="linklabel" jdbcType="INTEGER" />
+	    <result column="linkstatus" property="linkstatus" jdbcType="VARCHAR" />
+	    <result column="modulepic" property="modulepic" jdbcType="VARCHAR" />
+	    <result column="picstatus" property="picstatus" jdbcType="INTEGER" />
+	    <result column="textrecommendpic" property="textrecommendpic" jdbcType="VARCHAR" />
+	    <result column="textpicstatus" property="textpicstatus" jdbcType="INTEGER" />
+	    <result column="picture" property="picture" jdbcType="VARCHAR" />
+	    <result column="picturestatus" property="picturestatus" jdbcType="INTEGER" />
+	    <result column="moduleviewpoint" property="moduleviewpoint" jdbcType="VARCHAR" />
+	    <result column="viewpointstatus" property="viewpointstatus" jdbcType="INTEGER" />
+	    <result column="modulestatus" property="modulestatus" jdbcType="INTEGER" />
+	    <result column="isshowleft" property="isshowleft" jdbcType="INTEGER" />
+	    <result column="isshowright" property="isshowright" jdbcType="INTEGER" />
+	    <result column="namestatus" property="namestatus" jdbcType="INTEGER" />
+	    <result column="modulelinktype" property="modulelinktype" jdbcType="INTEGER" />
+	    <result column="modulelinkchannel" property="modulelinkchannel" jdbcType="INTEGER" />
+	    <result column="modulelinkurl" property="modulelinkurl" jdbcType="VARCHAR" />
+	    <result column="modulelinkspecial" property="modulelinkspecial" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    moduleId, masterplateId, sequence, channel, describes, name, linkchannel, linktype, 
+    linklabel, linkstatus, modulepic, picstatus, textrecommendpic, textpicstatus, picture, 
+    picturestatus, moduleviewpoint, viewpointstatus, modulestatus, isshowleft, isshowright, 
+    namestatus, modulelinktype, modulelinkchannel, modulelinkurl, modulelinkspecial
+  </sql>
+  
+ <select id="select" resultMap="BaseResultMap" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from vod_phone_module
+    where channel = #{channel}
+    and modulestatus = 1
+	order by sequence limit #{limit},#{pagesize}
+  </select>
+  <select id="load" resultMap="BaseResultMap" parameterType="Map">
+		select
+		<include refid="Base_Column_List" />
+		from vod_phone_module
+		where moduleId = #{moduleId}
+	</select>
+  
+  <select id="selectForOne"  parameterType="Map" resultType="Map">
+		SELECT
+		a.moduleId,
+		a.masterplateId masterplateNum,
+		b.count size,
+		b.id
+		FROM `vod_phone_module` a
+		LEFT JOIN vod_masterplate_son b ON a.masterplateId = b.masterplateId
+		WHERE a.id = #{id};
+	</select>
+</mapper>

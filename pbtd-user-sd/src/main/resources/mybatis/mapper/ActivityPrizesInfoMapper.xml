@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.ActivityPrizesInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.ActivityPrizesInfo" >
+    <id column="id" property="id" />
+    <result column="prizeCode" property="prizecode" />
+    <result column="prizeNum" property="prizenum" />
+    <result column="prizeResNum" property="prizeresnum" />
+    <result column="language" property="language" />
+    <result column="createTime" property="createtime" />
+    <result column="updateTime" property="updatetime"/>
+    <result column="activeName" property="activename" />
+    <result column="startTime" property="starttime" />
+    <result column="endTime" property="endtime"  />
+    <result column="prizeName" property="prizename"  />
+    <result column="probability" property="probability"/>
+    <result column="version" property="version" />
+  </resultMap>
+
+  <select id="queryAll" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    *
+    from activity_prizes_info
+    where activeName = #{activeName}
+  </select>
+  <select id="queryForOutPut" resultType="com.pbtd.playuser.domain.ActivityPrizesOutPut" parameterType="java.lang.String" >
+    select 
+    prizeCode,prizeName
+    from activity_prizes_info
+    where activeName = #{activeName}
+  </select>
+  <update id="updateprizeresNum">
+  	update activity_prizes_info
+  	set prizeResNum = prizeResNum - 1,updateTime = #{updatetime},version = version+1
+  	where id = #{id}
+  </update>
+</mapper>

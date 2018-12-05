@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LiveVersionMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.live.domain.LiveVersion">
+		<id column="versionId" property="versionid" jdbcType="INTEGER" />
+		<result column="versionName" property="versionname" jdbcType="VARCHAR" />
+		<result column="isPlayContinue" property="isplaycontinue"
+			jdbcType="INTEGER" />
+		<result column="ShowType" property="showtype" jdbcType="INTEGER" />
+		<result column="isSupportSeqNum" property="issupportseqnum"
+			jdbcType="INTEGER" />
+		<result column="isShowLiveList" property="isshowlivelist"
+			jdbcType="INTEGER" />
+		<result column="delayTime" property="delaytime" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+		<result column="isShowChnName" property="isshowchnname"
+			jdbcType="INTEGER" />
+		<result column="isNumChanage" property="isnumchanage" jdbcType="INTEGER" />
+		<result column="modifyTime" property="modifytime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		versionId, versionName, isPlayContinue, ShowType,
+		isSupportSeqNum,
+		isShowLiveList,
+		delayTime, state, createTime,
+		updateTime, isShowChnName, isNumChanage,
+		modifyTime
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from live_version
+		<where>
+			<if test="versionid != null">
+				versionId = #{versionId,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(*) from live_version
+		<where>
+			<if test="versionname != null">
+				versionname like #{versionname,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="find" parameterType="Map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from live_version
+		<trim prefix="WHERE" suffixOverrides="AND">
+			<if test="versionid != null">
+				versionid = #{versionid,jdbcType=INTEGER} and
+			</if>
+			<if test="versionname != null">
+				versionname like #{versionname,jdbcType=VARCHAR} and
+			</if>
+			<if test="isplaycontinue != null">
+				isplaycontinue = #{isplaycontinue,jdbcType=INTEGER} and
+			</if>
+			<if test="showtype != null">
+				showtype = #{showtype,jdbcType=INTEGER} and
+			</if>
+			<if test="issupportseqnum != null">
+				issupportseqnum = #{issupportseqnum,jdbcType=INTEGER} and
+			</if>
+			<if test="isshowlivelist != null">
+				isshowlivelist = #{isshowlivelist,jdbcType=INTEGER} and
+			</if>
+			<if test="delaytime != null">
+				delaytime = #{delaytime,jdbcType=VARCHAR} and
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=INTEGER} and
+			</if>
+		</trim>
+		limit #{start},#{pageSize}
+	</select>
+
+	<select id="load" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_version
+		where versionId = #{id,jdbcType=INTEGER}
+	</select>
+	
+
+	<delete id="deletes" parameterType="Map">
+		delete from live_version
+		<where>
+			<if test="id_ != null">
+				and versionId in
+				<foreach collection="id_" index="index" item="item" open="("
+					separator="," close=")">
+					#{item,jdbcType=INTEGER}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+
+	<update id="update" parameterType="com.pbtd.manager.live.domain.LiveVersion">
+		update live_version
+		<set>
+			<if test="versionname != null">
+				versionName = #{versionname,jdbcType=VARCHAR},
+			</if>
+			<if test="isplaycontinue != null">
+				isPlayContinue = #{isplaycontinue,jdbcType=INTEGER},
+			</if>
+			<if test="showtype != null">
+				ShowType = #{showtype,jdbcType=INTEGER},
+			</if>
+			<if test="issupportseqnum != null">
+				isSupportSeqNum = #{issupportseqnum,jdbcType=INTEGER},
+			</if>
+			<if test="isshowlivelist != null">
+				isShowLiveList = #{isshowlivelist,jdbcType=INTEGER},
+			</if>
+			<if test="delaytime != null">
+				delayTime = #{delaytime,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=INTEGER},
+			</if>
+			updateTime = now(),
+			<if test="isshowchnname != null">
+				isShowChnName = #{isshowchnname,jdbcType=INTEGER},
+			</if>
+			<if test="isnumchanage != null">
+				isNumChanage = #{isnumchanage,jdbcType=INTEGER},
+			</if>
+			modifyTime = now()
+		</set>
+		where versionId = #{versionid,jdbcType=INTEGER}
+	</update>
+	
+	   <update id="truncateTable">
+        truncate table live_version ;
+    </update>
+	
+	<insert id="insert" parameterType="com.pbtd.manager.live.domain.LiveVersion">
+		insert into live_version
+		(versionName,
+		isPlayContinue,
+		ShowType,
+		isSupportSeqNum,
+		isShowLiveList,
+		delayTime,
+		state,
+		createTime,
+		updateTime,
+		modifyTime,
+		isShowChnName,
+		isNumChanage
+		)
+		values
+		(#{versionname,jdbcType=VARCHAR},
+		#{isplaycontinue,jdbcType=INTEGER},
+		#{showtype,jdbcType=INTEGER},
+		#{issupportseqnum,jdbcType=INTEGER},
+		#{isshowlivelist,jdbcType=INTEGER},
+		#{delaytime,jdbcType=VARCHAR},
+		#{state,jdbcType=INTEGER},
+		now(),
+		now(),
+		now(),
+		1,
+		#{isnumchanage,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<select id="getversion"  resultMap="BaseResultMap">
+		select * from live_version
+	</select>
+</mapper>

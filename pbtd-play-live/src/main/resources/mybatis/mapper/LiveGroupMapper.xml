@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playlive.mapper.LiveGroupMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playlive.domain.LiveGroup">
+		<id column="groupId" property="groupid" jdbcType="INTEGER" />
+		<result column="groupName" property="groupname" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		groupId, groupName
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.pbtd.playlive.domain.LiveGroup">
+		select
+		<include refid="Base_Column_List" />
+		from live_Group
+		<where>
+			<trim  suffixOverrides=",">
+				<if test="groupname != null">
+					groupName = #{groupname,jdbcType=VARCHAR},
+				</if>
+			</trim>
+		</where>
+	</select>
+	
+	<update id="truncateTable">
+		truncate table live_Group ;
+	</update>
+	
+	<insert id="insert" parameterType="com.pbtd.playlive.domain.LiveGroup">
+		insert into live_group (
+		groupId,
+		groupName,
+		createTime,
+		updateTime)
+		values (
+		#{groupid},
+		#{groupname,jdbcType=VARCHAR},
+		now(),
+		now())
+	</insert>
+</mapper>

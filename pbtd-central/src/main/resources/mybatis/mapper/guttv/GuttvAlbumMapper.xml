@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playclick.heyi.mapper.GuttvAlbumMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playclick.heyi.domain.GuttvAlbuminfo">
+		<result column="seriesCode" property="seriesCode" jdbcType="VARCHAR" />
+		<result column="seriesName" property="seriesName" jdbcType="VARCHAR" />
+		<result column="volumnCount" property="volumnCount" jdbcType="INTEGER" />
+		<result column="currentNum" property="currentNum" jdbcType="INTEGER" />
+		<result column="pinyin" property="pinyin" jdbcType="VARCHAR" />
+		<result column="pinyinsuoxie" property="pinyinsuoxie" jdbcType="VARCHAR" />
+		<result column="cpCode" property="cpCode" jdbcType="VARCHAR" />
+		<result column="cpName" property="cpName" jdbcType="VARCHAR" />
+		<result column="isCollectfees" property="isCollectfees"			jdbcType="INTEGER" />
+		<result column="originalName" property="originalName" jdbcType="VARCHAR" />
+		<result column="actor" property="actor" jdbcType="VARCHAR" />
+		<result column="writer" property="writer" jdbcType="VARCHAR" />
+		<result column="actorName" property="actorName" jdbcType="VARCHAR" />
+		<result column="writerName" property="writerName" jdbcType="VARCHAR" />
+		<result column="orgairDate" property="orgairDate" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="VARCHAR" />
+		<result column="contentProvider" property="contentProvider"			jdbcType="VARCHAR" />
+		<result column="keyWord" property="keyWord" jdbcType="VARCHAR" />
+		<result column="tag" property="tag" jdbcType="VARCHAR" />
+		<result column="viewPoint" property="viewPoint" jdbcType="VARCHAR" />
+		<result column="starLevel" property="starLevel" jdbcType="VARCHAR" />
+		<result column="rating" property="rating" jdbcType="VARCHAR" />
+		<result column="awards" property="awards" jdbcType="VARCHAR" />
+		<result column="originalCountry" property="originalCountry"			jdbcType="VARCHAR" />
+		<result column="language" property="language" jdbcType="VARCHAR" />
+		<result column="releaseYear" property="releaseYear" jdbcType="VARCHAR" />
+		<result column="duration" property="duration" jdbcType="VARCHAR" />
+		<result column="Channel" property="channel" jdbcType="VARCHAR" />
+		<result column="ChannelName" property="ChannelName" jdbcType="VARCHAR" />
+		<result column="Label" property="label" jdbcType="VARCHAR" />
+		<result column="LabelName" property="LabelName" jdbcType="VARCHAR" />
+		<result column="enName" property="enName" jdbcType="VARCHAR" />
+		<result column="vName" property="vName" jdbcType="VARCHAR" />
+		<result column="definition" property="definition" jdbcType="VARCHAR" />
+		<result column="copyRightProperty" property="copyRightProperty"			jdbcType="INTEGER" />
+		<result column="crBeginDate" property="crBeginDate" jdbcType="VARCHAR" />
+		<result column="crEndDate" property="crEndDate" jdbcType="VARCHAR" />
+		<result column="copyright" property="copyright" jdbcType="VARCHAR" />
+		<result column="cpContentID" property="cpContentID" jdbcType="VARCHAR" />
+		<result column="score" property="score" jdbcType="VARCHAR" />
+		<result column="pictureURL1" property="pictureURL1" jdbcType="VARCHAR" />
+		<result column="pictureURL2" property="pictureURL2" jdbcType="VARCHAR" />
+		<result column="pictureURL3" property="pictureURL3" jdbcType="VARCHAR" />
+		<result column="pictureURL4" property="pictureURL4" jdbcType="VARCHAR" />
+		<result column="correlateId" property="correlateId" jdbcType="VARCHAR" />
+		<result column="isStorage" property="isStorage" jdbcType="INTEGER" />
+        <result column="storagetime" property="storagetime" jdbcType="VARCHAR" /> 
+        <result column="updatetime" property="updatetime" jdbcType="VARCHAR" /> 
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.pbtd.playclick.heyi.domain.GuttvAlbuminfo"		extends="BaseResultMap">
+		<result column="description" property="description" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Blob_Column_List">
+		description
+	</sql>
+	 <sql id="Base_Column_List" >
+ seriesCode,seriesName,volumnCount,currentNum,pinyin,pinyinsuoxie,cpCode,cpName,isCollectfees,originalName,actor,writer,
+actorName,writerName,orgairDate,price,description,contentProvider,keyWord,tag,viewPoint,starLevel,rating,awards,originalCountry,
+language,releaseYear,duration,Channel,ChannelName,Label,LabelName,enName,vName,definition,
+copyRightProperty,crBeginDate,crEndDate,copyright,cpContentID,score,pictureURL1,pictureURL2,pictureURL3,
+pictureURL4,correlateId,isStorage,
+   DATE_FORMAT(storagetime, '%Y.%m.%d %H:%i:%s') storagetime,
+    DATE_FORMAT(updatetime, '%Y.%m.%d %H:%i:%s') updatetime
+    
+    </sql>
+	
+	     <select id="load" resultType="com.pbtd.playclick.heyi.domain.GuttvAlbuminfo"  parameterType="Map"  >
+     select  
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from heyi_vod_albuminfo where 1=1
+       <if test="seriesCode != null and seriesCode != ''" >
+       and  seriesCode=#{seriesCode,jdbcType=VARCHAR}
+      </if>
+      <if test="seriesName != null  and seriesName != ''" >
+      and   seriesName like '%${seriesName}%'
+      </if>
+      <if test="actorName != null  and actorName != ''" >
+      and   actorName like '%${actorName}%'
+      </if>
+     <if test="writerName != null  and writerName != ''" >
+      and   writerName like '%${writerName}%'
+      </if>
+      <if test="isStorage != null  and isStorage>-1" >
+       and   isStorage=#{isStorage}
+      </if>
+      <if test="status != null  and status != ''" >
+       and  status=#{status,jdbcType=INTEGER}
+      </if>
+       <if test="Channel != null  and Channel != ''" >
+     	 and Channel=  #{Channel,jdbcType=VARCHAR}
+      </if>
+      <if test="ChannelName != null  and ChannelName != ''" >
+      and  ChannelName like '%${ChannelName}%'
+      </if>
+      <if test="Label != null  and Label != ''" >
+      and   Label=#{Label,jdbcType=VARCHAR}
+      </if>
+      <if test="LabelName != null  and LabelName != ''" >
+      and LabelName like '%${LabelName}%'
+      </if>
+    </select>
+	
+	 <select id="count" parameterType="com.pbtd.playclick.heyi.domain.GuttvAlbuminfo" resultType="java.lang.Integer">
+     select   count(1)
+    from heyi_vod_albuminfo where 1=1
+       <if test="seriesCode != null and seriesCode != ''" >
+       and  seriesCode=#{seriesCode,jdbcType=VARCHAR}
+      </if>
+      <if test="seriesName != null  and seriesName != ''" >
+      and   seriesName like '%${seriesName}%'
+      </if>
+      <if test="actorName != null  and actorName != ''" >
+      and   actorName like '%${actorName}%'
+      </if>
+     <if test="writerName != null  and writerName != ''" >
+      and   writerName like '%${writerName}%'
+      </if>
+      <if test="isStorage != null  and isStorage>-1" >
+       and   isStorage=#{isStorage}
+      </if>
+      <if test="status != null  and status != ''" >
+       and  status=#{status,jdbcType=INTEGER}
+      </if>
+       <if test="Channel != null  and Channel != ''" >
+     	 and Channel=  #{Channel,jdbcType=VARCHAR}
+      </if>
+      <if test="ChannelName != null  and ChannelName != ''" >
+      and  ChannelName like '%${ChannelName}%'
+      </if>
+      <if test="Label != null  and Label != ''" >
+      and   Label=#{Label,jdbcType=VARCHAR}
+      </if>
+      <if test="LabelName != null  and LabelName != ''" >
+      and LabelName like '%${LabelName}%'
+      </if>
+    </select>
+     <select id="find" resultType="com.pbtd.playclick.heyi.domain.GuttvAlbuminfo"  parameterType="Map"  >
+     select  
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from heyi_vod_albuminfo where 1=1
+       <if test="seriesCode != null and seriesCode != ''" >
+       and  seriesCode=#{seriesCode,jdbcType=VARCHAR}
+      </if>
+      <if test="seriesName != null  and seriesName != ''" >
+      and   seriesName like '%${seriesName}%'
+      </if>
+      <if test="actorName != null  and actorName != ''" >
+      and   actorName like '%${actorName}%'
+      </if>
+     <if test="writerName != null  and writerName != ''" >
+      and   writerName like '%${writerName}%'
+      </if>
+      <if test="isStorage != null  and isStorage>-1" >
+       and   isStorage=#{isStorage}
+      </if>
+      <if test="status != null  and status != ''" >
+       and  status=#{status,jdbcType=INTEGER}
+      </if>
+       <if test="Channel != null  and Channel != ''" >
+     	 and Channel=  #{Channel,jdbcType=VARCHAR}
+      </if>
+      <if test="ChannelName != null  and ChannelName != ''" >
+      and  ChannelName like '%${ChannelName}%'
+      </if>
+      <if test="Label != null  and Label != ''" >
+      and   Label=#{Label,jdbcType=VARCHAR}
+      </if>
+      <if test="LabelName != null  and LabelName != ''" >
+      and LabelName like '%${LabelName}%'
+      </if>
+    </select>
+    
+      <select id="page" resultType="com.pbtd.playclick.heyi.domain.GuttvAlbuminfo"  parameterType="Map"  >
+     select  
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from heyi_vod_albuminfo where 1=1
+       <if test="seriesCode != null and seriesCode != ''" >
+       and  seriesCode=#{seriesCode,jdbcType=VARCHAR}
+      </if>
+      <if test="seriesName != null  and seriesName != ''" >
+      and   seriesName like '%${seriesName}%'
+      </if>
+      <if test="actorName != null  and actorName != ''" >
+      and   actorName like '%${actorName}%'
+      </if>
+     <if test="writerName != null  and writerName != ''" >
+      and   writerName like '%${writerName}%'
+      </if>
+      <if test="isStorage != null  and isStorage>-1" >
+       and   isStorage=#{isStorage}
+      </if>
+      <if test="status != null  and status != ''" >
+       and  status=#{status,jdbcType=INTEGER}
+      </if>
+       <if test="Channel != null  and Channel != ''" >
+     	 and Channel=  #{Channel,jdbcType=VARCHAR}
+      </if>
+      <if test="ChannelName != null  and ChannelName != ''" >
+      and  ChannelName like '%${ChannelName}%'
+      </if>
+      <if test="Label != null  and Label != ''" >
+      and   Label=#{Label,jdbcType=VARCHAR}
+      </if>
+      <if test="LabelName != null  and LabelName != ''" >
+      and LabelName like '%${LabelName}%'
+      </if>
+       limit #{start},#{pageSize}
+    </select>
+	<insert id="insert" parameterType="com.pbtd.playclick.heyi.domain.GuttvAlbuminfo">
+		insert into heyi_vod_albuminfo (seriesCode, seriesName, volumnCount,
+		currentNum, pinyin, pinyinsuoxie,
+		cpCode, cpName, isCollectfees,
+		originalName, actor, writer,
+		actorName, writerName, orgairDate,
+		price, contentProvider, keyWord,
+		tag, viewPoint, starLevel,
+		rating, awards, originalCountry,
+		language, releaseYear, duration,
+		Channel, ChannelName, Label,
+		LabelName, enName, vName,
+		definition, copyRightProperty, crBeginDate,
+		crEndDate, copyright, cpContentID,
+		score, pictureURL1, pictureURL2,
+		pictureURL3, pictureURL4, correlateId,
+		description)
+		values (#{seriescode,jdbcType=VARCHAR}, #{seriesname,jdbcType=VARCHAR},
+		#{volumncount,jdbcType=INTEGER},
+		#{currentnum,jdbcType=INTEGER}, #{pinyin,jdbcType=VARCHAR}, #{pinyinsuoxie,jdbcType=VARCHAR},
+		#{cpcode,jdbcType=VARCHAR}, #{cpname,jdbcType=VARCHAR},
+		#{iscollectfees,jdbcType=INTEGER},
+		#{originalname,jdbcType=VARCHAR}, #{actor,jdbcType=VARCHAR}, #{writer,jdbcType=VARCHAR},
+		#{actorname,jdbcType=VARCHAR}, #{writername,jdbcType=VARCHAR},
+		#{orgairdate,jdbcType=VARCHAR},
+		#{price,jdbcType=VARCHAR}, #{contentprovider,jdbcType=VARCHAR}, #{keyword,jdbcType=VARCHAR},
+		#{tag,jdbcType=VARCHAR}, #{viewpoint,jdbcType=VARCHAR},
+		#{starlevel,jdbcType=VARCHAR},
+		#{rating,jdbcType=VARCHAR}, #{awards,jdbcType=VARCHAR}, #{originalcountry,jdbcType=VARCHAR},
+		#{language,jdbcType=VARCHAR}, #{releaseyear,jdbcType=VARCHAR},
+		#{duration,jdbcType=VARCHAR},
+		#{channel,jdbcType=VARCHAR}, #{channelname,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR},
+		#{labelname,jdbcType=VARCHAR}, #{enname,jdbcType=VARCHAR},
+		#{vname,jdbcType=VARCHAR},
+		#{definition,jdbcType=VARCHAR}, #{copyrightproperty,jdbcType=INTEGER},
+		#{crbegindate,jdbcType=VARCHAR},
+		#{crenddate,jdbcType=VARCHAR}, #{copyright,jdbcType=VARCHAR}, #{cpcontentid,jdbcType=VARCHAR},
+		#{score,jdbcType=VARCHAR}, #{pictureurl1,jdbcType=VARCHAR},
+		#{pictureurl2,jdbcType=VARCHAR},
+		#{pictureurl3,jdbcType=VARCHAR}, #{pictureurl4,jdbcType=VARCHAR}, #{correlateid,jdbcType=VARCHAR},
+		#{description,jdbcType=LONGVARCHAR})
+	</insert>
+	<update id="update" parameterType="com.pbtd.playclick.heyi.domain.GuttvAlbuminfo">
+		update heyi_vod_albuminfo
+		<set>
+		  updatestatus=0,
+			<if test="seriesname != null">
+				seriesname=#{seriesname,jdbcType=VARCHAR},
+			</if>
+			<if test="volumncount != null">
+				volumncount=#{volumncount,jdbcType=INTEGER},
+			</if>
+			<if test="currentnum != null">
+				currentnum=#{currentnum,jdbcType=INTEGER},
+			</if>
+			<if test="pinyin != null">
+				pinyin=#{pinyin,jdbcType=VARCHAR},
+			</if>
+			<if test="pinyinsuoxie != null">
+				pinyinsuoxie=#{pinyinsuoxie,jdbcType=VARCHAR},
+			</if>
+			<if test="cpcode != null">
+				cpcode=#{cpcode,jdbcType=VARCHAR},
+			</if>
+			<if test="cpname != null">
+				cpname=#{cpname,jdbcType=VARCHAR},
+			</if>
+			<if test="iscollectfees != null">
+				iscollectfees=#{iscollectfees,jdbcType=INTEGER},
+			</if>
+			<if test="originalname != null">
+				originalname=#{originalname,jdbcType=VARCHAR},
+			</if>
+			<if test="actor != null">
+				actor=#{actor,jdbcType=VARCHAR},
+			</if>
+			<if test="writer != null">
+				writer=#{writer,jdbcType=VARCHAR},
+			</if>
+			<if test="actorname != null">
+				actorname=#{actorname,jdbcType=VARCHAR},
+			</if>
+			<if test="writername != null">
+				writername=#{writername,jdbcType=VARCHAR},
+			</if>
+			<if test="orgairdate != null">
+				orgairdate=#{orgairdate,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				price=#{price,jdbcType=VARCHAR},
+			</if>
+			<if test="contentprovider != null">
+				contentprovider=#{contentprovider,jdbcType=VARCHAR},
+			</if>
+			<if test="keyword != null">
+				keyword=#{keyword,jdbcType=VARCHAR},
+			</if>
+			<if test="tag != null">
+				tag=#{tag,jdbcType=VARCHAR},
+			</if>
+			<if test="viewpoint != null">
+				viewpoint=#{viewpoint,jdbcType=VARCHAR},
+			</if>
+			<if test="starlevel != null">
+				starlevel=#{starlevel,jdbcType=VARCHAR},
+			</if>
+			<if test="rating != null">
+				rating=#{rating,jdbcType=VARCHAR},
+			</if>
+			<if test="awards != null">
+				awards=#{awards,jdbcType=VARCHAR},
+			</if>
+			<if test="originalcountry != null">
+				originalcountry=#{originalcountry,jdbcType=VARCHAR},
+			</if>
+			<if test="language != null">
+				language=#{language,jdbcType=VARCHAR},
+			</if>
+			<if test="releaseyear != null">
+				releaseyear=#{releaseyear,jdbcType=VARCHAR},
+			</if>
+			<if test="duration != null">
+				duration=#{duration,jdbcType=VARCHAR},
+			</if>
+			<if test="channel != null">
+				channel=#{channel,jdbcType=VARCHAR},
+			</if>
+			<if test="channelname != null">
+				channelname=#{channelname,jdbcType=VARCHAR},
+			</if>
+			<if test="label != null">
+				label=#{label,jdbcType=VARCHAR},
+			</if>
+			<if test="labelname != null">
+				labelname=#{labelname,jdbcType=VARCHAR},
+			</if>
+			<if test="enname != null">
+				enname=#{enname,jdbcType=VARCHAR},
+			</if>
+			<if test="vname != null">
+				vname=#{vname,jdbcType=VARCHAR},
+			</if>
+			<if test="definition != null">
+				definition=#{definition,jdbcType=VARCHAR},
+			</if>
+			<if test="copyrightproperty != null">
+				copyrightproperty=#{copyrightproperty,jdbcType=INTEGER},
+			</if>
+			<if test="crbegindate != null">
+				crbegindate=#{crbegindate,jdbcType=VARCHAR},
+			</if>
+			<if test="crenddate != null">
+				crenddate=#{crenddate,jdbcType=VARCHAR},
+			</if>
+			<if test="copyright != null">
+				copyright=#{copyright,jdbcType=VARCHAR},
+			</if>
+			<if test="cpcontentid != null">
+				cpcontentid=#{cpcontentid,jdbcType=VARCHAR},
+			</if>
+			<if test="score != null">
+				score=#{score,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureurl1 != null">
+				pictureurl1=#{pictureurl1,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureurl2 != null">
+				pictureurl2=#{pictureurl2,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureurl3 != null">
+				pictureurl3=#{pictureurl3,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureurl4 != null">
+				pictureurl4=#{pictureurl4,jdbcType=VARCHAR},
+			</if>
+			<if test="correlateid != null">
+				correlateid=#{correlateid,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description=#{description,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where seriescode=#{seriescode,jdbcType=LONGVARCHAR}
+	</update>
+	
+	 <select id="findAlbumsinfovideo" parameterType="Map" resultType="Map">
+    select seriesCode,drama,dramaname,dramaviewPoint,version,Resolution,
+Definition,SourceType,Type,movieUrl,fileurl,updatetime,id,
+duration,pic,title,correlateId
+     from heyi_vod_albuminfovideo
+    where 1=1
+ 			<if test="drama !=null">
+				and drama=#{drama,jdbcType=VARCHAR}
+			</if>
+			<if test="dramaname !=null">
+				and dramaname=#{dramaname,jdbcType=VARCHAR}
+			</if>
+			<if test="seriesCode !=null and seriesCode !=''">
+				and seriesCode=#{seriesCode,jdbcType=VARCHAR}
+			</if>
+			<if test="id !=null and id>0">
+				and id=#{id,jdbcType=INTEGER}
+			</if>
+ 	order by CAST(drama as SIGNED)  
+ 
+    </select>
+    
+</mapper>

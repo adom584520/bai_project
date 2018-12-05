@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.system.mapper.SysParamMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.system.domain.SysParam">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="platform" property="platform" jdbcType="INTEGER" />
+		<result column="keydata" property="keydata" jdbcType="VARCHAR" />
+		<result column="keyName" property="keyname" jdbcType="VARCHAR" />
+		<result column="valuedata" property="valuedata" jdbcType="VARCHAR" />
+		<result column="valueName" property="valuename" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="paramdescribe" property="paramdescribe" jdbcType="VARCHAR" />
+		<result column="createTime" property="createTime"  />
+		<result column="updateTime" property="updateTime"  />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, platform, keydata, keyName, valuedata, valueName, status, paramdescribe
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from sys_param
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="select" resultMap="BaseResultMap" parameterType="Map">
+		select
+		*
+		from sys_param
+		where platform = #{platform,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_param
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insertfordomain" parameterType="com.pbtd.manager.system.domain.SysParam">
+		insert into sys_param (id, platform, keydata,
+		keyName, valuedata, valueName,
+		status, paramdescribe)
+		values (#{id,jdbcType=INTEGER}, #{platform,jdbcType=INTEGER},
+		#{keydata,jdbcType=VARCHAR},
+		#{keyname,jdbcType=VARCHAR}, #{valuedata,jdbcType=VARCHAR}, #{valuename,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER}, #{paramdescribe,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.pbtd.manager.system.domain.SysParam">
+		insert into sys_param
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="platform != null">
+				platform,
+			</if>
+			<if test="keydata != null">
+				keydata,
+			</if>
+			<if test="keyname != null">
+				keyName,
+			</if>
+			<if test="valuedata != null">
+				valuedata,
+			</if>
+			<if test="valuename != null">
+				valueName,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="paramdescribe != null">
+				paramdescribe,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="platform != null">
+				#{platform,jdbcType=INTEGER},
+			</if>
+			<if test="keydata != null">
+				#{keydata,jdbcType=VARCHAR},
+			</if>
+			<if test="keyname != null">
+				#{keyname,jdbcType=VARCHAR},
+			</if>
+			<if test="valuedata != null">
+				#{valuedata,jdbcType=VARCHAR},
+			</if>
+			<if test="valuename != null">
+				#{valuename,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="paramdescribe != null">
+				#{paramdescribe,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.pbtd.manager.system.domain.SysParam">
+		update sys_param
+		<set>
+			<if test="platform != null">
+				platform = #{platform,jdbcType=INTEGER},
+			</if>
+			<if test="keydata != null">
+				keydata = #{keydata,jdbcType=VARCHAR},
+			</if>
+			<if test="keyname != null">
+				keyName = #{keyname,jdbcType=VARCHAR},
+			</if>
+			<if test="valuedata != null">
+				valuedata = #{valuedata,jdbcType=VARCHAR},
+			</if>
+			<if test="valuename != null">
+				valueName = #{valuename,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="paramdescribe != null">
+				paramdescribe = #{paramdescribe,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.pbtd.manager.system.domain.SysParam">
+		update sys_param
+		set platform = #{platform,jdbcType=INTEGER},
+		keydata = #{keydata,jdbcType=VARCHAR},
+		keyName = #{keyname,jdbcType=VARCHAR},
+		valuedata = #{valuedata,jdbcType=VARCHAR},
+		valueName = #{valuename,jdbcType=VARCHAR},
+		status = #{status,jdbcType=INTEGER},
+		paramdescribe = #{paramdescribe,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="count" parameterType="Map" resultType="INTEGER">
+		select
+		count(id) count from sys_param
+	</select>
+
+	<insert id="insert" parameterType="Map">
+		insert into sys_param (platform, keydata,
+		keyName, valuedata,valueName,
+		status, paramdescribe,createTime,updateTime)
+		values (#{platform,jdbcType=INTEGER},
+		#{keydata,jdbcType=VARCHAR},
+		#{keyname,jdbcType=VARCHAR}, #{valuedata,jdbcType=VARCHAR}, #{valuename,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER}, #{paramdescribe,jdbcType=VARCHAR},now(),now())
+	</insert>
+
+	<update id="update" parameterType="Map">
+		update sys_param
+		<set>
+			<if test="platform != null">
+				platform = #{platform,jdbcType=INTEGER},
+			</if>
+			<if test="keydata != null">
+				keydata = #{keydata,jdbcType=VARCHAR},
+			</if>
+			<if test="keyname != null">
+				keyName = #{keyname,jdbcType=VARCHAR},
+			</if>
+			<if test="valuedata != null">
+				valuedata = #{valuedata,jdbcType=VARCHAR},
+			</if>
+			<if test="valuename != null">
+				valueName = #{valuename,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="paramdescribe != null">
+				paramdescribe = #{paramdescribe,jdbcType=VARCHAR},
+			</if>
+				createTime = now() ,
+				updateTime = now()
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<delete id="delete" parameterType="Map">
+		delete from sys_param
+		where 1=1
+		<if test="id != null and id > -1">
+			and id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="id_!= null">
+			and ID in
+			<foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=INTEGER}
+			</foreach>
+		</if>
+	</delete>
+
+
+
+	<select id="load" parameterType="INTEGER"
+		resultType="com.pbtd.manager.system.domain.SysParam">
+		select
+		*
+		from sys_param
+		where id=#{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询数据 -->
+	<select id="find" resultType="Map">
+		select
+		*
+		from sys_param
+		<where>
+			<if test="name!=null and name!=''">
+				and name like '%#{name,jdbcType=VARCHAR}%'
+			</if>
+			<if test="id!=null and id!=''">
+				and id=#{id,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+	<select id="findonline" resultType="Map">
+		select
+		*
+		from sys_param where status = 1;
+	</select>
+
+
+</mapper>

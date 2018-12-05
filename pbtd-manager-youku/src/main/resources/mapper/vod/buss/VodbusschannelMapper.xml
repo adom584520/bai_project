@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.buss.mapper.VodbusschannelMapper">
+     <select id="maxbussId" parameterType="Map" resultType="java.lang.Integer">
+        select max(bussId)+1 bussId
+        from  vod_buss_info  
+    </select>
+    <!--INSERT/UPDATE/DELETE 执行语句-->
+    <insert id="insert" parameterType="Map">
+        insert into 
+        vod_buss_channel 
+        (
+       groupId, bussId, channelCode 
+        )
+        values 
+        (
+        #{groupId,jdbcType=INTEGER},
+        #{bussId,jdbcType=INTEGER},
+        #{channelCode,jdbcType=INTEGER}
+        )
+    </insert>
+    <delete id="deletes" parameterType="Map" >
+        delete from vod_buss_channel
+        where 1=1
+           and bussId = #{bussId,jdbcType=INTEGER}
+        <if test="bussId_ != null">
+        	or bussId in 
+        	<foreach collection="bussId_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+        <if test="groupId != null and groupId > -1">
+            and groupId = #{groupId,jdbcType=INTEGER}
+        </if>
+    </delete>
+</mapper>

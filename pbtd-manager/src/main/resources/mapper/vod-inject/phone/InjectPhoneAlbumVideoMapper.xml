@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.inject.phone.mapper.InjectPhoneAlbumVideoMapper">
+
+	<resultMap type="com.pbtd.manager.inject.phone.domain.InjectPhoneAlbumVideo" id="injectPhoneAlbumVideo">
+		<id column="id" property="id" />
+		<result column="seriesCode" property="seriesCode" />
+		<result column="drama" property="drama"/>
+		<result column="zxInjectState" property="zxInjectState" />
+		<result column="zxPriority" property="zxPriority"/>
+		<result column="hwInjectState" property="hwPriority"/>
+	</resultMap>
+
+	 <!--节目查询条数 -->
+    <select id="countalbumVideo" parameterType="Map" resultType="java.lang.Integer">
+        select count(1)
+		from inject_phone_albuminfovideo a 
+		left join vod_phone_albuminfovideo b 
+		on a.seriesCode=b.seriesCode  
+		and a.drama=b.drama
+        where 1=1
+        <if test="seriesCode!=null">
+          	and a.seriesCode=#{seriesCode,jdbcType=INTEGER}
+        </if>
+        <if test="zxInjectState!=null and hwInjectState==null">
+			and zxInjectState=#{zxInjectState}
+		</if>		     			     
+		<if test="hwInjectState!=null and zxInjectState==null">
+			and hwInjectState=#{hwInjectState}
+		</if>
+		<if test="zxInjectState!=null and hwInjectState!=null">
+			and (zxInjectState=#{zxInjectState} or hwInjectState=#{hwInjectState})
+		</if>
+	</select>
+	
+	<!--节目查询列表 -->
+    <select id="pagealbumVideo" parameterType="Map" resultType="Map">
+ 			select a.id,a.seriesCode,a.drama,a.zxInjectState,a.zxPriority,a.hwInjectState,a.hwPriority,
+			b.dramaname,b.update_time
+			from inject_phone_albuminfovideo a 
+			left join vod_phone_albuminfovideo b 
+			on a.seriesCode=b.seriesCode 
+			and a.drama=b.drama
+            where 1=1
+			<if test="id != null ">
+			     and a.id=#{id,jdbcType=INTEGER}
+			</if>
+			<if test="seriesCode!=null">
+				and a.seriesCode=#{seriesCode,jdbcType=INTEGER}
+			</if>
+			 <if test="zxInjectState!=null and hwInjectState==null">
+				and zxInjectState=#{zxInjectState}
+			</if>		     			     
+			<if test="hwInjectState!=null and zxInjectState==null">
+				and hwInjectState=#{hwInjectState}
+			</if>
+			<if test="zxInjectState!=null and hwInjectState!=null">
+				and (zxInjectState=#{zxInjectState} or hwInjectState=#{hwInjectState})
+			</if>
+         	order by a.zxPriority desc,b.update_time
+         	<if test="start != null">
+            	limit #{start},#{pageSize}
+        	</if>
+    </select>
+    
+    <!-- 更新专辑优先级 -->
+   <update id="updateAlbumVideoPriority" parameterType="Map">
+		update inject_phone_albuminfovideo t 
+		set t.zxPriority=#{zxPriority}
+		where t.id=#{id}
+	</update>
+	
+</mapper>

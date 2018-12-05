@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playlive.mapper.LiveProgramMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playlive.domain.LiveProgram">
+		<id column="programId" property="programid" jdbcType="INTEGER" />
+		<result column="startTime" property="starttime" jdbcType="BIGINT" />
+		<result column="endTime" property="endtime" jdbcType="BIGINT" />
+		<result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+		<result column="source" property="source" jdbcType="INTEGER" />
+		<result column="realTime" property="realtime" jdbcType="VARCHAR" />
+		<result column="programName" property="programname" jdbcType="VARCHAR" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		 startTime, endTime, chnCode, programName,
+		realTime
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.pbtd.playlive.domain.LiveProgram">
+		select
+		<include refid="Base_Column_List" />
+		from live_program
+		<trim prefix="where " suffixOverrides="and">
+			<if test="chncode != null">
+				chnCode = #{chncode} and
+			</if>
+			<if test="starttime != null">
+				startTime > #{starttime} and
+			</if>
+			<if test="endtime != null">
+				<![CDATA[ endTime > #{endtime} ]]>
+			</if>
+		</trim>
+		ORDER BY startTime limit 1
+	</select>
+	<select id="selectProList" resultMap="BaseResultMap"
+		parameterType="com.pbtd.playlive.domain.LiveProgram">
+		select
+		<include refid="Base_Column_List" />
+		from live_program
+		<trim prefix="where " suffixOverrides="and">
+			<if test="chncode != null">
+				chnCode = #{chncode,jdbcType=INTEGER} and
+			</if>
+			<if test="starttime != null  and  endtime != null">
+				startTime BETWEEN #{starttime} and #{endtime}
+			</if>
+			ORDER BY startTime;
+		</trim>
+	</select>
+	
+	<update id="truncateTable">
+		truncate table live_program ;
+	</update>
+	
+	<insert id="insert" parameterType="com.pbtd.playlive.domain.LiveProgram">
+		insert into live_program (
+		startTime,
+		endTime,
+		chnCode,
+		source,
+		realTime,
+		programName,
+		createTime
+		)
+		values (
+		#{starttime,jdbcType=BIGINT},
+		#{endtime,jdbcType=BIGINT},
+		#{chncode,jdbcType=VARCHAR},
+		#{source,jdbcType=INTEGER},
+		#{realtime,jdbcType=VARCHAR},
+		#{programname,jdbcType=VARCHAR},
+		now()
+		)
+	</insert>
+	
+	<delete id="deleteTimeOut" parameterType="java.lang.Integer">
+	
+	<![CDATA[ delete from live_program  where  startTime <  (unix_timestamp()-3600*24*5) ]]>
+
+	</delete>
+</mapper>

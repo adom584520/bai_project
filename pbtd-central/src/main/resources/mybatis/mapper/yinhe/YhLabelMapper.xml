@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.playclick.yinhe.mapper.YhLabelMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playclick.yinhe.domain.YhLabel">
+		<id column="tagId" property="tagId" jdbcType="VARCHAR" />
+		<id column="chnId" property="chnId" jdbcType="VARCHAR"/>
+		<result column="tagName" property="tagName" jdbcType="VARCHAR"/>
+		<result column="typeId" property="typeId" jdbcType="VARCHAR"/>
+		<result column="typeName" property="typeName" jdbcType="VARCHAR"/>
+		<result column="bz" property="bz" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+    tagId, chnId, tagName, typeId, typeName, bz, status
+  </sql>
+  
+  <select id="selectByPrimaryKey"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_vod_label
+    where tagId = #{tagId}
+      and chnId = #{chnId}
+  </select>
+  
+  <delete id="deleteByPrimaryKey">
+    delete from yh_vod_label
+    where tagId = #{tagId}
+      and chnId = #{chnId}
+  </delete>
+  
+  <insert id="insert" parameterType="com.pbtd.playclick.yinhe.domain.YhLabel">
+    insert into yh_vod_label (tagId, chnId, tagName, 
+      typeId, typeName, bz, 
+      status)
+    values (#{tagId,jdbcType=VARCHAR}, #{chnId,jdbcType=VARCHAR}, #{tagName,jdbcType=VARCHAR}, 
+      #{typeId,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.pbtd.playclick.yinhe.domain.YhLabel">
+    insert into yh_vod_label
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tagId != null">
+        tagId,
+      </if>
+      <if test="chnId != null">
+        chnId,
+      </if>
+      <if test="tagName != null">
+        tagName,
+      </if>
+      <if test="typeId != null">
+        typeId,
+      </if>
+      <if test="typeName != null">
+        typeName,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tagId != null">
+        #{tagId,jdbcType=VARCHAR},
+      </if>
+      <if test="chnId != null">
+        #{chnId,jdbcType=VARCHAR},
+      </if>
+      <if test="tagName != null">
+        #{tagName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null">
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playclick.yinhe.domain.YhLabel">
+    update yh_vod_label
+    <set>
+      <if test="tagName != null">
+        tagName = #{tagName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+        typeId = #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null">
+        typeName = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tagId = #{tagId,jdbcType=VARCHAR}
+      and chnId = #{chnId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playclick.yinhe.domain.YhLabel">
+    update yh_vod_label
+    set tagName = #{tagName,jdbcType=VARCHAR},
+      typeId = #{typeId,jdbcType=VARCHAR},
+      typeName = #{typeName,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where tagId = #{tagId,jdbcType=VARCHAR}
+      and chnId = #{chnId,jdbcType=VARCHAR}
+  </update>
+  
+	<select id="find" parameterType="Map"
+		resultType="com.pbtd.playclick.yinhe.domain.YhLabel">
+		select tagId,tagName,typeId,typeName,chnId,bz,status from yh_vod_label
+		<where>
+			<if test="tagName!=null and tagName!='' ">
+				and a.tagName = #{tagName,jdbcType=VARCHAR}
+			</if>
+			<if test="typeId!=null and typeId>-1 ">
+				and a.typeId = #{typeId,jdbcType=VARCHAR}
+			</if>
+			<if test="chnId!=null and chnId>-1 ">
+				and a.chnId = #{chnId,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by typeId,chnId
+	</select>
+	
+</mapper>

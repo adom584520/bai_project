@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.vodinterface.web.mapper.VodTvModuleMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.vodinterface.web.domain.VodTvModule" >
+    <result column="moduleId" property="moduleid" jdbcType="INTEGER" />
+    <result column="masterplateId" property="masterplateid" jdbcType="INTEGER" />
+    <result column="sequence" property="sequence" jdbcType="INTEGER" />
+    <result column="channel" property="channel" jdbcType="INTEGER" />
+    <result column="describes" property="describes" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="linkchannel" property="linkchannel"  />
+	<result column="linklabel" property="linklabel"  />
+	<result column="linkstatus" property="linkstatus"  />
+	<result column="modulepic" property="modulepic"  />
+	<result column="picstatus" property="picstatus"  />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    moduleId, masterplateId, sequence, channel, describes, name,linkchannel,linklabel,linkstatus,modulepic,picstatus
+  </sql>
+  
+ <select id="select" resultMap="BaseResultMap" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from vod_tv_module
+    where channel = #{channel}
+  </select>
+  
+  <select id="selectForOne"  parameterType="Map" resultType="Map">
+		SELECT
+		a.moduleId,
+		a.masterplateId masterplateNum,
+		b.count size,
+		b.id
+		FROM `vod_tv_module` a
+		LEFT JOIN vod_masterplate_son b ON a.masterplateId = b.masterplateId
+		WHERE a.moduleId = #{moduleId};
+	</select>
+</mapper>

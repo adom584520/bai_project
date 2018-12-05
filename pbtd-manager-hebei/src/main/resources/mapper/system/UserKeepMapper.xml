@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.system.mapper.UserKeepMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.system.domain.UserKeep">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="startTime" property="startTime" jdbcType="DATE" />
+		<result column="endTime" property="endTime" jdbcType="DATE" />
+		<result column="startUser" property="startUser" jdbcType="INTEGER" />
+		<result column="endUser" property="endUser" jdbcType="INTEGER" />
+		<result column="keepUser" property="keepUser" jdbcType="INTEGER" />
+		<result column="keepPercent" property="keepPercent" jdbcType="FLOAT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, startTime, endTime, startUser, endUser, keepUser, keepPercent
+	</sql>
+
+	<!-- 插入数据-->
+	<insert id="insertData">
+		INSERT INTO user_keep (startTime, endTime, startUser, endUser, keepUser, keepPercent)
+		values (#{baseStartTime},#{baseEndTime},#{startUser},#{endUser},#{keepUser},#{keepPercent})
+	</insert>
+
+	<select id="getUserKeep" parameterType="Map" resultMap="BaseResultMap">
+		SELECT * FROM user_keep WHERE startTime like concat('%',#{startTime},'%') and endTime like concat('%',#{endTime},'%')
+		order by startTime desc
+	</select>
+
+	<select id="isUserKeepExist" parameterType="Map" resultType="INTEGER">
+		SELECT count(1) FROM user_keep WHERE startTime like concat('%',#{baseStartTime},'%') and endTime like concat('%',#{baseEndTime},'%')
+	</select>
+
+</mapper>

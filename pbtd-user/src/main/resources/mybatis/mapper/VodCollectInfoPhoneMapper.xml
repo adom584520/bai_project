@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.VodCollectInfoPhoneMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.VodCollectInfo">
+		<id column="id" property="id"/>
+		<result column="userId" property="userId"/>
+		<result column="palypos" property="playpos"/>
+		<result column="dram" property="drama"/>
+		<result column="dramaname" property="dramaname"/>
+		<result column="seriesCode" property="seriesCode"/>
+		<result column="pictureurl1" property="pictureurl1"/>
+		<result column="pictureurl2" property="pictureurl2"/>
+		<result column="duration" property="duration"/>
+		<result column="viewPoint" property="viewPoint"/>
+		<result column="seriesName" property="seriesName"/>
+		<result column="createTime" property="createTime"/>
+	</resultMap>
+	<sql id="column">
+		id, userId, palypos, dramaname,dram, seriesCode, pictureurl1,pictureurl2,duration,
+		viewPoint,seriesName,createTime
+	</sql>
+	<delete id="delete">
+		delete from
+		user_vod_collect_info_phone
+		<where>
+			userId = #{userId} 
+			<if test="seriesCode!=null">
+				and seriesCode = #{seriesCode}
+			</if>
+		</where>
+	</delete>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into user_vod_collect_info_phone 
+		(userId, palypos,dram, dramaname, seriesCode,createTime)
+		values (
+		#{userId},#{playpos},#{drama},#{dramaname},#{seriesCode},#{createTime})
+	</insert>
+	
+	<update id="update">
+		update user_vod_collect_info_phone
+		set pictureurl1=#{pictureurl1},pictureurl2=#{pictureurl2},duration=#{duration},
+		viewPoint=#{viewPoint},seriesName=#{seriesName}
+		where id = #{id}
+	</update>
+	
+	<select id="queryAll" resultMap="BaseResultMap">
+		select <include refid="column" />
+		from user_vod_collect_info_phone
+		where userId = #{userId}
+		order by createTime DESC,id asc
+		limit #{pagination},#{row}
+	</select>
+	
+	<select id="queryIsCollect" resultType="long">
+		select count(*)
+		from user_vod_collect_info_phone
+		where userId = #{userId} and seriesCode=#{seriesCode}
+	</select>
+	
+	<delete id="deleteBatch">
+		delete from user_vod_collect_info_phone
+		<where>
+			userId = #{userId}
+			<if test="list!=null and list.size()>0">
+				and seriesCode in
+				<foreach collection="list" item="code" open="(" separator="," close=")">
+					#{code}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+</mapper>

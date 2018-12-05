@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.UserLiveCollectInfoMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.UserLiveCollectInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="userId" property="userid" jdbcType="CHAR" />
+		<result column="chnCode" property="chncode" jdbcType="CHAR" />
+		<result column="chnName" property="chnname" jdbcType="VARCHAR" />
+		<result column="playUrl" property="playurl" jdbcType="VARCHAR" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+		<result column="groupId" property="groupid" jdbcType="INTEGER" />
+		<result column="packageCover" property="packagecover" jdbcType="VARCHAR" />
+		<result column="videoId" property="videoid" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, userId, chnCode, chnName, playUrl,createTime, updateTime,
+		groupId,
+		packageCover, videoId
+	</sql>
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from
+		user_live_collect_info
+		<where>
+			<if test="userId != null">
+				userId = #{userId}
+			</if>
+			<if test="chnCode != null">
+				and chnCode = #{chnCode}
+			</if>
+		</where>
+	</delete>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into
+		user_live_collect_info (
+		userId,
+		chnCode,
+		chnName,
+		playUrl,
+		packageCover,
+		videoId,
+		groupId,
+		createTime,
+		updateTime
+		)
+		values (
+		#{userId,jdbcType=CHAR},
+		#{chnCode,jdbcType=CHAR},
+		#{chnName,jdbcType=VARCHAR},
+		#{playUrl,jdbcType=VARCHAR},
+		#{packageCover,jdbcType=VARCHAR},
+		#{videoId},
+		#{groupId},
+		now(),
+		now()
+		)
+	</insert>
+	<select id="select" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+		select 
+		<include refid="Base_Column_List" />
+		from user_live_collect_info
+		<where>
+			<if test="userId != null">
+				userId = #{userId}
+			</if>
+			<if test="chnCode != null">
+				and chnCode = #{chnCode}
+			</if>
+		</where>
+		ORDER BY createTime DESC;
+	</select>
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.launcher.mapper.LauncherUIMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.launcher.domain.LauncherUI" >
+        <id column="id" property="id"/>
+        <result column="group_id" property="groupId"/>
+        <result column="group_name" property="groupName"/>
+        <result column="logo" property="logo"/>
+        <result column="poster_background" property="posterBackground"/>
+        <result column="picker_view" property="pickerView"/>
+        <result column="watch_background" property="watchBackground"/>
+        <result column="status" property="status"/>
+        <result column="loginInfo_name" property="loginInfoName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+    
+    <sql id="easyColumn">
+    	id,group_id,logo,poster_background,picker_view,watch_background
+    </sql>
+    
+    <select id="queryByGroupId" resultMap="baseResultMap">
+    	select <include refid="easyColumn"/>
+    	from launcher_ui
+    	where group_id = #{groupId} and status = #{status}
+    </select>
+</mapper>

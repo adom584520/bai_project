@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.system.mapper.SysCountUserMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.user.domain.SysCountUser">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="usercount" property="usercount" jdbcType="INTEGER" />
+		<result column="addusercount" property="addusercount" jdbcType="INTEGER" />
+		<result column="playusercount" property="playusercount"
+			jdbcType="INTEGER" />
+		<result column="addplayusercount" property="addplayusercount"
+			jdbcType="INTEGER" />
+		<result column="addactivecount" property="addactivecount"
+			jdbcType="INTEGER" />
+		<result column="addactiveusercount" property="addactiveusercount"
+			jdbcType="INTEGER" />
+		<result column="activeusercount" property="activeusercount"
+			jdbcType="INTEGER" />
+		<result column="activecount" property="activecount" jdbcType="INTEGER" />
+		<result column="playcount" property="playcount" jdbcType="INTEGER" />
+		<result column="addplaycount" property="addplaycount" jdbcType="INTEGER" />
+		<result column="playtime" property="playtime" jdbcType="REAL" />
+		<result column="activedegree" property="activedegree" jdbcType="REAL" />
+		<result column="playactivedegree" property="playactivedegree"
+			jdbcType="REAL" />
+		<result column="playtimetoone" property="playtimetoone"
+			jdbcType="REAL" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, createtime, usercount, addusercount, playusercount,
+		addplayusercount, addactivecount,
+		addactiveusercount, activeusercount,
+		activecount, playcount, addplaycount, playtime,
+		activedegree,playactivedegree,
+		playtimetoone
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from sys_count_user
+		where createtime like #{starttimestring}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="Map">
+		delete from
+		sys_count_user
+		where createtime like #{starttimestring}
+	</delete>
+	<insert id="insert" parameterType="com.pbtd.manager.user.domain.SysCountUser">
+		 insert into sys_count_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="usercount != null" >
+        usercount,
+      </if>
+      <if test="addusercount != null" >
+        addusercount,
+      </if>
+      <if test="playusercount != null" >
+        playusercount,
+      </if>
+      <if test="fourgplayusercount != null" >
+        fourgplayusercount,
+      </if>
+      <if test="wifiplayusercount != null" >
+        wifiplayusercount,
+      </if>
+      <if test="addplayusercount != null" >
+        addplayusercount,
+      </if>
+      <if test="addactivecount != null" >
+        addactivecount,
+      </if>
+      <if test="addactiveusercount != null" >
+        addactiveusercount,
+      </if>
+      <if test="activeusercount != null" >
+        activeusercount,
+      </if>
+      <if test="activecount != null" >
+        activecount,
+      </if>
+      <if test="playcount != null" >
+        playcount,
+      </if>
+      <if test="addplaycount != null" >
+        addplaycount,
+      </if>
+      <if test="playtime != null" >
+        playtime,
+      </if>
+      <if test="fourgplaytime != null" >
+        fourgplaytime,
+      </if>
+      <if test="wifiplaytime != null" >
+        wifiplaytime,
+      </if>
+      <if test="playactivedegree != null" >
+        playactivedegree,
+      </if>
+      <if test="activedegree != null" >
+        activedegree,
+      </if>
+      <if test="playtimetoone != null" >
+        playtimetoone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usercount != null" >
+        #{usercount,jdbcType=INTEGER},
+      </if>
+      <if test="addusercount != null" >
+        #{addusercount,jdbcType=INTEGER},
+      </if>
+      <if test="playusercount != null" >
+        #{playusercount,jdbcType=INTEGER},
+      </if>
+      <if test="fourgplayusercount != null" >
+        #{fourgplayusercount,jdbcType=INTEGER},
+      </if>
+      <if test="wifiplayusercount != null" >
+        #{wifiplayusercount,jdbcType=INTEGER},
+      </if>
+      <if test="addplayusercount != null" >
+        #{addplayusercount,jdbcType=INTEGER},
+      </if>
+      <if test="addactivecount != null" >
+        #{addactivecount,jdbcType=INTEGER},
+      </if>
+      <if test="addactiveusercount != null" >
+        #{addactiveusercount,jdbcType=INTEGER},
+      </if>
+      <if test="activeusercount != null" >
+        #{activeusercount,jdbcType=INTEGER},
+      </if>
+      <if test="activecount != null" >
+        #{activecount,jdbcType=INTEGER},
+      </if>
+      <if test="playcount != null" >
+        #{playcount,jdbcType=INTEGER},
+      </if>
+      <if test="addplaycount != null" >
+        #{addplaycount,jdbcType=INTEGER},
+      </if>
+      <if test="playtime != null" >
+        #{playtime,jdbcType=REAL},
+      </if>
+      <if test="fourgplaytime != null" >
+        #{fourgplaytime,jdbcType=REAL},
+      </if>
+      <if test="wifiplaytime != null" >
+        #{wifiplaytime,jdbcType=REAL},
+      </if>
+      <if test="playactivedegree != null" >
+        #{playactivedegree,jdbcType=REAL},
+      </if>
+      <if test="activedegree != null" >
+        #{activedegree,jdbcType=REAL},
+      </if>
+      <if test="playtimetoone != null" >
+        #{playtimetoone,jdbcType=REAL},
+      </if>
+    </trim>
+	</insert>
+
+	<!-- 查询数据 -->
+	<select id="find" resultType="Map">
+		select
+		id, createtime, usercount, addusercount, playusercount,
+		addplayusercount,
+		playcount,
+		addplaycount, FORMAT(playtime,2) playtime,
+		FORMAT(activedegree*100,2) activedegree,
+		FORMAT(playactivedegree*100,2) playactivedegree,
+		FORMAT(playtimetoone,2)
+		playtimetoone,addactivecount,
+		addactiveusercount, activeusercount,
+		activecount,fourgplayusercount,wifiplayusercount,fourgplaytime,wifiplaytime
+		from sys_count_user
+		<where>
+			<if test="starttime != null">
+				and createtime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createtime &lt;= #{endtime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+		
+		
+		
+		<if test="pageSize !=null and  start!=null">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<!-- 查询数据 -->
+	<select id="page" resultType="Map">
+		select
+		date(createtime) createtime, usercount, addusercount,
+		playusercount,
+		addplayusercount,
+		playcount,
+		addplaycount,
+		FORMAT(playtime,2) playtime,
+		FORMAT(activedegree*100,2) activedegree,
+		FORMAT(playactivedegree*100,2) playactivedegree,
+		FORMAT(playtimetoone,2)
+		playtimetoone,addactivecount,
+		addactiveusercount, activeusercount,
+		activecount
+		from sys_count_user
+		<where>
+			<if test="starttime != null">
+				and createtime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createtime &lt;= #{endtime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+
+	<select id="count" parameterType="Map" resultType="INTEGER">
+		select
+		count(id) count from sys_count_user
+		<where>
+			<if test="starttime != null">
+				and createtime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createtime &lt;= #{endtime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectforyestoday" resultMap="BaseResultMap"
+		parameterType="Map">
+		select
+		<include refid="Base_Column_List" />
+		from sys_count_user
+		where createtime like #{starttimestring}
+	</select>
+</mapper>

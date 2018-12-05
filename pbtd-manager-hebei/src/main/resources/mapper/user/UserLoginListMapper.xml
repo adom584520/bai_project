@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.user.mapper.UserLoginListMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.user.domain.UserLoginList">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="userMobile" property="usermobile" jdbcType="CHAR" />
+		<result column="sourceFlag" property="sourceflag" jdbcType="INTEGER" />
+		<result column="creatTime" property="creattime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, userMobile, sourceFlag, creatTime
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from user_login_list
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from user_login_list
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.pbtd.manager.user.domain.UserLoginList">
+		insert into user_login_list (id, userMobile, sourceFlag,
+		creatTime)
+		values (#{id,jdbcType=INTEGER}, #{usermobile,jdbcType=CHAR},
+		#{sourceflag,jdbcType=INTEGER},
+		#{creattime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.pbtd.manager.user.domain.UserLoginList">
+		insert into user_login_list
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="usermobile != null">
+				userMobile,
+			</if>
+			<if test="sourceflag != null">
+				sourceFlag,
+			</if>
+			<if test="creattime != null">
+				creatTime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="usermobile != null">
+				#{usermobile,jdbcType=CHAR},
+			</if>
+			<if test="sourceflag != null">
+				#{sourceflag,jdbcType=INTEGER},
+			</if>
+			<if test="creattime != null">
+				#{creattime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.pbtd.manager.user.domain.UserLoginList">
+		update user_login_list
+		<set>
+			<if test="usermobile != null">
+				userMobile = #{usermobile,jdbcType=CHAR},
+			</if>
+			<if test="sourceflag != null">
+				sourceFlag = #{sourceflag,jdbcType=INTEGER},
+			</if>
+			<if test="creattime != null">
+				creatTime = #{creattime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.pbtd.manager.user.domain.UserLoginList">
+		update user_login_list
+		set userMobile = #{usermobile,jdbcType=CHAR},
+		sourceFlag = #{sourceflag,jdbcType=INTEGER},
+		creatTime = #{creattime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+
+	<select id="activecount" parameterType="Map" resultType="INTEGER">
+		<if test="activeuser != null">
+			select count(1) from (
+
+		</if>
+		select
+		count(1)
+		from user_login_list
+		<where>
+			<if test="starttime != null">
+				and creatTime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and creatTime &lt;= #{endtime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="activeuser != null">
+				group by userMobile
+			</if>
+		</where>
+		<if test="activeuser != null">
+			) b
+		</if>
+	</select>
+
+
+	<!--<select id="selectactiveuserkeepcount" resultType="INTEGER"-->
+		<!--parameterType="Map">-->
+		<!--SELECT count(1) from (-->
+		<!--SELECT-->
+		<!--count(1) cc,-->
+		<!--userMobile-->
+		<!--FROM-->
+		<!--(-->
+		<!--SELECT-->
+		<!--userMobile,-->
+		<!--DATE(creatTime),count(1)-->
+		<!--FROM-->
+		<!--`user_login_list`-->
+		<!--WHERE-->
+		<!--userMobile is not null-->
+		<!--<if test="starttime != null">-->
+			<!--and creatTime &gt;= #{starttime,jdbcType=TIMESTAMP}-->
+		<!--</if>-->
+		<!--<if test="endtime != null">-->
+			<!--and creatTime &lt;= #{endtime,jdbcType=TIMESTAMP}-->
+		<!--</if>-->
+		<!--GROUP BY-->
+		<!--DATE(creatTime),-->
+		<!--userMobile-->
+		<!--) a-->
+		<!--GROUP BY-->
+		<!--userMobile-->
+		<!--) b where b.cc &gt;= #{count}-->
+	<!--</select>-->
+
+   <select id="selectactiveuserkeepcount" resultType="INTEGER"
+		parameterType="Map">
+		SELECT COUNT(1) FROM (
+		SELECT COUNT(1) user_count FROM (
+		SELECT userMobile FROM user_base_info
+		WHERE createTime LIKE concat('%',#{baseStartTime},'%')
+		GROUP BY userMobile union all
+		SELECT userMobile FROM user_login_list
+		WHERE creatTime LIKE concat('%',#{baseEndTime},'%')
+		GROUP BY userMobile) a
+		GROUP BY userMobile) b
+		WHERE b.user_count &gt; 1
+	</select>
+
+	<select id="getUserCount" resultType="INTEGER" parameterType="Map">
+		SELECT count(1) FROM
+		(SELECT count(1) FROM
+		user_login_list
+		WHERE creatTime like concat('%',#{baseEndTime},'%')
+		GROUP BY userMobile) a
+	</select>
+
+</mapper>

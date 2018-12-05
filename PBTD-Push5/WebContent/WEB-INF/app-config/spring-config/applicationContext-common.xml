@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+	<!-- 注解探测器 -->
+	<context:component-scan base-package="com.yh">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+    <!-- 开启事务注解驱动 -->
+	<!-- <tx:annotation-driven /> -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="WEB-INF/app-config/jdbc.properties" />
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${jdbc.system.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.system.url}" />
+		<property name="user" value="${jdbc.system.username}" />
+		<property name="password" value="${jdbc.system.password}" />
+
+		<property name="initialPoolSize" value="5" />
+		<property name="minPoolSize" value="5" />
+		<property name="maxPoolSize" value="20" />
+		<property name="maxStatements" value="100" />
+		<property name="maxIdleTime" value="3600" />
+		<property name="acquireIncrement" value="2" />
+		<property name="acquireRetryAttempts" value="10" />
+		<property name="acquireRetryDelay" value="600" />
+		<property name="testConnectionOnCheckin" value="true" />
+		<property name="idleConnectionTestPeriod" value="1200" />
+		<property name="checkoutTimeout" value="10000" />
+	</bean>
+	 
+	
+	<!--================= MyBatis & start ==================== -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation"
+			value="WEB-INF/app-config/mybatis-config/mybatis.xml" />
+		<!-- <property name="plugins"> <list> <ref bean="mybatisPaginationInterceptor"/> 
+			</list> </property> -->
+	</bean>
+	<!-- 用于dao层手动IOC控制，可通过配置文件或注解实现注入 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- 通过扫描的模式，扫描目录在com/zc/mapper目录下，所有的mapper都继承SqlMapper接口的接口， 这样一个bean就可以了 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<property name="basePackage" value="com.yh.*" />
+		<property name="markerInterface" value="com.yh.mybatis.sqlmap.SqlMapper" />
+	</bean>
+	<!-- =================== MyBatis & end ===================== -->
+
+	<!-- ==== 事务管理 add by yahai.hu & start ==== -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 方法一 拦截器 -->
+	<!-- 创建拦截器 -->
+	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager"></property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+				<prop key="query*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="list*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<!-- 指定对满足哪些bean name的bean自动生成业务代理 -->
+		<property name="beanNames">
+			<!-- 下面是所有需要自动创建事务代理的bean -->
+			<list>
+				<value>*Service*</value>
+			</list>
+			<!-- 此处可增加其他需要自动创建事务代理的bean -->
+		</property>
+		<!-- 下面定义BeanNameAutoProxyCreator所需的事务拦截器 -->
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+				<!-- 此处可增加其他新的Interceptor -->
+			</list>
+		</property>
+	</bean>
+</beans>

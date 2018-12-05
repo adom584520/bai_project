@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.launcher.mapper.PositionMapper">
+	<!-- 模糊查询 -->
+	<sql id="whrClauseLike">
+		<if test="id != null and id > -1">
+			and id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="position != null and position != ''">
+			and position = #{position,jdbcType=INTEGER}
+		</if>
+		<if test="position_name != null">
+			and position_name like '%${position_name}%'
+		</if>
+		<if test="name != null">
+			and name like '%${name}%'
+		</if>
+		<if test="position_type!= null and position_type!='' ">
+			and position_type = #{position_type,jdbcType=INTEGER}
+		</if>
+	</sql>
+	<sql id="whrClauseLikeMore">
+		<if test="id_ != null">
+			and ID in
+			<foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=INTEGER}
+			</foreach>
+		</if>
+	</sql>
+	<!-- 精确查询 -->
+	<sql id="whrClauseEqual">
+		<if test="id != null and id > -1">
+			and id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="position != null and position != ''">
+			and position = #{position,jdbcType=INTEGER}
+		</if>
+		<if test="position_name != null">
+			and position_name=#{position_name,jdbcType=VARCHAR}
+		</if>
+		<if test="position_type!= null and position_type!='' ">
+			and position_type = #{position_type,jdbcType=INTEGER}
+		</if>
+	</sql>
+	<sql id="whrClauseEqualMore">
+		<if test="id_ != null">
+			and ID in
+			<foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=INTEGER}
+			</foreach>
+		</if>
+	</sql>
+	<insert id="add" parameterType="com.pbtd.manager.launcher.domain.Position">
+		insert into launcher_position
+		(position,position_type,position_name,name)
+		values
+		(#{position,jdbcType=INTEGER},#{position_type,jdbcType=INTEGER},#{position_name,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR})
+	</insert>
+	<update id="modify" parameterType="Map">
+		update launcher_position
+		<set>
+			<if test="position != null ">
+				position = #{position,jdbcType=INTEGER},
+			</if>
+			<if test="position_name != null ">
+				position_name=#{position_name,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null ">
+				name=#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="position_type!= null ">
+				position_type = #{position_type,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id=#{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deletes" parameterType="Map">
+		delete from launcher_position
+		where 1=1
+		<include refid="whrClauseLike" />
+		<include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+	</delete>
+	<select id="generatePosition" parameterType="Map" resultType="java.lang.Integer">
+		select max(id) + 1 as count
+		from launcher_position
+		where 1=1
+	</select>
+	<select id="load" parameterType="java.lang.Integer"
+		resultType="com.pbtd.manager.launcher.domain.Position">
+		select id,position_type,position_name,position,name from launcher_position
+		where id= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(id)
+		from launcher_position
+		where 1=1
+	</select>
+	<select id="find" parameterType="Map" resultType="Map">
+		select id, position_type,position_name,position,name from launcher_position
+		where 1=1
+		<if test="position_name!=null">
+			and position_name like '%${position_name}%'
+		</if>
+		<if test="name!=null">
+			and name like '%${name}%'
+		</if>
+		<if test="position_type!= null and position_type!='' ">
+			and position_type = #{position_type,jdbcType=INTEGER}
+		</if>
+		<if test="position != null and position != ''">
+			and position = #{position,jdbcType=INTEGER}
+		</if>
+		limit #{start},#{pageSize}
+	</select>
+	<resultMap type="java.util.HashMap" id="BaseMap">
+		<result property="position_type" column="id" />
+		<result property="position_name" column="name" />
+	</resultMap>
+	<select id="queryType" parameterType="Map" resultMap="BaseMap">
+		select id,name from launcher_position_type
+		where 1=1
+		<if test="id!=null and id!=''">
+			and id=#{id,jdbcType=INTEGER}
+		</if>
+		<if test="name!=null and name!=''">
+			and name=#{name,jdbcType=VARCHAR}
+		</if>
+	</select>
+</mapper>

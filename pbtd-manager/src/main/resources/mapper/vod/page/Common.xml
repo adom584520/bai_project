@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.page.mapper.CommonMapper">
+      
+	<!-- vod phone 频道列表 -->
+  <select id="choosechannel" parameterType="Map" resultType="Map">
+        select 
+       	id,channelName,
+		channelCode,levels,sequence	, parentCode, status,
+        navigationtype,count, create_time,create_user,update_time,update_user
+        from  vod_phone_channel a  
+        where 1=1
+		<if test="id != null and id  !=''">
+            and ID = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="levels != null and levels !=''">
+            and levels = #{levels,jdbcType=INTEGER}
+        </if>
+        <if test="channelCode != null and channelCode !=''">
+            and channelCode = #{channelCode,jdbcType=INTEGER}
+        </if>
+        <if test="parentCode != null and parentCode !=''">
+            and parentCode = #{parentCode,jdbcType=INTEGER}
+        </if>
+        <if test="navigationtype != null and navigationtype !=''">
+		            and navigationtype = #{navigationtype,jdbcType=INTEGER}
+		        </if>
+        <if test="status != null and status  !=''">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        ORDER BY SEQUENCE
+        </select>
+        
+        
+        <!-- vod phone b标签列表 -->
+	  <select id="chooselabel" parameterType="Map" resultType="Map">
+	       select id,name,type,status from vod_phone_label
+	       where 1=1
+		 <if test="id != null and id !=''">
+            and ID = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="type != null and type !=''">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="status != null and status  !=''">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="channelCode != null and channelCode  !=''">
+        and id in( select label from vod_labelchannel where 
+			type='phone' and channel=#{channelCode,jdbcType=INTEGER})
+        </if>
+        ORDER BY SEQUENCE
+        </select>
+        
+     <!-- vod tv 频道列表 -->
+  <select id="choosechanneltv" parameterType="Map" resultType="Map">
+        select 
+       	id,channelName,
+		channelCode,levels,sequence	, parentCode, status,
+        navigationtype,count, create_time,create_user,update_time,update_user
+        from  vod_tv_channel a  
+        where 1=1
+		<if test="id != null and id  !=''">
+            and ID = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="levels != null and levels  !=''">
+            and levels = #{levels,jdbcType=INTEGER}
+        </if>
+        <if test="channelCode != null and channelCode  !=''">
+            and channelCode = #{channelCode,jdbcType=INTEGER}
+        </if>
+        <if test="parentCode != null and parentCode  !=''">
+            and parentCode = #{parentCode,jdbcType=INTEGER}
+        </if>
+        <if test="navigationtype != null and navigationtype !=''">
+		            and navigationtype = #{navigationtype,jdbcType=INTEGER}
+		        </if>
+        <if test="status != null and status  !=''">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        ORDER BY SEQUENCE
+        </select>
+        
+           <!-- vod tv b标签列表 -->
+	  <select id="chooselabeltv" parameterType="Map" resultType="Map">
+	       select id,name,type,status from vod_tv_label
+		<if test="id != null and id  !=''">
+            and ID = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="type != null and type !=''">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="status != null and status  !=''">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+         <if test="channelCode != null and channelCode  !=''">
+         and id in( select label from vod_labelchannel where 
+			type='tv' and channel=#{channelCode,jdbcType=INTEGER}) 
+        </if>
+        ORDER BY SEQUENCE
+        </select>
+        
+        
+            <!-- vod 角标 -->
+	  <select id="choosecorner" parameterType="Map" resultType="Map">
+	     select id,name,imgurl from vod_corner
+	     <where>
+		        <if test="status != null and status  !=''">
+		            and status = #{status,jdbcType=INTEGER}
+		        </if>
+        </where>
+        </select>
+        
+          <!-- vod 付费包 -->
+	  <select id="choosecollectfeesbag" parameterType="Map" resultType="Map">
+	     select  code,name from vod_collectfeesbag
+		<where>
+		        <if test="status != null and status  !=''">
+		            and status = #{status,jdbcType=INTEGER}
+		        </if>
+        </where>
+        </select>
+        <!-- 获取项目下的频道列表 -->
+        <select id="findbusschannel" parameterType="Map" resultType="Map">
+	    select  channelCode  name  
+		from
+		vod_buss_channel
+		where bussId in (select bussId from vod_buss_info where name=#{proj,jdbcType=VARCHAR})
+	</select>
+	
+	  <select id="findalbum" parameterType="Map" resultType="Map">
+		select  LEFT(writer,7) writer ,channel,LEFT(actor,7) actor,seriesCode from  vod_phone_albuminfo  a
+		</select>
+	 <select id="findalbumhot" parameterType="Map" resultType="Map">
+		select  LEFT(writer,7) writer ,channel,LEFT(actor,7) actor,seriesCode from  vod_phone_albuminfo  a
+		where seriesCode!=${seriesCode}
+		 		<if test="writer != null and stwriteratus!=''">
+		            and writer like'%${writer}%' 
+		        </if>
+		         <if test="actor != null and actor !=''">
+		            and actor like'%${actor}%' 
+		        </if>
+		         <if test="channel != null and channel!=''">
+		            and channel like'%${channel}%' 
+		        </if>
+		         limit 5 
+		</select>
+		 <insert id="inserthot">
+		     insert into vod_phone_albuminfo_recommend
+		     (id,seriesCode,status,sequence)
+		     values
+		     (#{id,jdbcType=INTEGER},
+		     #{seriesCode,jdbcType=INTEGER},
+		    1,
+		     1
+		     )
+    </insert>
+    <!-- 标签分类 -->
+      <select id="chooselabeltype" parameterType="Map" resultType="Map">
+	    select  id,  name  
+		from
+		vod_labeltype
+	</select>
+	
+	 <!-- cp源 -->
+      <select id="choosecpsource" parameterType="Map" resultType="Map">
+	  select code as id,name from cp_source
+	</select>
+	
+	
+	<!-- 爬取汇聚数据偏移值 -->
+	   <select id="getoffset" parameterType="Map" resultType="Map">
+	 select album_offset,album_offsettime,albumvideo_offset,albumvideo_offsettime 
+	  from album_offset
+	</select>
+	<update id="updateoffset" parameterType="Map">
+	update album_offset
+	<set>
+		 <if test="album_offset != null and album_offset !=''">
+		        album_offset = #{album_offset,jdbcType=INTEGER},
+		      album_offsettime=now(),
+		 </if>
+		  <if test="albumvideo_offset != null and albumvideo_offset !=''">
+		        albumvideo_offset = #{albumvideo_offset,jdbcType=INTEGER},
+		        albumvideo_offsettime=now(),
+		 </if>
+	</set>
+	</update>
+</mapper>

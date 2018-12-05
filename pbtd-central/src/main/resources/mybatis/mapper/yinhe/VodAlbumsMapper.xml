@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playclick.yinhe.mapper.vodAlbumsMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playclick.yinhe.domain.Albums" >
+    <id column="albumId" property="albumId" jdbcType="VARCHAR" />
+    <result column="albumAttributes" property="albumAttributes" jdbcType="VARCHAR" />
+    <result column="albumName" property="albumName" jdbcType="VARCHAR" />
+    <result column="chnId" property="chnId" jdbcType="VARCHAR" />
+    <result column="chnName" property="chnName" jdbcType="VARCHAR" />
+    <result column="cpId" property="cpId" jdbcType="VARCHAR" />
+    <result column="duration" property="duration" jdbcType="VARCHAR" />
+    <result column="focus" property="focus" jdbcType="VARCHAR" />
+    <result column="is3d" property="is3d" jdbcType="VARCHAR" />
+    <result column="isPurchase" property="isPurchase" jdbcType="VARCHAR" />
+    <result column="isPurchaseOwn" property="isPurchaseOwn" jdbcType="VARCHAR" />
+    <result column="isSeries" property="isSeries" jdbcType="VARCHAR" />
+    <result column="maxSet" property="maxSet" jdbcType="VARCHAR" />
+    <result column="phase" property="phase" jdbcType="VARCHAR" />
+    <result column="pid" property="pid" jdbcType="VARCHAR" />
+    <result column="playCnt" property="playCnt" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="VARCHAR" />
+    <result column="scoreLabel" property="scoreLabel" jdbcType="VARCHAR" />
+    <result column="season" property="season" jdbcType="VARCHAR" />
+    <result column="sets" property="sets" jdbcType="VARCHAR" />
+    <result column="showDate" property="showDate" jdbcType="VARCHAR" />
+    <result column="timestamp" property="timestamp" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="bz" property="bz" jdbcType="VARCHAR" />
+    <result column="tags" property="tags" jdbcType="VARCHAR" />
+    <result column="tagsids" property="tagsids" jdbcType="VARCHAR" />
+    <result column="currentCount" property="currentCount" jdbcType="VARCHAR" />
+    <result column="directorname" property="directorname" jdbcType="VARCHAR" />
+    <result column="actorname" property="actorname" jdbcType="VARCHAR" />
+    <result column="actorids" property="actorids" jdbcType="VARCHAR" />
+    <result column="directorids" property="directorids" jdbcType="VARCHAR" />
+     <result column="isStorage" property="isStorage" jdbcType="INTEGER" />
+    <result column="storagetime" property="storagetime" jdbcType="VARCHAR"/>
+    <result column="updatetime" property="updatetime" jdbcType="VARCHAR" />
+    <result column="originalCountry" property="originalCountry" jdbcType="VARCHAR" />
+    
+  </resultMap> 
+  <resultMap id="ResultMapWithBLOBs" type="com.pbtd.playclick.yinhe.domain.AlbumsWithBLOBs" extends="BaseResultMap" >
+    <result column="actors" property="actors" jdbcType="LONGVARCHAR" />
+    <result column="albumDesc" property="albumDesc" jdbcType="LONGVARCHAR" />
+    <result column="cpList" property="cpList" jdbcType="LONGVARCHAR" />
+    <result column="currShowPlayOrder" property="currShowPlayOrder" jdbcType="LONGVARCHAR" />
+    <result column="leafTags" property="leafTags" jdbcType="LONGVARCHAR" />
+    <result column="picUrl" property="picUrl" jdbcType="LONGVARCHAR" />
+    <result column="superScripts" property="superScripts" jdbcType="LONGVARCHAR" />
+    
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    albumId, albumAttributes, albumName, chnId, chnName, cpId, duration, focus, is3d, 
+    isPurchase, isPurchaseOwn, isSeries, maxSet, phase, pid, playCnt, score, scoreLabel, 
+    season, sets, showDate, timestamp, status, bz, tags,tagsids,currentCount
+    ,actorname, directorname,actorids, directorids,isStorage,
+      DATE_FORMAT(storagetime, '%Y.%m.%d %h:%i:%s') storagetime,
+    DATE_FORMAT(updatetime, '%Y.%m.%d %h:%i:%s') updatetime,originalCountry
+  </sql>
+  <sql id="Blob_Column_List" >
+    actors, albumDesc, cpList, currShowPlayOrder, leafTags, picUrl, superScripts
+  </sql>
+ 
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_vod_albuminfo
+    where albumId = #{albumId,jdbcType=VARCHAR}
+  </select>
+  
+      <select id="count" parameterType="Map" resultType="java.lang.Integer">
+    select   count(1)
+    from yh_vod_albuminfo where 1=1
+       <if test="tags != null" >
+         and tags like '%${tags}%'
+      </if>
+      <if test="tagsids != null" >
+        and tagsids like '%${tagsids}%'
+      </if>
+       <if test="isStorage != null and isStorage>-1" >
+        and isStorage = #{isStorage,jdbcType=INTEGER} 
+      </if>
+      <if test="currentCount != null" >
+        and currentCount = #{currentCount,jdbcType=VARCHAR}
+      </if>
+       <if test="actorids != null" >
+        and actorids = #{actorids,jdbcType=VARCHAR}
+      </if>
+       <if test="actorname!= null" >
+        and actorname  like '%${actorname}%'
+      </if>
+       <if test="directorname != null" >
+      and   directorname  like '%${directorname}%'
+      </if>
+       <if test="directorids != null" >
+       and  directorids = #{directorids,jdbcType=VARCHAR} 
+      </if>
+      <if test="albumAttributes != null" >
+        and albumAttributes = #{albumAttributes,jdbcType=VARCHAR} 
+      </if>
+      <if test="albumName != null" >
+      and   albumName  like '%${albumName}%'
+      </if>
+      <if test="chnId != null" >
+      and   chnId = #{chnId,jdbcType=VARCHAR} 
+      </if>
+      <if test="chnName != null" >
+       and  chnName = #{chnName,jdbcType=VARCHAR} 
+      </if>
+      <if test="cpId != null" >
+       and  cpId = #{cpId,jdbcType=VARCHAR} 
+      </if>
+      <if test="duration != null" >
+      and   duration = #{duration,jdbcType=VARCHAR} 
+      </if>
+      <if test="focus != null" >
+       and  focus = #{focus,jdbcType=VARCHAR} 
+      </if>
+      <if test="is3d != null" >
+     and    is3d = #{is3d,jdbcType=VARCHAR} 
+      </if>
+      <if test="isPurchase != null" >
+      and   isPurchase = #{isPurchase,jdbcType=VARCHAR} 
+      </if>
+      <if test="isPurchaseOwn != null" >
+       and  isPurchaseOwn = #{isPurchaseOwn,jdbcType=VARCHAR} 
+      </if>
+      <if test="isSeries != null" >
+       and  isSeries = #{isSeries,jdbcType=VARCHAR} 
+      </if>
+      <if test="maxSet != null" >
+       and  maxSet = #{maxSet,jdbcType=VARCHAR} 
+      </if>
+      <if test="phase != null" >
+       and  phase = #{phase,jdbcType=VARCHAR} 
+      </if>
+      <if test="pid != null" >
+        and pid = #{pid,jdbcType=VARCHAR} 
+      </if>
+      <if test="playCnt != null" >
+       and  playCnt = #{playCnt,jdbcType=VARCHAR} 
+      </if>
+      <if test="score != null" >
+        and score = #{score,jdbcType=VARCHAR} 
+      </if>
+      <if test="scoreLabel != null" >
+       and scoreLabel = #{scoreLabel,jdbcType=VARCHAR} 
+      </if>
+      <if test="season != null" >
+       and  season = #{season,jdbcType=VARCHAR} 
+      </if>
+      <if test="sets != null" >
+       and sets = #{sets,jdbcType=VARCHAR} 
+      </if>
+      <if test="showDate != null" >
+        and showDate = #{showDate,jdbcType=VARCHAR} 
+      </if>
+      <if test="timestamp != null" >
+        and timestamp = #{timestamp,jdbcType=VARCHAR} 
+      </if>
+      <if test="status != null" >
+        and status = #{status,jdbcType=VARCHAR} 
+      </if>
+      <if test="bz != null" >
+        and bz = #{bz,jdbcType=VARCHAR} 
+      </if>
+      <if test="actors != null" >
+        and actors = #{actors,jdbcType=LONGVARCHAR} 
+      </if>
+      <if test="albumDesc != null" >
+        and albumDesc = #{albumDesc,jdbcType=LONGVARCHAR} 
+      </if>
+      <if test="cpList != null" >
+        and cpList = #{cpList,jdbcType=LONGVARCHAR} 
+      </if>
+      <if test="currShowPlayOrder != null" >
+       and  currShowPlayOrder = #{currShowPlayOrder,jdbcType=LONGVARCHAR} 
+      </if>
+      <if test="leafTags != null" >
+        and leafTags = #{leafTags,jdbcType=LONGVARCHAR} 
+      </if>
+      <if test="picUrl != null" >
+        and picUrl = #{picUrl,jdbcType=LONGVARCHAR} 
+      </if>
+      <if test="superScripts != null" >
+       and  superScripts = #{superScripts,jdbcType=LONGVARCHAR} 
+      </if>
+  </select>
+   <select id="find" resultMap="ResultMapWithBLOBs"  parameterType="Map"  >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_vod_albuminfo where 1=1
+      <if test="tags != null" >
+         and tags like '%${tags}%'
+      </if>
+      <if test="tagsids != null" >
+        and tagsids like '%${tagsids}%'
+      </if>
+       <if test="isStorage != null and isStorage>-1" >
+        and isStorage = #{isStorage,jdbcType=INTEGER} 
+      </if>
+      <if test="currentCount != null" >
+        and currentCount = #{currentCount,jdbcType=VARCHAR}
+      </if>
+       <if test="actorids != null" >
+        and actorids = #{actorids,jdbcType=VARCHAR}
+      </if>
+       <if test="actorname!= null" >
+        and actorname  like '%${actorname}%'
+      </if>
+       <if test="directorname != null" >
+      and   directorname  like '%${directorname}%'
+      </if>
+       <if test="directorids != null" >
+       and  directorids = #{directorids,jdbcType=VARCHAR} 
+      </if>
+      <if test="albumAttributes != null" >
+        and albumAttributes = #{albumAttributes,jdbcType=VARCHAR} 
+      </if>
+      <if test="albumName != null" >
+      and   albumName like '%${albumName}%'
+      </if>
+      <if test="chnId != null" >
+      and   chnId = #{chnId,jdbcType=VARCHAR} 
+      </if>
+      <if test="chnName != null" >
+       and  chnName = #{chnName,jdbcType=VARCHAR} 
+      </if>
+      <if test="cpId != null" >
+       and  cpId = #{cpId,jdbcType=VARCHAR} 
+      </if>
+      <if test="duration != null" >
+      and   duration = #{duration,jdbcType=VARCHAR} 
+      </if>
+      <if test="focus != null" >
+       and  focus = #{focus,jdbcType=VARCHAR} 
+      </if>
+      <if test="is3d != null" >
+     and    is3d = #{is3d,jdbcType=VARCHAR} 
+      </if>
+      <if test="isPurchase != null" >
+      and   isPurchase = #{isPurchase,jdbcType=VARCHAR} 
+      </if>
+      <if test="isPurchaseOwn != null" >
+       and  isPurchaseOwn = #{isPurchaseOwn,jdbcType=VARCHAR} 
+      </if>
+      <if test="isSeries != null" >
+       and  isSeries = #{isSeries,jdbcType=VARCHAR} 
+      </if>
+      <if test="maxSet != null" >
+       and  maxSet = #{maxSet,jdbcType=VARCHAR} 
+      </if>
+      <if test="phase != null" >
+       and  phase = #{phase,jdbcType=VARCHAR} 
+      </if>
+      <if test="pid != null" >
+        and pid = #{pid,jdbcType=VARCHAR} 
+      </if>
+      <if test="playCnt != null" >
+       and  playCnt = #{playCnt,jdbcType=VARCHAR} 
+      </if>
+      <if test="score != null" >
+        and score = #{score,jdbcType=VARCHAR} 
+      </if>
+      <if test="scoreLabel != null" >
+       and scoreLabel = #{scoreLabel,jdbcType=VARCHAR} 
+      </if>
+      <if test="season != null" >
+       and  season = #{season,jdbcType=VARCHAR} 
+      </if>
+      <if test="sets != null" >
+       and sets = #{sets,jdbcType=VARCHAR} 
+      </if>
+      <if test="showDate != null" >
+        and showDate = #{showDate,jdbcType=VARCHAR} 
+      </if>
+      <if test="timestamp != null" >
+        and timestamp = #{timestamp,jdbcType=VARCHAR} 
+      </if>
+      <if test="status != null  " >
+        and status = #{status,jdbcType=VARCHAR} 
+      </if>
+      <if test="bz != null" >
+        and bz = #{bz,jdbcType=VARCHAR} 
+      </if>
+      <if test="actors != null" >
+        and actors = #{actors,jdbcType=LONGVARCHAR} 
+      </if>
+      <if test="albumDesc != null" >
+        and albumDesc = #{albumDesc,jdbcType=LONGVARCHAR} 
+      </if>
+      <if test="cpList != null" >
+        and cpList = #{cpList,jdbcType=LONGVARCHAR} 
+      </if>
+      <if test="currShowPlayOrder != null" >
+       and  currShowPlayOrder = #{currShowPlayOrder,jdbcType=LONGVARCHAR} 
+      </if>
+      <if test="leafTags != null" >
+        and leafTags = #{leafTags,jdbcType=LONGVARCHAR} 
+      </if>
+      <if test="picUrl != null" >
+        and picUrl = #{picUrl,jdbcType=LONGVARCHAR} 
+      </if>
+      <if test="superScripts != null" >
+       and  superScripts = #{superScripts,jdbcType=LONGVARCHAR} 
+      </if>
+       order by updatetime desc
+      	 limit #{start},#{pageSize}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from yh_vod_albuminfo
+    where albumId = #{albumId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.pbtd.playclick.yinhe.domain.AlbumsWithBLOBs" >
+    insert into yh_vod_albuminfo (albumId, albumAttributes, albumName, 
+      chnId, chnName, cpId, 
+      duration, focus, is3d, 
+      isPurchase, isPurchaseOwn, isSeries, 
+      maxSet, phase, pid, 
+      playCnt, score, scoreLabel, 
+      season, sets, showDate, 
+      timestamp, status, bz, 
+      actors, albumDesc, cpList, 
+      currShowPlayOrder, leafTags, picUrl, 
+      superScripts,
+      tags, tagsids,actorname,directorname,actorids, directorids,currentCount
+      )
+    values (#{albumId,jdbcType=VARCHAR}, #{albumAttributes,jdbcType=VARCHAR}, #{albumName,jdbcType=VARCHAR}, 
+      #{chnId,jdbcType=VARCHAR}, #{chnName,jdbcType=VARCHAR}, #{cpId,jdbcType=VARCHAR}, 
+      #{duration,jdbcType=VARCHAR}, #{focus,jdbcType=VARCHAR}, #{is3d,jdbcType=VARCHAR}, 
+      #{isPurchase,jdbcType=VARCHAR}, #{isPurchaseOwn,jdbcType=VARCHAR}, #{isSeries,jdbcType=VARCHAR}, 
+      #{maxSet,jdbcType=VARCHAR}, #{phase,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR}, 
+      #{playCnt,jdbcType=VARCHAR}, #{score,jdbcType=VARCHAR}, #{scoreLabel,jdbcType=VARCHAR}, 
+      #{season,jdbcType=VARCHAR}, #{sets,jdbcType=VARCHAR}, #{showDate,jdbcType=VARCHAR}, 
+      #{timestamp,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, 
+      #{actors,jdbcType=LONGVARCHAR}, #{albumDesc,jdbcType=LONGVARCHAR}, #{cpList,jdbcType=LONGVARCHAR}, 
+      #{currShowPlayOrder,jdbcType=LONGVARCHAR}, #{leafTags,jdbcType=LONGVARCHAR}, #{picUrl,jdbcType=LONGVARCHAR}, 
+      #{superScripts,jdbcType=LONGVARCHAR},
+       #{tags,jdbcType=VARCHAR},
+        #{tagsids,jdbcType=VARCHAR},
+         #{actorname,jdbcType=VARCHAR},
+          #{directorname,jdbcType=VARCHAR},
+           #{actorids,jdbcType=VARCHAR},
+            #{directorids,jdbcType=VARCHAR},
+            #{currentCount,jdbcType=VARCHAR}
+       
+      )
+  </insert>
+   
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playclick.yinhe.domain.AlbumsWithBLOBs" >
+    update yh_vod_albuminfo
+    <set >
+    updatestatus=0,
+     <if test="tags != null" >
+        tags = #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="tagsids != null" >
+        tagsids = #{tagsids,jdbcType=VARCHAR},
+      </if>
+      <if test="currentCount != null" >
+        currentCount = #{currentCount,jdbcType=VARCHAR},
+      </if>
+       <if test="actorids != null" >
+        actorids = #{actorids,jdbcType=VARCHAR},
+      </if>
+       <if test="actorname!= null" >
+        actorname = #{actorname,jdbcType=VARCHAR},
+      </if>
+       <if test="directorname != null" >
+        directorname = #{directorname,jdbcType=VARCHAR},
+      </if>
+       <if test="directorids != null" >
+        directorids = #{directorids,jdbcType=VARCHAR},
+      </if>
+      <if test="albumAttributes != null" >
+        albumAttributes = #{albumAttributes,jdbcType=VARCHAR},
+      </if>
+      <if test="albumName != null" >
+        albumName = #{albumName,jdbcType=VARCHAR},
+      </if>
+      <if test="chnId != null" >
+        chnId = #{chnId,jdbcType=VARCHAR},
+      </if>
+      <if test="chnName != null" >
+        chnName = #{chnName,jdbcType=VARCHAR},
+      </if>
+      <if test="cpId != null" >
+        cpId = #{cpId,jdbcType=VARCHAR},
+      </if>
+      <if test="duration != null" >
+        duration = #{duration,jdbcType=VARCHAR},
+      </if>
+      <if test="focus != null" >
+        focus = #{focus,jdbcType=VARCHAR},
+      </if>
+      <if test="is3d != null" >
+        is3d = #{is3d,jdbcType=VARCHAR},
+      </if>
+      <if test="isPurchase != null" >
+        isPurchase = #{isPurchase,jdbcType=VARCHAR},
+      </if>
+      <if test="isPurchaseOwn != null" >
+        isPurchaseOwn = #{isPurchaseOwn,jdbcType=VARCHAR},
+      </if>
+      <if test="isSeries != null" >
+        isSeries = #{isSeries,jdbcType=VARCHAR},
+      </if>
+      <if test="maxSet != null" >
+        maxSet = #{maxSet,jdbcType=VARCHAR},
+      </if>
+      <if test="phase != null" >
+        phase = #{phase,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="playCnt != null" >
+        playCnt = #{playCnt,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=VARCHAR},
+      </if>
+      <if test="scoreLabel != null" >
+        scoreLabel = #{scoreLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="season != null" >
+        season = #{season,jdbcType=VARCHAR},
+      </if>
+      <if test="sets != null" >
+        sets = #{sets,jdbcType=VARCHAR},
+      </if>
+      <if test="showDate != null" >
+        showDate = #{showDate,jdbcType=VARCHAR},
+      </if>
+      <if test="timestamp != null" >
+        timestamp = #{timestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null" >
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="actors != null" >
+        actors = #{actors,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="albumDesc != null" >
+        albumDesc = #{albumDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="cpList != null" >
+        cpList = #{cpList,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="currShowPlayOrder != null" >
+        currShowPlayOrder = #{currShowPlayOrder,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="leafTags != null" >
+        leafTags = #{leafTags,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="picUrl != null" >
+        picUrl = #{picUrl,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="superScripts != null" >
+        superScripts = #{superScripts,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where albumId = #{albumId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="findGitvvideo" parameterType="Map" resultType="Map">
+		  select  parentId,albumId,albumName,beginTime,cpAlbumIdOld,cpId,duration,endTime,indexM3u8
+		,isEffective,isOnline,isPurchaseYinheTv,m3u8,pic,playOrder,positiveId,showDate,
+		source,sourceChnId,sourceId,subTitle,superScripts,trySeeTimeTv,tvDesc,tvFocus,tvId,tvName
+		,tvPhase,tvSeason,tvStatus,videoUrl,timestamp,bz,status
+		,palyurl,versionId,tvurl,pid,updatetime
+		  from yh_vod_gitvvideo  where 1=1 
+		 <if test="parentId != null" >
+		     and  parentId = #{parentId,jdbcType=VARCHAR}
+     	 </if> 
+     	 <if test="playOrder != null" >
+		     and playOrder = #{playOrder,jdbcType=VARCHAR}
+     	 </if>
+     	 <if test="albumName != null" >
+		      and albumName like '%${albumId}%'
+     	 </if>
+     	 <if test="tvId != null" >
+		    and  tvId = #{tvId,jdbcType=VARCHAR}
+     	 </if>
+     	 <if test="albumId != null" >
+		    and  albumId = #{albumId,jdbcType=VARCHAR}
+     	 </if>
+     	  order by CAST(playOrder as SIGNED)  
+  </select>
+</mapper>

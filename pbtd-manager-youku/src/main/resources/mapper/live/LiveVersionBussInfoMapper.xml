@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LiveVersionBussInfoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.pbtd.manager.live.domain.LiveVersionBussInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="bussId" property="bussid" jdbcType="INTEGER" />
+		<result column="versionId" property="versionid" jdbcType="INTEGER" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, bussId, versionId,createTime, updateTime
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.pbtd.manager.live.domain.LiveVersionBussInfo">
+		select
+		a.id,a.bussId,a.versionId,a.createTime,a.updateTime,b.`name`,c.versionName
+		from live_version_buss_info a LEFT JOIN live_buss_info b on a.bussId =
+		b.bussId LEFT JOIN live_version c on a.versionId = c.versionId
+		<where>
+			<trim suffixOverrides="AND">
+				<if test="id != null">
+					a.id = #{id,jdbcType=INTEGER} AND
+				</if>
+				<if test="bussid != null">
+					a.bussId = #{bussid,jdbcType=INTEGER} AND
+				</if>
+				<if test="versionid != null">
+					a.versionId = #{versionid,jdbcType=INTEGER}
+				</if>
+			</trim>
+		</where>
+	</select>
+
+	<update id="update" parameterType="com.pbtd.manager.live.domain.LiveVersionBussInfo">
+		update live_version_buss_info
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="bussid != null">
+				bussId = #{bussid,jdbcType=VARCHAR},
+			</if>
+			<if test="versionid != null">
+				versionId = #{versionid,jdbcType=INTEGER},
+			</if>
+			updateTime = now()
+		</trim>
+		where Id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<insert id="insert" parameterType="com.pbtd.manager.live.domain.LiveVersionBussInfo">
+		insert into
+		live_version_buss_info (
+		bussId,
+		versionId,
+		createTime,
+		updateTime
+		)
+		values
+		(
+		#{bussid,jdbcType=INTEGER},
+		#{versionid,jdbcType=INTEGER},
+		now(),
+		now()
+		)
+	</insert>
+
+
+	<delete id="deletes" parameterType="Map">
+		delete from live_version_buss_info
+		<where>
+			<if test="id_ != null">
+				and Id in
+				<foreach collection="id_" index="index" item="item" open="("
+					separator="," close=")">
+					#{item,jdbcType=INTEGER}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+
+
+	<select id="load" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_version_buss_info
+		where Id =
+		#{id,jdbcType=INTEGER}
+	</select>
+
+
+	<select id="find" parameterType="Map" resultMap="BaseResultMap">
+		select
+		a.id,a.bussId,a.versionId,a.createTime,a.updateTime,b.`name`,c.versionName
+		from live_version_buss_info a LEFT JOIN live_buss_info b on a.bussId =
+		b.bussId LEFT JOIN live_version c on a.versionId = c.versionId
+		<where>
+			<trim suffixOverrides="AND">
+				<if test="id != null">
+					a.id = #{id,jdbcType=INTEGER} AND
+				</if>
+				<if test="bussid != null">
+					a.bussId = #{bussid,jdbcType=INTEGER} AND
+				</if>
+				<if test="versionid != null">
+					a.versionId = #{versionid,jdbcType=INTEGER}
+				</if>
+			</trim>
+		</where>
+		limit #{start},#{pageSize}
+	</select>
+
+
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(*) from live_version_buss_info 
+		<where>
+			<if test="name != null">
+				bussId  in  (SELECT bussId FROM live_buss_info where `name` like #{name,jdbcType=INTEGER})
+			</if>
+		</where>
+	</select>
+
+</mapper>

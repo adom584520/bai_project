@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.system.mapper.    ">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.user.domain.SysCountSeries">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="seriesCode" property="seriescode" jdbcType="VARCHAR" />
+		<result column="seriesName" property="seriesname" jdbcType="VARCHAR" />
+		<result column="playtime" property="playtime" jdbcType="REAL" />
+		<result column="playcount" property="playcount" jdbcType="INTEGER" />
+		<result column="playusercount" property="playusercount"
+			jdbcType="INTEGER" />
+		<result column="channel" property="channel" jdbcType="VARCHAR" />
+		<result column="channleName" property="channlename" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, createtime, seriesCode, seriesName, playtime,
+		playcount,
+		playusercount, channel,
+		channleName
+	</sql>
+	<insert id="insert" parameterType="com.pbtd.manager.user.domain.SysCountSeries">
+		insert into sys_count_series
+		(createtime, seriesCode,
+		seriesName, playtime, playcount,
+		playusercount, channel, channleName
+		)
+		values
+		(#{createtime,jdbcType=TIMESTAMP},
+		#{seriescode,jdbcType=VARCHAR},
+		#{seriesname,jdbcType=VARCHAR}, #{playtime,jdbcType=INTEGER},
+		#{playcount,jdbcType=INTEGER},
+		#{playusercount,jdbcType=INTEGER},
+		#{channel,jdbcType=VARCHAR},
+		#{channlename,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="count" parameterType="Map" resultType="INTEGER">
+		select count(1) from (
+		select
+		count(id) count from sys_count_series
+		<where>
+			<if test="starttime != null">
+				and createtime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createtime &lt;= #{endtime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="channel != null">
+				and channel  = #{channel,jdbcType=VARCHAR}
+			</if>
+		</where>
+		GROUP BY seriesCode ) b
+	</select>
+	<!-- 查询数据 -->
+	<select id="find" resultType="Map">
+		select
+		date(a.createtime) createtime,a.seriesCode
+		seriesCode,a.seriesName seriesName,
+		sum(a.playtime)
+		playtime,sum(playcount) playcount,sum(playusercount) playusercount,
+		a.channel channel,a.channleName channleName
+		from sys_count_series a
+		<where>
+			<if test="starttime != null">
+				and createtime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createtime &lt;= #{endtime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="channel != null">
+				and channel  = #{channel,jdbcType=VARCHAR}
+			</if>
+		</where>
+		GROUP BY seriesCode
+		ORDER BY playcount DESC 
+		<if test="topstatus != null">
+		limit #{topstatus,jdbcType=INTEGER}
+		</if>
+		<if test="limitnum != null">
+		limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="findallchannel" resultType="Map">
+		select channel,channleName channelName from sys_count_series a where channel != ''  and channel is not null  GROUP BY channel
+	</select>
+	<delete id="delete" parameterType="Map">
+		delete from
+		sys_count_series
+		where createtime like #{starttime}
+	</delete>
+</mapper>

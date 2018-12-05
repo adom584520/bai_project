@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.vodinterface.web.mapper.AlbumMapper">
+	<!-- 专辑列表 二级栏目 -->
+	<select id="pgetchannel2Album" parameterType="Map" resultType="Map">
+		select
+		b.cpseriescode,b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,
+		b.pictureurl3,b.pictureurl4,
+		<!-- b.pictureurl5,b.pictureurl6,b.description, -->
+		b.score,b.viewPoint,b.duration
+		,b.corner, b.cornerimg
+		,b.isvip,
+		b.epis,b.volumncount,b.currentnum,
+		b.pay_type,b.price,b.isCollectfees,b.Collectfeesbag
+		from vod_phone_channel_albuminfo a left join vod_phone_albuminfo b on
+		a.seriesCode=b.seriesCode
+		where b.status=1 and a.seriesCode=b.seriesCode
+		<if test="status != null and status != ''">
+			and a.status=#{status,jdbcType=VARCHAR}
+		</if>
+		<if test="seriesName != null and seriesName != ''">
+			and b.seriesName like '%${seriesName}%'
+		</if>
+		<if test="channel != null and channel != ''">
+			and a.parentCode=#{channel,jdbcType=INTEGER}
+		</if>
+		<if test="channel2 != null and channel2 != ''">
+			and a.channelCode=#{channel2,jdbcType=VARCHAR}
+		</if>
+		<if test="channel_albuminfo != null and channel_albuminfo != ''">
+			and a.channelCode=#{channel_albuminfo,jdbcType=INTEGER}
+		</if>
+		order by a.sequence asc
+		<if test="limit !=null ">
+			limit ${limit},${pagesize}
+		</if>
+	</select>
+	<select id="findchannel2Albumcount" parameterType="Map"
+		resultType="INTEGER">
+		select count(1)
+		from vod_phone_channel_albuminfo a left join vod_phone_albuminfo b on
+		a.seriesCode=b.seriesCode
+		where b.status=1 and a.seriesCode=b.seriesCode
+		<if test="status != null and status != ''">
+			and a.status=#{status,jdbcType=VARCHAR}
+		</if>
+		<if test="seriesName != null and seriesName != ''">
+			and b.seriesName like '%${seriesName}%'
+		</if>
+		<if test="channel != null and channel != ''">
+			and a.parentCode=#{channel,jdbcType=INTEGER}
+		</if>
+		<if test="channel2 != null and channel2 != ''">
+			and a.channelCode=#{channel2,jdbcType=VARCHAR}
+		</if>
+		<if test="channel_albuminfo != null and channel_albuminfo != ''">
+			and a.channelCode=#{channel_albuminfo,jdbcType=INTEGER}
+		</if>
+	</select>
+	<!-- 专辑列表 频道标签 -->
+	<select id="pgetchannelAlbum" parameterType="Map" resultType="Map">
+		SELECT
+		a.seriesCode, a.seriesName, a.pictureurl1, a.pictureurl2, a.pictureurl3,
+		a.pictureurl4, a.pictureurl5, a.pictureurl6, a.score, a.viewPoint,
+		a.duration, a.corner, a.cornerimg, a.isvip, a.epis,
+		a.volumncount, a.currentnum,a.cpseriescode,
+		a.pay_type,a.price,a.isCollectfees,a.Collectfeesbag
+		from vod_phone_channel_albuminfo b
+		left join vod_phone_albuminfo a on a.seriesCode=b.seriesCode
+		where
+		a.status = 1 and a.seriesCode=b.seriesCode
+		<if test="status != null and status != ''">
+			and b.status=#{status,jdbcType=INTEGER}
+		</if>
+		<if test="seriesName != null and seriesName != ''">
+			and a.seriesName like '%${seriesName}%'
+		</if>
+		<if test="label1 != null and label1 != ''">
+			and ( a.label = '${label1}' or a.label like '${label1},%' or a.label like '%,${label1},%' or a.label like '%,${label1}' )
+		</if>
+		<if test="label2 != null and label2 != ''">		
+			and ( a.label = '${label2}' or a.label like '${label2},%' or a.label like '%,${label2},%' or a.label like '%,${label2}' )
+		</if>
+		<if test="label3!= null and label3 != ''">
+			and ( a.label = '${label3}' or a.label like '${label3},%' or a.label like '%,${label3},%' or a.label like '%,${label3}' )
+		</if>
+		<if test="label4 != null and label4 != ''">
+			and ( a.label = '${label4}' or a.label like '${label4},%' or a.label like '%,${label4},%' or a.label like '%,${label4}' )
+		</if>
+		<if test="channel != null and channel != ''">
+			and b.channelCode=#{channel,jdbcType=VARCHAR}
+		</if>
+		<if test="channel2 != null and channel2 != ''">
+			and b.channelCode=#{channel2,jdbcType=VARCHAR}
+		</if>
+		<if test="label21 != null and label21 != ''">
+			and ( a.label2 = '${label21}' or a.label2 like '${label21},%' or a.label2 like '%,${label21},%' or a.label2 like '%,${label21}' )
+		</if>
+		<if test="label22 != null and label22 != ''">
+			and ( a.label2 = '${label22}' or a.label2 like '${label22},%' or a.label2 like '%,${label22},%' or a.label2 like '%,${label22}' )
+		</if>
+		<if test="label23!= null and label23 != ''">
+			and ( a.label2 = '${label23}' or a.label2 like '${label23},%' or a.label2 like '%,${label23},%' or a.label2 like '%,${label23}' )
+		</if>
+		<if test="label24 != null and label24 != ''">
+			and ( a.label2 = '${label24}' or a.label2 like '${label24},%' or a.label2 like '%,${label24},%' or a.label2 like '%,${label24}' )
+		</if>
+		order by b.sequence asc
+		<if test="limit !=null ">
+			limit ${limit},${pagesize}
+		</if>
+	</select>
+	<select id="findchannelAlbumcount" parameterType="Map"
+		resultType="INTEGER">
+		Select count(1) from
+		vod_phone_channel_albuminfo b
+		left join vod_phone_albuminfo a on a.seriesCode=b.seriesCode
+		where
+		a.status = 1 and a.seriesCode=b.seriesCode
+		<if test="status != null and status != ''">
+			and b.status=#{status,jdbcType=INTEGER}
+		</if>
+		<if test="seriesName != null and seriesName != ''">
+			and a.seriesName like '%${seriesName}%'
+		</if>
+		<if test="label1 != null and label1 != ''">
+			and ( a.label = '${label1}' or a.label like '${label1},%' or a.label like '%,${label1},%' or a.label like '%,${label1}' )
+		</if>
+		<if test="label2 != null and label2 != ''">		
+			and ( a.label = '${label2}' or a.label like '${label2},%' or a.label like '%,${label2},%' or a.label like '%,${label2}' )
+		</if>
+		<if test="label3!= null and label3 != ''">
+			and ( a.label = '${label3}' or a.label like '${label3},%' or a.label like '%,${label3},%' or a.label like '%,${label3}' )
+		</if>
+		<if test="label4 != null and label4 != ''">
+			and ( a.label = '${label4}' or a.label like '${label4},%' or a.label like '%,${label4},%' or a.label like '%,${label4}' )
+		</if>
+		<if test="channel1 != null and channel1 != ''">
+			and b.channelCode=#{channel1,jdbcType=VARCHAR}
+		</if>
+		<if test="channel2 != null and channel2 != ''">
+			and b.channelCode=#{channel2,jdbcType=VARCHAR}
+		</if>
+		<if test="label21 != null and label21 != ''">
+			and ( a.label2 = '${label21}' or a.label2 like '${label21},%' or a.label2 like '%,${label21},%' or a.label2 like '%,${label21}' )
+		</if>
+		<if test="label22 != null and label22 != ''">
+			and ( a.label2 = '${label22}' or a.label2 like '${label22},%' or a.label2 like '%,${label22},%' or a.label2 like '%,${label22}' )
+		</if>
+		<if test="label23!= null and label23 != ''">
+			and ( a.label2 = '${label23}' or a.label2 like '${label23},%' or a.label2 like '%,${label23},%' or a.label2 like '%,${label23}' )
+		</if>
+		<if test="label24 != null and label24 != ''">
+			and ( a.label2 = '${label24}' or a.label2 like '${label24},%' or a.label2 like '%,${label24},%' or a.label2 like '%,${label24}' )
+		</if>
+	</select>
+	<!-- 专辑详情 -->
+	<select id="pgetAlbuminfo" parameterType="Map" resultType="Map">
+		select
+		cpseriescode,seriesCode,seriesName,Channel,ChannelName,pictureurl1,pictureurl2,
+		pictureurl3,pictureurl4,pictureurl5,pictureurl6,
+		description,
+		epis,isCollectfees,corner, cornerimg
+		,volumncount,currentnum,isvip,
+		actorName,writerName,releaseYear,duration,cpCode,cpName,cpseriescode,
+		pay_type,price,isCollectfees,Collectfeesbag
+		from vod_phone_albuminfo
+		where status=1 and seriesCode=#{seriesCode,jdbcType=INTEGER}
+	</select>
+	<!-- 剧集列表 -->
+	<select id="pgetAlbuminfovideo" parameterType="Map" resultType="Map">
+		select drama,dramaname,zxdispatchurl,hwdispatchurl,
+		zxversion,hwversion,duration,dramaviewPoint,zxfileurl,cpvideoId,pic,isCollectfees,videopaid
+		from vod_phone_albuminfovideo
+		where seriesCode=#{seriesCode,jdbcType=INTEGER}
+		order by drama asc
+		<if test="limit !=null ">
+			limit ${limit},${pagesize}
+		</if>
+	</select>
+	<select id="findAlbuminfovideocount" parameterType="Map"
+		resultType="INTEGER">
+		select count(1)
+		from vod_phone_albuminfovideo
+		where seriesCode=#{seriesCode,jdbcType=INTEGER}
+	</select>
+	<!-- 专辑 关联推荐 -->
+	<select id="pgetAlbuminforecommend" parameterType="Map"
+		resultType="Map">
+		select
+		b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,
+		b.pictureurl3,b.pictureurl4,b.pictureurl5,b.pictureurl6,
+		b.score,b.description,b.viewPoint,b.duration
+		,b.corner,
+		b.cornerimg,b.isvip,b.volumncount,b.currentnum,b.cpseriescode
+		,b.channel,b.channelName,
+		b.pay_type,b.price,b.isCollectfees,b.Collectfeesbag
+		from vod_phone_albuminfo_recommend a left join vod_phone_albuminfo b on
+		a.seriesCode=b.seriesCode
+		where b.status=1 and a.seriesCode=b.seriesCode and
+		a.id=#{seriesCode,jdbcType=INTEGER}
+		order by a.sequence asc
+		limit 6
+	</select>
+	<!-- 专辑 热搜 -->
+	<select id="pgetAlbumhotsearch" parameterType="Map" resultType="Map">
+		select b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,
+		b.pictureurl3,b.pictureurl4,b.pictureurl5,b.pictureurl6,
+		b.score,b.description,b.viewPoint,b.duration
+		,b.corner,
+		b.cornerimg,b.isvip,b.volumncount,b.currentnum,b.cpseriescode,
+		b.pay_type,b.price,b.isCollectfees,b.Collectfeesbag
+		from vod_phone_hotsearch a left join vod_phone_albuminfo b on
+		a.seriesCode=b.seriesCode
+		where b.status=1 and a.seriesCode=b.seriesCode
+		order by a.sequence asc
+		<if test="limit !=null ">
+			limit ${limit},${pagesize}
+		</if>
+	</select>
+
+	<!-- 热播列表 频道标签 -->
+	<select id="findhotseriescode" parameterType="Map" resultType="Map">
+		select
+		b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,
+		b.pictureurl3,b.pictureurl4,b.pictureurl5,b.pictureurl6,
+		b.score,b.description,b.viewPoint,b.duration
+		,b.corner,b.cornerimg,b.isvip,
+		b.epis,b.volumncount,b.currentnum,b.cpseriescode,
+		b.pay_type,b.price,b.isCollectfees,b.Collectfeesbag
+		from vod_phone_hotseriesvideo a left join vod_phone_albuminfo b on
+		a.seriesCode=b.seriesCode
+		where b.status=1 and a.seriesCode=b.seriesCode
+		<if test="id != null and id !=''">
+			and a.id=#{id,jdbcType=INTEGER}
+		</if>
+		order by a.sequence asc
+		<if test="limit !=null ">
+			limit ${limit},${pagesize}
+		</if>
+	</select>
+	<select id="findhotseriescount" parameterType="Map" resultType="INTEGER">
+		select count(1)
+		from vod_phone_hotseriesvideo a left join vod_phone_albuminfo b on
+		a.seriesCode=b.seriesCode
+		where b.status=1 and a.seriesCode=b.seriesCode
+		<if test="id != null and id !=''">
+			and a.id=#{id,jdbcType=INTEGER}
+		</if>
+	</select>
+	<select id="findcount" parameterType="Map" resultType="Map">
+		select count from vod_phone_hotseries
+		where 1=1
+		<if test="channel!=null and channel!=''">
+			and channelCode=#{channel,jdbcType=INTEGER}
+		</if>
+		<if test="hot_id!=null and hot_id!=''">
+			and id=#{hot_id,jdbcType=INTEGER}
+		</if>
+	</select>
+	<!-- 与收藏预约对接接口 -->
+	<select id="findpalbumforuser" parameterType="Map" resultType="Map">
+		select
+		seriesCode,seriesName,pictureurl1,pictureurl2,viewPoint,duration,cpseriescode,ChannelName,Channel
+		from vod_phone_albuminfo
+		where seriesCode=#{code,jdbcType=INTEGER}
+	</select>
+	<select id="findchannelpalbumforuser" parameterType="Map" resultType="java.lang.String">
+		SELECT GROUP_CONCAT(a.channelCode SEPARATOR ',') channellist FROM vod_phone_channel_albuminfo a
+		where seriesCode=#{code,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询某个专辑 -->
+	<select id="album" parameterType="String" resultType="Map">
+		SELECT
+		seriesCode,
+		ChannelName,
+		REPLACE (actorName, '未知', '') AS actorName,
+		REPLACE (writerName, '未知', '') AS writerName
+		FROM
+		vod_phone_albuminfo
+		WHERE status=1 and
+		seriesCode = #{seriesCode,jdbcType=INTEGER}
+	</select>
+	<!-- 相关推荐 -->
+	<select id="findalbumOne" parameterType="Map" resultType="Map">
+		SELECT
+		seriesCode,seriesName,pictureurl1,pictureurl2,score
+		,corner,viewPoint,
+		isvip,volumncount,currentnum,cpseriescode FROM
+		vod_phone_albuminfo
+		where seriesName
+		NOT LIKE '%预告%' and
+		( find_in_set(#{actorName1},
+		REPLACE (actorName,
+		'|', ','))
+		<if test="actorName2 != null and actorName2!=''">
+			or find_in_set(#{actorName2}, REPLACE (actorName, '|',
+			','))
+		</if>
+		<if test="actorName3 != null and actorName3!=''">
+			or find_in_set(#{actorName3}, REPLACE (actorName, '|',
+			','))
+		</if>
+		)
+		limit 10
+	</select>
+
+	<select id="findalbumTwo" parameterType="Map" resultType="Map">
+		SELECT
+		seriesCode,seriesName,pictureurl1,pictureurl2,score
+		,corner,viewPoint,
+		isvip,volumncount,currentnum,cpseriescode FROM
+		vod_phone_albuminfo
+		where seriesName
+		NOT LIKE '%预告%' and
+		find_in_set(#{writerName}, REPLACE
+		(writerName,
+		'|', ','))
+		limit 10
+	</select>
+
+	<select id="findalbumThree" resultType="Map">
+		SELECT
+		seriesCode,seriesName,pictureurl1,pictureurl2,score
+		,corner,viewPoint,
+		isvip,volumncount,currentnum FROM
+		vod_phone_albuminfo WHERE seriesName
+		NOT LIKE '%预告%'
+		<if test="ChannelName != null and ChannelName!=''">
+			and ChannelName=#{ChannelName,jdbcType=VARCHAR}
+		</if>
+		ORDER BY CAST(Channel AS signed) limit 10
+	</select>
+	<!-- 查询返回播放字段 start -->
+	<select id="pfindmovieurl" resultType="Map">
+		select id,name,title,status,levels from vod_movieurl
+		<where>
+			<if test="status != null and status!=''">
+				status=#{status,jdbcType=VARCHAR}
+			</if>
+		</where>
+		ORDER BY levels
+	</select>
+	<!-- 查询返回播放字段 end -->
+
+	<!-- 搜索接口 start -->
+	<select id="findsearchalbumcount" parameterType="Map"
+		resultType="INTEGER">
+		select count(1) from
+		vod_phone_albuminfo b
+		where b.status=1
+		<if test="name != null and name != ''">
+			and ( b.seriesName like '%${name}%'
+			or b.actorName like
+			'%${name}%'
+			or b.writerName like '%${name}%'
+			or b.keyword like
+			'%${name}%')
+		</if>
+		<if test="channelName != null and channelName != ''">
+			and b.channelName like '%${channelName}%'
+		</if>
+	</select>
+	<select id="findsearchalbum" parameterType="Map" resultType="Map">
+		select cpseriescode
+		show_id,channelName,seriesCode,seriesName,description,
+		originalCountry,if(length(releaseYear)>4,date_format(releaseYear,'%Y'),releaseYear)
+		releaseYear ,
+		pictureurl1,pictureurl2,writerName ,actorName,score
+		from
+		vod_phone_albuminfo b
+		where b.status=1
+		<if test="name != null and name != ''">
+			and ( b.seriesName like '%${name}%'
+			or b.actorName like
+			'%${name}%'
+			or b.writerName like '%${name}%'
+			or b.keyword like
+			'%${name}%')
+		</if>
+		<if test="channelName != null and channelName != ''">
+			and b.channelName like '%${channelName}%'
+		</if>
+
+		order by b.sequence asc
+		<if test="limit !=null ">
+			limit ${limit},${pagesize}
+		</if>
+	</select>
+	<!-- 搜索接口 end -->
+	
+	<!-- 根据videoid查询媒资详情  start-->
+	<select id="pgetAlbuminfo_videoid" parameterType="Map" resultType="Map">
+		select
+		cpseriescode,seriesCode,seriesName,Channel,ChannelName,pictureurl1,pictureurl2,
+		pictureurl3,pictureurl4,pictureurl5,pictureurl6,
+		description,
+		epis,isCollectfees,corner, cornerimg
+		,volumncount,currentnum,isvip,
+		actorName,writerName,releaseYear,duration,cpCode,cpName,cpseriescode,
+		pay_type,price,isCollectfees,Collectfeesbag
+		from vod_phone_albuminfo 
+		where status=1 and seriesCode=(
+		select seriesCode from vod_phone_albuminfovideo where cpvideoId=#{videoid,jdbcType=VARCHAR}
+		)
+		
+	</select>
+	<!-- 根据videoid查询媒资详情  end-->
+	
+	
+	
+	<!-- 查询该专辑时候收费 start -->
+	<select id="loadalbumpaid" parameterType="Map" resultType="Map">
+		select
+		 seriesCode
+		from vod_phone_paid_albuminfo 
+		where  seriesCode= #{seriesCode,jdbcType=VARCHAR}
+	</select>
+	<!-- 查询该专辑时候收费 end -->
+</mapper>

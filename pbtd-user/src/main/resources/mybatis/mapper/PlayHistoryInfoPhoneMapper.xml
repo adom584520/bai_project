@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.PlayHistoryInfoPhoneMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.PlayHistoryInfo">
+		<id column="id" property="id" />
+		<result column="userId" property="userId" />
+		<result column="playpos" property="playpos" />
+		<result column="dram" property="drama" />
+		<result column="dramaname" property="dramaname" />
+		<result column="seriesCode" property="seriesCode" />
+		<result column="pictureurl1" property="pictureurl1" />
+		<result column="pictureurl2" property="pictureurl2" />
+		<result column="duration" property="duration" />
+		<result column="viewPoint" property="viewPoint" />
+		<result column="seriesName" property="seriesName" />
+		<result column="status" property="status" />
+		<result column="createTime" property="createTime" />
+	</resultMap>
+
+	<sql id="column">
+		id, userId, playpos,dram, dramaname, seriesCode,
+		pictureurl1,pictureurl2,duration,
+		viewPoint,seriesName,status,createTime,playTime
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="map">
+		insert into user_play_history_info_phone
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				userId,
+			</if>
+			<if test="createtime != null">
+				createTime,
+			</if>
+			<if test="playpos != null">
+				playpos,
+			</if>
+			<if test="playtime != null">
+				playTime,
+			</if>
+			<if test="dram != null">
+				dram,
+			</if>
+			<if test="dramaname != null">
+				dramaname,
+			</if>
+			<if test="seriesname != null">
+				seriesName,
+			</if>
+			<if test="pictureurl1 != null">
+				pictureurl1,
+			</if>
+			<if test="pictureurl2 != null">
+				pictureurl2,
+			</if>
+			<if test="duration != null">
+				duration,
+			</if>
+			<if test="viewpoint != null">
+				viewPoint,
+			</if>
+			<if test="seriescode != null">
+				seriesCode,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="channellist != null">
+				channellist,
+			</if>
+			<if test="channelname != null">
+				channelName,
+			</if>
+			<if test="playlength != null">
+				playLength,
+			</if>
+			<if test="netstatus != null">
+				netStatus,
+			</if>
+			<if test="sourcesflag != null">
+				sourcesFlag,
+			</if>
+			<if test="definition != null">
+				definition,
+			</if>
+			<if test="versionnum != null">
+				versionNum,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				#{userid,jdbcType=CHAR},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="playpos != null">
+				#{playpos,jdbcType=INTEGER},
+			</if>
+			<if test="playtime != null">
+				#{playtime,jdbcType=INTEGER},
+			</if>
+			<if test="dram != null">
+				#{dram,jdbcType=INTEGER},
+			</if>
+			<if test="dramaname != null">
+				#{dramaname,jdbcType=VARCHAR},
+			</if>
+			<if test="seriesname != null">
+				#{seriesname,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureurl1 != null">
+				#{pictureurl1,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureurl2 != null">
+				#{pictureurl2,jdbcType=VARCHAR},
+			</if>
+			<if test="duration != null">
+				#{duration,jdbcType=INTEGER},
+			</if>
+			<if test="viewpoint != null">
+				#{viewpoint,jdbcType=VARCHAR},
+			</if>
+			<if test="seriescode != null">
+				#{seriescode,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="channellist != null">
+				#{channellist,jdbcType=VARCHAR},
+			</if>
+			<if test="channelname != null">
+				#{channelname,jdbcType=VARCHAR},
+			</if>
+			<if test="playlength != null">
+				#{playlength,jdbcType=INTEGER},
+			</if>
+			<if test="netstatus != null">
+				#{netstatus,jdbcType=INTEGER},
+			</if>
+			<if test="sourcesflag != null">
+				#{sourcesflag,jdbcType=INTEGER},
+			</if>
+			<if test="definition != null">
+				#{definition,jdbcType=INTEGER},
+			</if>
+			<if test="versionnum != null">
+				#{versionnum,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+
+
+
+	<update id="update">
+		update user_play_history_info_phone
+		<set>
+			<if test="dram != null">
+				dram = #{dram,jdbcType=INTEGER},
+			</if>
+			<if test="dramaname != null">
+				dramaname = #{dramaname,jdbcType=VARCHAR},
+			</if>
+			<if test="seriesname != null">
+				seriesName = #{seriesname,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureurl1 != null">
+				pictureurl1 = #{pictureurl1,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureurl2 != null">
+				pictureurl2 = #{pictureurl2,jdbcType=VARCHAR},
+			</if>
+			<if test="duration != null">
+				duration = #{duration,jdbcType=INTEGER},
+			</if>
+			<if test="viewpoint != null">
+				viewPoint = #{viewpoint,jdbcType=VARCHAR},
+			</if>
+			<if test="seriescode != null">
+				seriesCode = #{seriescode,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="channellist != null">
+				channellist = #{channellist,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateStatusBatch">
+		update user_play_history_info_phone
+		set status = #{status}
+		<where>
+			userId = #{userId}
+			<if test="list!=null and list.size()>0">
+				and seriesCode in
+				<foreach collection="list" item="code" open="(" separator=","
+					close=")">
+					#{code}
+				</foreach>
+			</if>
+			and status = #{queryStatus}
+		</where>
+	</update>
+
+	<update id="updateStatus">
+		update user_play_history_info_phone
+		set status = #{status}
+		<where>
+			userId = #{userId}
+			<if test="seriesCode!=null">
+				and seriesCode=#{seriesCode}
+			</if>
+			and status = #{queryStatus}
+		</where>
+	</update>
+
+	<select id="queryAll" resultMap="BaseResultMap">
+		select
+		<include refid="column" />
+		from user_play_history_info_phone
+		<where>
+			and userId = #{userId}
+			<if test="status!=null">
+				and status = #{status}
+			</if>
+		</where>
+		order by createTime DESC,id asc
+		limit #{pagination},#{row}
+	</select>
+
+	<select id="queryplayhistorycount" resultType="int"
+		parameterType="Map">
+		select count(1)
+		from user_play_history_info_phone a
+		<where>
+			<if test="startTime != null">
+				date(a.createTime) BETWEEN #{startTime} and
+				#{endTime}
+			</if>
+		</where>
+	</select>
+	<select id="queryuserplayhistorycount" resultType="int"
+		parameterType="Map">
+		SELECT count(1) FROM
+		(
+		SELECT id FROM user_play_history_info_phone a
+		<where>
+			<if test="startTime != null">
+				date(a.createTime) BETWEEN #{startTime} and
+				#{endTime} and
+			</if>
+			a.userId != '' AND a.userId IS NOT NULL GROUP BY userId,
+			DATE_FORMAT(createTime, "%Y-%m-%d")
+		</where>
+		) b
+	</select>
+	<select id="selectfortop" resultType="Map" parameterType="Map">
+		SELECT dramaname,count(1) count, seriesCode, seriesName,channelName
+		,sum(playpos) allplaypos FROM user_play_history_info_phone a
+		where 1=1
+		<if test="starttime != null">
+			and date(a.createTime) BETWEEN #{starttime} and #{endtime}
+		</if>
+		<if test="channelcode != null">
+			and channellist = #{channelcode}
+		</if>
+		GROUP BY seriesCode ORDER BY count DESC limit #{topnum};
+	</select>
+	<select id="selectfortopcount" resultType="Map" parameterType="Map">
+		SELECT count(1) count, sum(playpos) allplaypos FROM
+		user_play_history_info_phone a
+		where 1=1
+		<if test="starttime != null">
+			and date(a.createTime) BETWEEN #{starttime} and
+			#{endtime}
+		</if>
+		<if test="channelcode != null">
+			and channellist = #{channelcode}
+		</if>
+	</select>
+	<select id="getdataforhour" resultType="Map" parameterType="Map">
+		SELECT b.time,count(1) count FROM (
+		SELECT date_format(a.createTime, '%H') time,count(1) count FROM
+		user_play_history_info_phone a
+		<where>
+			<if test="startTime != null">
+				date_format(a.createTime,'%Y-%m-%d') =
+				date_format(#{startTime,jdbcType=DATE},'%Y-%m-%d')
+			</if>
+			GROUP BY DATE_FORMAT(createTime, "%Y-%m-%d %H"),userId
+		</where>
+		) b GROUP BY b.time
+		
+	</select>
+
+	<select id="queryOne" resultMap="BaseResultMap">
+		select
+		<include refid="column" />
+		from user_play_history_info_phone
+		where userId=#{userId} and
+		seriesCode=#{seriesCode} and status=#{status}
+	</select>
+	<select id="queryOneCode" resultMap="BaseResultMap"
+		parameterType="Map">
+		select
+		<include refid="column" />
+		from user_play_history_info_phone
+		where userId=#{userId} and createTime
+		> #{startTime} order by playTime DESC limit 1
+	</select>
+
+	<update id="updateStatusByGtId">
+		update user_play_history_info_phone
+		set status =
+		#{status}
+		where userId=#{userId} and (createTime = #{createTime} or
+		createTime &lt; #{createTime}) and status = #{queryStatus}
+	</update>
+</mapper>

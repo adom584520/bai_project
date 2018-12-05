@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.inject.tv.mapper.InjectTvAlbumVideoMapper">
+
+	 <!--节目查询条数 -->
+    <select id="countalbumVideo" parameterType="Map" resultType="java.lang.Integer">
+        select count(1)
+		from inject_tv_albuminfovideo a 
+		left join vod_tv_albuminfovideo b 
+		on a.seriesCode=b.seriesCode  
+		and a.drama=b.drama
+        where 1=1
+        <if test="seriesCode!=null">
+          	and a.seriesCode=#{seriesCode,jdbcType=INTEGER}
+        </if>
+        <if test="zxInjectState!=null and hwInjectState==null">
+			and zxInjectState=#{zxInjectState}
+		</if>		     			     
+		<if test="hwInjectState!=null and zxInjectState==null">
+			and hwInjectState=#{hwInjectState}
+		</if>
+		<if test="zxInjectState!=null and hwInjectState!=null">
+			and (zxInjectState=#{zxInjectState} or hwInjectState=#{hwInjectState})
+		</if>
+	</select>
+	
+	<!-- 节目剧集查询总记录，成功记录 -->
+	<select id="countalbumVideoAllAndSuccess" parameterType="Map">
+		select 
+		count(1) as allNum ,
+		sum(case when a.zxInjectState=1 then 1 else 0 end) as successNum
+		from inject_tv_albuminfovideo a
+		where a.seriesCode=#{seriesCode}
+	</select>
+	
+	<!--节目查询列表 -->
+    <select id="pagealbumVideo" parameterType="Map" resultType="Map">
+ 			select a.id,a.seriesCode,a.drama,a.zxInjectState,a.zxPriority,a.hwInjectState,a.hwPriority,
+			b.id as vodId,b.dramaname,b.create_time
+			from inject_tv_albuminfovideo a 
+			left join vod_tv_albuminfovideo b 
+			on a.seriesCode=b.seriesCode 
+			and a.drama=b.drama
+            where 1=1
+			<if test="id != null ">
+			     and a.id=#{id,jdbcType=INTEGER}
+			</if>
+			<if test="seriesCode!=null">
+				and a.seriesCode=#{seriesCode,jdbcType=INTEGER}
+			</if>
+			 <if test="zxInjectState!=null and hwInjectState==null">
+				and zxInjectState=#{zxInjectState}
+			</if>		     			     
+			<if test="hwInjectState!=null and zxInjectState==null">
+				and hwInjectState=#{hwInjectState}
+			</if>
+			<if test="zxInjectState!=null and hwInjectState!=null">
+				and (zxInjectState=#{zxInjectState} or hwInjectState=#{hwInjectState})
+			</if>
+         	order by a.zxPriority desc,b.create_time
+         	<if test="start != null">
+            	limit #{start},#{pageSize}
+        	</if>
+    </select>
+    
+     <!-- 同时更新专辑优先级 -->
+   <update id="updateAlbumVideoPriority" parameterType="Map">
+		update inject_tv_albuminfovideo t 
+		set t.zxPriority=#{zxPriority},t.hwPriority=#{hwPriority}
+		where t.id=#{id}
+	</update>
+	
+	<!-- 更新专辑优先级-华为 -->
+   <update id="updateHwAlbumVideoPriority" parameterType="Map">
+		update inject_tv_albuminfovideo t 
+		set	t.hwPriority=#{hwPriority}
+		where t.id=#{id}
+	</update>
+	
+	
+	<!-- 更新专辑优先级-中兴 -->
+   <update id="updateZxAlbumVideoPriority" parameterType="Map">
+		update inject_tv_albuminfovideo t 
+		set	t.zxPriority=#{zxPriority}
+		where t.id=#{id}
+	</update>
+	
+	
+	<!-- 更新剧集状态-hw -->
+	<update id="updateAlbumVideoHwInjectState" parameterType="Map">
+		update inject_tv_albuminfovideo t 
+		set t.hwInjectState=#{hwInjectState}
+		where 1=1
+		<if test="seriesCode!=null">
+			t.seriesCode=#{seriesCode}
+		</if>
+		<if test="drama!=null">
+			and t.drama=#{drama}
+		</if>
+		<if test="id!=null">
+			and t.id=#{id}
+		</if>
+	</update>
+	
+	<!-- 更新剧集状态-zx -->
+	<update id="updateAlbumVideoZxInjectState" parameterType="Map">
+		update inject_tv_albuminfovideo t 
+		set t.zxInjectState=#{zxInjectState}
+		where 1=1
+		<if test="seriesCode!=null">
+			t.seriesCode=#{seriesCode}
+		</if>
+		<if test="drama!=null">
+			and t.drama=#{drama}
+		</if>
+		<if test="id!=null">
+			and t.id=#{id}
+		</if>
+	</update>
+	
+	<!-- 更新专辑注入状态  某一专辑-->
+	 <update id="updateSingleAlbumInjectState" parameterType="Map">
+	 	update inject_tv_albuminfo tt join (select 
+		t1.seriesCode,
+		if(t1.totalNum=t1.zxSuccessNum,1,if(t1.totalNum=t1.zxFailNum,0,2)) zxIsSuccess,
+		if(t1.totalNum=t1.hwSuccessNum,1,if(t1.totalNum=t1.hwFailNum,0,2)) hwIsSuccess
+		from (
+			SELECT b.seriesCode,
+			count(1) totalNum,
+			sum(b.zxInjectState=1) zxSuccessNum,
+			sum(b.zxInjectState=0) zxFailNum,
+			sum(b.hwInjectState=1) hwSuccessNum,
+			sum(b.hwInjectState=0) hwFailNum
+			from inject_tv_albuminfovideo b
+			where b.seriesCode=#{seriesCode}
+			group by b.seriesCode
+		) t1
+		) t2 on t2.seriesCode=tt.seriesCode
+		set tt.zxInjectState=t2.zxIsSuccess,tt.hwInjectState=t2.hwIsSuccess
+		where tt.seriesCode=#{seriesCode}
+	 </update>
+	 
+	
+	
+</mapper>

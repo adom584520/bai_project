@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.inject.tv.mapper.InjectTvAlbumMapper">
+
+
+	 <!--节目查询条数 -->
+    <select id="countalbum" parameterType="Map" resultType="java.lang.Integer">
+        select count(1)
+		from inject_tv_albuminfo a 
+		left join vod_tv_albuminfo b 
+		on a.seriesCode=b.seriesCode   
+        where 1=1
+        <if test="id!=null">
+        	 and id=#{id,jdbcType=INTEGER}
+        </if>
+        <if test="seriesCode!=null">
+          	and seriesCode=#{seriesCode,jdbcType=INTEGER}
+        </if>
+        <if test="seriesName!=null">
+			and b.seriesName like '%${seriesName}%'
+		</if>
+		<if test="update_time != null ">
+			and date_format(update_time,'%Y-%m-%d') =
+			#{update_time,jdbcType=DATE}
+		</if>		
+		<if test="isCollectfees!=null">
+			and isCollectfees=#{isCollectfees}
+		</if>	     			     
+		<if test="zxPriority!=null">
+			and zxPriority=#{zxPriority}
+		</if>
+		<if test="zxInjectState!=null">
+			and zxInjectState=#{zxInjectState}
+		</if>
+	</select>
+	
+	<!--节目查询列表 -->
+    <select id="pagealbum" parameterType="Map" resultType="Map">
+ 			select a.id,a.seriesCode,a.channel,a.zxInjectState,a.zxPriority,a.hwInjectState,a.hwPriority,
+			b.seriesName,b.ChannelName,b.volumncount,b.currentnum,b.create_time,b.isCollectfees
+			from inject_tv_albuminfo a 
+			left join vod_tv_albuminfo b 
+			on a.seriesCode=b.seriesCode 
+            where 1=1
+			<if test="id != null ">
+			     and a.id=#{id,jdbcType=INTEGER}
+			</if>
+			<if test="seriesName!=null">
+				and b.seriesName like '%${seriesName}%'
+			</if>
+			<if test="update_time != null ">
+				and date_format(update_time,'%Y-%m-%d') =
+				#{update_time,jdbcType=DATE}
+			</if>		
+			<if test="isCollectfees!=null">
+				and isCollectfees=#{isCollectfees}
+			</if>	     			     
+			<if test="zxPriority!=null">
+				and zxPriority=#{zxPriority}
+			</if>
+			<if test="zxInjectState!=null">
+				and zxInjectState=#{zxInjectState}
+			</if>
+         	order by a.zxPriority desc,b.create_time
+         	<if test="start != null">
+            	limit #{start},#{pageSize}
+        	</if>
+    </select>
+    
+    <!-- 更新专辑优先级 -->
+   <update id="updateAlbumPriority" parameterType="Map">
+		update inject_tv_albuminfo t 
+		set t.zxPriority=#{zxPriority}
+		where t.id=#{id}
+	</update>
+	
+	
+	<!-- 更新重注入媒资  -->
+	<update id="updateAlbumInjectState" parameterType="Map" >
+		update inject_tv_albuminfo t 
+		set t.zxInjectState=#{zxInjectState}
+		where t.id=#{id}
+	</update>
+	
+	
+	
+	
+	
+</mapper>

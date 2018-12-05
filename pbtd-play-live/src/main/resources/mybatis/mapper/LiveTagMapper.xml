@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playlive.mapper.LiveTagMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playlive.domain.LiveTag">
+		<id column="tagId" property="tagid" jdbcType="INTEGER" />
+		<result column="tagName" property="tagname" jdbcType="VARCHAR" />
+		<result column="tagStatus" property="tagstatus" jdbcType="INTEGER" />
+		<result column="tagOrder" property="tagorder" jdbcType="INTEGER" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		tagId, tagName, tagStatus, tagOrder, createTime, updateTime
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.pbtd.playlive.domain.LiveTag">
+		select
+		<include refid="Base_Column_List" />
+		from live_Tag
+		<where>
+			<trim suffixOverrides="and">
+				<if test="tagname != null">
+					tagName = #{tagname,jdbcType=VARCHAR} and
+				</if>
+				<if test="tagstatus != null">
+					tagStatus = #{tagstatus,jdbcType=INTEGER} and
+				</if>
+				<if test="tagorder != null">
+					tagOrder = #{tagorder,jdbcType=INTEGER} and
+				</if>
+				<if test="createtime != null">
+					createTime = #{createtime,jdbcType=TIMESTAMP} and
+				</if>
+				<if test="updatetime != null">
+					updateTime = #{updatetime,jdbcType=TIMESTAMP} and
+				</if>
+			</trim>
+		</where>
+	</select>
+
+
+	<select id="load" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_tag where tagId = #{tagid,jdbcType=INTEGER}
+	</select>
+
+	<update id="truncateTable">
+		truncate table live_tag ;
+	</update>
+	
+	<insert id="insert" parameterType="com.pbtd.playlive.domain.LiveTag">
+		insert into live_tag (
+		tagName,
+		tagStatus,
+		tagOrder,
+		createTime,
+		updateTime
+		)
+		values (
+		#{tagname,jdbcType=VARCHAR},
+		#{tagstatus,jdbcType=INTEGER},
+		#{tagorder,jdbcType=INTEGER},
+		now(),
+		now()
+		)
+	</insert>
+</mapper>

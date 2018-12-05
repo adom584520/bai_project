@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playlive.mapper.LivePackageMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playlive.domain.LivePackage">
+		<id column="packageId" property="packageid" jdbcType="INTEGER" />
+		<result column="packageName" property="packagename" jdbcType="VARCHAR" />
+		<result column="startTime" property="starttime" jdbcType="INTEGER" />
+		<result column="endTime" property="endtime" jdbcType="INTEGER" />
+		<result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+		<result column="packageOrder" property="packageorder" jdbcType="INTEGER" />
+		<result column="tagId" property="tagid" jdbcType="INTEGER" />
+		<result column="packagePoster" property="packageposter"
+			jdbcType="VARCHAR" />
+		<result column="packageStats" property="packagestats" jdbcType="INTEGER" />
+		<result column="packageCode" property="packagecode" jdbcType="VARCHAR" />
+		<result column="packageCover" property="packagecover" jdbcType="VARCHAR" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		packageId, packageName, startTime, endTime, chnCode,
+		packageOrder,tagId,
+		packagePoster,
+		packageStats, packageCode,
+		packageCover,
+		createTime, updateTime
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.pbtd.playlive.domain.LivePackage">
+		select
+		<include refid="Base_Column_List" />
+		from live_package
+		<where>
+			<if test="packageid != null">
+				packageId = #{packageid,jdbcType=INTEGER}
+			</if>
+
+		</where>
+	</select>
+
+	<select id="queryAllPackage" parameterType="java.util.HashMap"
+		resultType="com.pbtd.playlive.domain.LivePackage">
+		SELECT * FROM live_package
+		<where>
+			<if test="tagid != null">
+				tagId = #{tagid} AND
+			</if>
+			startTime > DATE_SUB(CURDATE(), INTERVAL 40 day)
+			GROUP BY packageName
+			ORDER BY
+			packageOrder,
+			startTime DESC
+		</where>
+	</select>
+	
+	<update id="truncateTable">
+		truncate table live_package ;
+	</update>
+	
+	<insert id="insert" parameterType="com.pbtd.playlive.domain.LivePackage">
+		insert into live_package (
+		packageId,
+		tagId,
+		packageName,
+		startTime,
+		endTime,
+		chnCode,
+		packageOrder,
+		packagePoster,
+		packageStats,
+		packageCode,
+		packageCover,
+		createTime,
+		updateTime)
+		values (
+		#{packageid,jdbcType=INTEGER},
+		#{tagid,jdbcType=INTEGER},
+		#{packagename,jdbcType=VARCHAR},
+		#{starttime,jdbcType=INTEGER},
+		#{endtime,jdbcType=INTEGER},
+		#{chncode,jdbcType=VARCHAR},
+		#{packageorder,jdbcType=INTEGER},
+		#{packageposter,jdbcType=VARCHAR},
+		#{packagestats,jdbcType=INTEGER},
+		#{packagecode,jdbcType=VARCHAR},
+		#{packagecover,jdbcType=VARCHAR},
+		now(),
+		now()
+		)
+	</insert>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+	
+	<![CDATA[ delete from live_package  where packageId  = #{packageid} ]]>
+
+	</delete>
+	<delete id="deleteTimeOut" parameterType="java.lang.Integer">
+	
+	<![CDATA[ delete from live_package  where startTime < (unix_timestamp(now())*1000-60*60*24*1000*7) ]]>
+
+	</delete>
+</mapper>

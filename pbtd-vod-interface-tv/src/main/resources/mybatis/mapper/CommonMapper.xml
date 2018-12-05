@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.vodinterface.web.mapper.CommonMapper">
+
+<!-- 查询演员接口 -->
+<select id="getactors" parameterType="Map" resultType="Map"> 
+  select code,name,pinyin,actor,
+  director,imgportrait,backgroundimg,
+  birthDay,birthPlace,description 
+  from  vod_actors where 1=1
+  <if test="actorId!=null ">
+    and code=#{actorId,jdbcType=INTEGER}
+  </if>
+  <if test="start!=null and start!=''">
+  limit #{start},#{pageSize}
+  </if>
+</select>
+
+<!-- 演员列表 -->
+<select id="getactorlist" parameterType="Map" resultType="Map">
+<![CDATA[
+SELECT code,name,imgportrait,backgroundimg from vod_actors where code in(  
+		select  substring_index(substring_index(a.actor,',',b.help_topic_id+1),',',-1) 
+		from vod_tv_albuminfo a
+	    join mysql.help_topic b on b.help_topic_id < (length(a.actor) - length(replace(a.actor,',',''))+1)
+		where  seriesCode=#{seriesCode,jdbcType=INTEGER}
+	 )]]>
+</select>
+
+<!-- 内部接口 -->
+<select id="findChannel" parameterType="Map"   resultType="Map"  >
+        select a.channelCode,a.channelName,a.levels,a.parentCode,b.channelName parentName 
+        ,a.navigationtype,a.type,a.count ,
+            a.img,a.isshow_img,a.isshow_right,a.isshow_left 
+        from vod_tv_channel a 
+        left join vod_tv_channel b on a.parentCode=b.channelCode and b.levels=1
+    	where    a.status=1  
+        <if test="levels != null and levels != ''">
+		      and  a.levels=#{levels,jdbcType=VARCHAR}
+		</if>
+		 <if test="channelCode != null and channelCode != ''">
+		      and  a.channelCode=#{channelCode,jdbcType=VARCHAR}
+		</if>
+		<if test="parentCode != null and parentCode != ''">
+		      and  a.parentCode=#{parentCode,jdbcType=VARCHAR}
+		</if>
+		order  by  a.sequence asc
+    </select>
+<!-- 标签 -->
+    <select id="getlable" parameterType="Map"   resultType="Map"  >
+      	select  a.id,a.name,a.level,a.type
+       from vod_phone_label a 
+      left join vod_labelchannel b on a.id=b.label 
+       where status=1   and a.id=b.label and b.type='tv'
+		<if test="channel != null and channel != ''">
+		      and b.channel=#{channel,jdbcType=VARCHAR}
+		</if>
+      order  by a.type, b.sequence asc
+    </select>
+    <select id="getlabeltype" parameterType="Map" resultType="Map">
+     select id,name from vod_labeltype
+     order by sequence
+    </select>
+
+ <!-- 专题 -->
+     <select id="getspecial" parameterType="Map"   resultType="Map"  >
+    	 select id,name,imgurl,backgroundimg,viewPoint,describes,type,web_url,template,textcolor
+		 from vod_tv_special
+		 <where>
+			<if test="status != null and status != ''">
+			      and status=#{status,jdbcType=VARCHAR}
+			</if>
+			<if test="specialid != null and specialid != ''">
+			      and id=#{specialid,jdbcType=VARCHAR}
+			</if>
+		 </where>
+      order by sequence asc
+    </select>
+    <!-- 专题详情 -->
+     <select id="getspecialvideo" parameterType="Map"   resultType="Map"  >
+	   select  b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,
+	   b.score,b.description,b.viewPoint,b.duration
+		,b.corner, b.cornerimg
+	    ,b.isvip,b.isCollectfees
+		 from vod_tv_special_albuminfo a left join vod_tv_albuminfo b on a.seriesCode=b.seriesCode
+		 where b.status=1 and a.seriesCode=b.seriesCode and a.special_id=#{specialid,jdbcType=VARCHAR}
+		order by a.sequence asc
+    </select>
+<!-- 频道列表 -->
+<select id="getChannellist" parameterType="Map" resultType="java.util.HashMap">
+     select channelCode,channelName,img,isshow_img from vod_tv_channel 
+     where status=1
+   <if test="levels!=null and levels!=''">
+     and levels=#{levels,jdbcType=INTEGER}
+   </if>
+   <if test="parentCode != null and parentCode != ''">
+	  and parentCode=#{parentCode,jdbcType=VARCHAR}
+	</if>
+      order by sequence asc
+  <if test="start!=null and start!=''">
+      limit #{start},#{pageSize}
+  </if>
+</select>
+
+</mapper>

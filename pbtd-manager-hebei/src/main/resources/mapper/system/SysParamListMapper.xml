@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.system.mapper.SysParamListMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.system.domain.SysParamList">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="flag" property="flag" jdbcType="INTEGER" />
+		<result column="keydata" property="keydata" jdbcType="VARCHAR" />
+		<result column="keyname" property="keyname" jdbcType="VARCHAR" />
+		<result column="valuedata" property="valuedata" jdbcType="VARCHAR" />
+		<result column="valuename" property="valuename" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, flag, keydata, keyname, valuedata, valuename
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from sys_param_list
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_param_list
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.pbtd.manager.system.domain.SysParamList">
+		insert into sys_param_list (id, flag, keydata,
+		keyname, valuedata, valuename
+		)
+		values (#{id,jdbcType=INTEGER}, #{flag,jdbcType=INTEGER},
+		#{keydata,jdbcType=VARCHAR},
+		#{keyname,jdbcType=VARCHAR}, #{valuedata,jdbcType=VARCHAR}, #{valuename,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.pbtd.manager.system.domain.SysParamList">
+		insert into sys_param_list
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="flag != null">
+				flag,
+			</if>
+			<if test="keydata != null">
+				keydata,
+			</if>
+			<if test="keyname != null">
+				keyname,
+			</if>
+			<if test="valuedata != null">
+				valuedata,
+			</if>
+			<if test="valuename != null">
+				valuename,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="flag != null">
+				#{flag,jdbcType=INTEGER},
+			</if>
+			<if test="keydata != null">
+				#{keydata,jdbcType=VARCHAR},
+			</if>
+			<if test="keyname != null">
+				#{keyname,jdbcType=VARCHAR},
+			</if>
+			<if test="valuedata != null">
+				#{valuedata,jdbcType=VARCHAR},
+			</if>
+			<if test="valuename != null">
+				#{valuename,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.pbtd.manager.system.domain.SysParamList">
+		update sys_param_list
+		<set>
+			<if test="flag != null">
+				flag = #{flag,jdbcType=INTEGER},
+			</if>
+			<if test="keydata != null">
+				keydata = #{keydata,jdbcType=VARCHAR},
+			</if>
+			<if test="keyname != null">
+				keyname = #{keyname,jdbcType=VARCHAR},
+			</if>
+			<if test="valuedata != null">
+				valuedata = #{valuedata,jdbcType=VARCHAR},
+			</if>
+			<if test="valuename != null">
+				valuename = #{valuename,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.pbtd.manager.system.domain.SysParamList">
+		update sys_param_list
+		set flag = #{flag,jdbcType=INTEGER},
+		keydata = #{keydata,jdbcType=VARCHAR},
+		keyname = #{keyname,jdbcType=VARCHAR},
+		valuedata = #{valuedata,jdbcType=VARCHAR},
+		valuename = #{valuename,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+	<!-- 查询数据 -->
+	<select id="findone" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_param_list where keydata = #{keydata,jdbcType=VARCHAR} and
+		valuedata = #{valuedata,jdbcType=VARCHAR}
+
+
+
+	</select>
+</mapper>

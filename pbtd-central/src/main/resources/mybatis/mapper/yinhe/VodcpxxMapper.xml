@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playclick.yinhe.mapper.VodcpxxMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playclick.yinhe.domain.Vodcpxx" >
+    <id column="albumId" property="albumId" jdbcType="VARCHAR" />
+    <result column="albumName" property="albumName" jdbcType="VARCHAR" />
+    <result column="chnId" property="chnId" jdbcType="VARCHAR" />
+    <result column="cpId" property="cpId" jdbcType="VARCHAR" />
+    <result column="is3d" property="is3d" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="VARCHAR" />
+    <result column="sets" property="sets" jdbcType="VARCHAR" />
+    <result column="bz" property="bz" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.pbtd.playclick.yinhe.domain.VodcpxxWithBLOBs" extends="BaseResultMap" >
+    <result column="currShowPlayOrder" property="currShowPlayOrder" jdbcType="LONGVARCHAR" />
+    <result column="pic" property="pic" jdbcType="LONGVARCHAR" />
+    <result column="superScripts" property="superScripts" jdbcType="LONGVARCHAR" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    albumId, albumName, chnId, cpId, is3d, score, sets, bz, status
+  </sql>
+  <sql id="Blob_Column_List" >
+    currShowPlayOrder, pic, superScripts
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_vod_album
+    where albumId = #{albumId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from yh_vod_album
+    where albumId = #{albumId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.pbtd.playclick.yinhe.domain.VodcpxxWithBLOBs" >
+    insert into yh_vod_album (albumId, albumName, chnId, 
+      cpId, is3d, score, 
+      sets, bz, status, currShowPlayOrder, 
+      pic, superScripts)
+    values (#{albumId,jdbcType=VARCHAR}, #{albumName,jdbcType=VARCHAR}, #{chnId,jdbcType=VARCHAR}, 
+      #{cpId,jdbcType=VARCHAR}, #{is3d,jdbcType=VARCHAR}, #{score,jdbcType=VARCHAR}, 
+      #{sets,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{currShowPlayOrder,jdbcType=LONGVARCHAR}, 
+      #{pic,jdbcType=LONGVARCHAR}, #{superScripts,jdbcType=LONGVARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.pbtd.playclick.yinhe.domain.VodcpxxWithBLOBs" >
+    insert into yh_vod_album
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="albumId != null" >
+        albumId,
+      </if>
+      <if test="albumName != null" >
+        albumName,
+      </if>
+      <if test="chnId != null" >
+        chnId,
+      </if>
+      <if test="cpId != null" >
+        cpId,
+      </if>
+      <if test="is3d != null" >
+        is3d,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="sets != null" >
+        sets,
+      </if>
+      <if test="bz != null" >
+        bz,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="currShowPlayOrder != null" >
+        currShowPlayOrder,
+      </if>
+      <if test="pic != null" >
+        pic,
+      </if>
+      <if test="superScripts != null" >
+        superScripts,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="albumId != null" >
+        #{albumId,jdbcType=VARCHAR},
+      </if>
+      <if test="albumName != null" >
+        #{albumName,jdbcType=VARCHAR},
+      </if>
+      <if test="chnId != null" >
+        #{chnId,jdbcType=VARCHAR},
+      </if>
+      <if test="cpId != null" >
+        #{cpId,jdbcType=VARCHAR},
+      </if>
+      <if test="is3d != null" >
+        #{is3d,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=VARCHAR},
+      </if>
+      <if test="sets != null" >
+        #{sets,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null" >
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="currShowPlayOrder != null" >
+        #{currShowPlayOrder,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="pic != null" >
+        #{pic,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="superScripts != null" >
+        #{superScripts,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playclick.yinhe.domain.VodcpxxWithBLOBs" >
+    update yh_vod_album
+    <set >
+      <if test="albumName != null" >
+        albumName = #{albumName,jdbcType=VARCHAR},
+      </if>
+      <if test="chnId != null" >
+        chnId = #{chnId,jdbcType=VARCHAR},
+      </if>
+      <if test="cpId != null" >
+        cpId = #{cpId,jdbcType=VARCHAR},
+      </if>
+      <if test="is3d != null" >
+        is3d = #{is3d,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=VARCHAR},
+      </if>
+      <if test="sets != null" >
+        sets = #{sets,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null" >
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="currShowPlayOrder != null" >
+        currShowPlayOrder = #{currShowPlayOrder,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="pic != null" >
+        pic = #{pic,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="superScripts != null" >
+        superScripts = #{superScripts,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where albumId = #{albumId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pbtd.playclick.yinhe.domain.VodcpxxWithBLOBs" >
+    update yh_vod_album
+    set albumName = #{albumName,jdbcType=VARCHAR},
+      chnId = #{chnId,jdbcType=VARCHAR},
+      cpId = #{cpId,jdbcType=VARCHAR},
+      is3d = #{is3d,jdbcType=VARCHAR},
+      score = #{score,jdbcType=VARCHAR},
+      sets = #{sets,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      currShowPlayOrder = #{currShowPlayOrder,jdbcType=LONGVARCHAR},
+      pic = #{pic,jdbcType=LONGVARCHAR},
+      superScripts = #{superScripts,jdbcType=LONGVARCHAR}
+    where albumId = #{albumId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playclick.yinhe.domain.Vodcpxx" >
+    update yh_vod_album
+    set albumName = #{albumName,jdbcType=VARCHAR},
+      chnId = #{chnId,jdbcType=VARCHAR},
+      cpId = #{cpId,jdbcType=VARCHAR},
+      is3d = #{is3d,jdbcType=VARCHAR},
+      score = #{score,jdbcType=VARCHAR},
+      sets = #{sets,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where albumId = #{albumId,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 清空album -->
+  <update id="truncateTable">
+	truncate table yh_vod_album
+  </update>
+</mapper>

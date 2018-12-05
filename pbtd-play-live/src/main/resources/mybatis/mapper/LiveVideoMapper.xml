@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playlive.mapper.LiveVideoMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playlive.domain.LiveVideo">
+		<id column="videoId" property="videoid" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="CHAR" />
+		<result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+		<result column="startTime" property="starttime" jdbcType="BIGINT" />
+		<result column="endTime" property="endtime" jdbcType="BIGINT" />
+		<result column="tagId" property="tagid" jdbcType="INTEGER" />
+		<result column="packageId" property="packageid" jdbcType="INTEGER" />
+		<result column="packageCode" property="packagecode" jdbcType="VARCHAR" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		videoId, title, chnCode, startTime, endTime, packageCode,
+		createTime,
+		updateTime
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from live_video
+		<where>
+			<if test="videoid != null">
+				videoId = #{videoid,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+	<select id="selectBycode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from live_video
+		<where>
+			packageCode = #{packagecode}
+		</where>
+		ORDER BY startTime;
+	</select>
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(1)
+		FROM
+		live_video a
+		LEFT JOIN (
+		SELECT
+		chnCode,
+		oldChnCode
+		FROM
+		live_channel
+		GROUP
+		BY
+		oldChnCode
+		) b ON a.chnCode = b.oldChnCode
+		<where>
+			<if test="packagecode != null">
+				packageCode = #{packagecode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="find" parameterType="Map" resultMap="BaseResultMap">
+		select
+		a.videoId,
+		a.title,
+		b.chnCode,
+		a.startTime,
+		a.endTime,
+		a.packageCode,
+		a.createTime,
+		a.updateTime
+		FROM
+		live_video a
+		LEFT JOIN (
+		SELECT
+		chnCode,
+		oldChnCode
+		FROM
+		live_channel
+		GROUP BY
+		oldChnCode
+		) b ON
+		a.chnCode = b.oldChnCode
+		<where>
+			<if test="packagecode != null">
+				packageCode = #{packagecode,jdbcType=VARCHAR}
+			</if>
+		</where>
+		limit #{start},#{pageSize}
+	</select>
+
+	<select id="load" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_video
+		where packageCode =
+		#{packagecode,jdbcType=INTEGER}
+	</select>
+	
+	<update id="truncateTable" >
+		truncate table live_video;
+	</update>
+	
+	<insert id="insert" parameterType="com.pbtd.playlive.domain.LiveVideo">
+		insert into live_video (
+		videoId,
+		title,
+		chnCode,
+		startTime,
+		endTime,
+		packageCode,
+		createTime,
+		updateTime)
+		values (
+		#{videoid,jdbcType=INTEGER},
+		#{title,jdbcType=VARCHAR},
+		#{chncode,jdbcType=VARCHAR},
+		#{starttime,jdbcType=INTEGER},
+		#{endtime,jdbcType=INTEGER},
+		#{packagecode,jdbcType=VARCHAR},
+		now(),
+		now())
+	</insert>
+	
+	<delete id="deleteTimeOut" parameterType="java.lang.Integer">
+	
+	<![CDATA[ delete from live_video  where startTime < (unix_timestamp(now())*1000-60*60*24*1000*7) ]]>
+
+	</delete>
+</mapper>

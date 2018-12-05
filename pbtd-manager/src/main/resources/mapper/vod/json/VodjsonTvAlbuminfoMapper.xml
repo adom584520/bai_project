@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.vod.tv.json.mapper.VodjsonTvAlbuminfoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.pbtd.manager.vod.tv.json.domain.VodjsonTvAlbuminfo">
+		<id column="seriesCode" property="seriescode" jdbcType="VARCHAR" />
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="seriesName" property="seriesname" jdbcType="VARCHAR" />
+		<result column="code" property="code" jdbcType="INTEGER" />
+		<result column="volumncount" property="volumncount" jdbcType="INTEGER" />
+		<result column="currentnum" property="currentnum" jdbcType="INTEGER" />
+		<result column="pinyin" property="pinyin" jdbcType="VARCHAR" />
+		<result column="pinyinsuoxie" property="pinyinsuoxie" jdbcType="VARCHAR" />
+		<result column="cpCode" property="cpcode" jdbcType="VARCHAR" />
+		<result column="cpName" property="cpname" jdbcType="VARCHAR" />
+		<result column="orderCode" property="ordercode" jdbcType="VARCHAR" />
+		<result column="isCollectfees" property="iscollectfees"
+			jdbcType="INTEGER" />
+		<result column="Collectfeesbag" property="collectfeesbag"
+			jdbcType="VARCHAR" />
+		<result column="originalName" property="originalname" jdbcType="VARCHAR" />
+		<result column="actor" property="actor" jdbcType="VARCHAR" />
+		<result column="actorName" property="actorname" jdbcType="VARCHAR" />
+		<result column="writer" property="writer" jdbcType="VARCHAR" />
+		<result column="writerName" property="writername" jdbcType="VARCHAR" />
+		<result column="orgairDate" property="orgairdate" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="contentProvider" property="contentprovider"
+			jdbcType="VARCHAR" />
+		<result column="keyWord" property="keyword" jdbcType="VARCHAR" />
+		<result column="tag" property="tag" jdbcType="VARCHAR" />
+		<result column="viewPoint" property="viewpoint" jdbcType="VARCHAR" />
+		<result column="starLevel" property="starlevel" jdbcType="VARCHAR" />
+		<result column="rating" property="rating" jdbcType="VARCHAR" />
+		<result column="awards" property="awards" jdbcType="VARCHAR" />
+		<result column="originalCountry" property="originalcountry"
+			jdbcType="VARCHAR" />
+		<result column="language" property="language" jdbcType="VARCHAR" />
+		<result column="releaseYear" property="releaseyear" jdbcType="VARCHAR" />
+		<result column="duration" property="duration" jdbcType="VARCHAR" />
+		<result column="Channel" property="channel" jdbcType="VARCHAR" />
+		<result column="ChannelName" property="channelname" jdbcType="VARCHAR" />
+		<result column="Channel2" property="channel2" jdbcType="VARCHAR" />
+		<result column="ChannelName2" property="channelname2" jdbcType="VARCHAR" />
+		<result column="Label" property="label" jdbcType="VARCHAR" />
+		<result column="LabelName" property="labelname" jdbcType="VARCHAR" />
+		<result column="Label2" property="label2" jdbcType="VARCHAR" />
+		<result column="LabelName2" property="labelname2" jdbcType="VARCHAR" />
+		<result column="enName" property="enname" jdbcType="VARCHAR" />
+		<result column="vName" property="vname" jdbcType="VARCHAR" />
+		<result column="definition" property="definition" jdbcType="VARCHAR" />
+		<result column="copyRightProperty" property="copyrightproperty"
+			jdbcType="VARCHAR" />
+		<result column="crBeginDate" property="crbegindate" jdbcType="VARCHAR" />
+		<result column="crEndDate" property="crenddate" jdbcType="VARCHAR" />
+		<result column="copyright" property="copyright" jdbcType="VARCHAR" />
+		<result column="cpContentID" property="cpcontentid" jdbcType="VARCHAR" />
+		<result column="score" property="score" jdbcType="REAL" />
+		<result column="Sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="pictureurl1" property="pictureurl1" jdbcType="VARCHAR" />
+		<result column="pictureurl2" property="pictureurl2" jdbcType="VARCHAR" />
+		<result column="pictureurl3" property="pictureurl3" jdbcType="VARCHAR" />
+		<result column="pictureurl4" property="pictureurl4" jdbcType="VARCHAR" />
+		<result column="isvip" property="isvip" jdbcType="INTEGER" />
+		<result column="corner" property="corner" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="cpseriescode" property="cpseriescode" jdbcType="VARCHAR" />
+		<result column="pictureurl5" property="pictureurl5" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+		<result column="cpCodelist" property="cpcodelist" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		seriesCode, seriesCode as id, seriesName, code, volumncount, currentnum,
+		pinyin, pinyinsuoxie,
+		cpCode, cpName, orderCode, isCollectfees,
+		Collectfeesbag,
+		originalName, actor, actorName,
+		writer, writerName,
+		orgairDate, price, description, contentProvider, keyWord,
+		tag,
+		viewPoint, starLevel, rating, awards, originalCountry, language,
+		releaseYear,
+		duration,
+		Channel, ChannelName, Channel2, ChannelName2,
+		Label, LabelName, Label2,
+		LabelName2,
+		enName, vName, definition,
+		copyRightProperty, crBeginDate, crEndDate,
+		copyright,
+		cpContentID,
+		score, Sequence, pictureurl1, pictureurl2, pictureurl3, pictureurl4,
+		isvip, corner, status, cpseriescode, pictureurl5, create_time,
+		create_user, update_time,
+		update_user, cpCodelist
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		seriesCode,seriesCode as id, seriesName, volumncount, currentnum
+		from vod_phone_albuminfo
+		where cpseriescode =
+		#{cpseriescode,jdbcType=VARCHAR}
+	</select>
+	
+<!-- 	<select id="selectKey" resultType="java.lang.Integer">
+		select case when
+		max(code) is
+		not null then max(code) + 1 else max(id)
+		+ 1 end as count
+		from
+		vod_phone_albuminfo
+		where 1=1
+	</select> -->
+
+	<delete id="deleteByPrimaryKey" >
+		delete from
+		vod_phone_albuminfo
+		where cpseriescode = #{cpseriescode,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="seriescode" parameterType="com.pbtd.manager.vod.tv.json.domain.VodjsonTvAlbuminfo">
+		insert into
+		vod_phone_albuminfo ( seriesName,
+		code, volumncount,
+		currentnum,
+		pinyin, pinyinsuoxie, cpCode,
+		cpName, orderCode,
+		isCollectfees,
+		Collectfeesbag, originalName, actor,
+		actorName, writer,
+		writerName,
+		orgairDate, price, description,
+		contentProvider, keyWord,
+		tag,
+		viewPoint, starLevel, rating,
+		awards, originalCountry, language,
+		releaseYear, duration, Channel,
+		ChannelName, Channel2, ChannelName2,
+		Label, LabelName, Label2,
+		LabelName2, enName, vName,
+		definition,
+		copyRightProperty, crBeginDate,
+		crEndDate, copyright, cpContentID,
+		score, Sequence, pictureurl1,
+		pictureurl2, pictureurl3, pictureurl4,
+		isvip, corner, status,
+		cpseriescode, pictureurl5, cpCodelist)
+		values
+		(
+		#{seriesname,jdbcType=VARCHAR},
+		#{code,jdbcType=INTEGER},
+		#{volumncount,jdbcType=INTEGER},
+		#{currentnum,jdbcType=INTEGER},
+		#{pinyin,jdbcType=VARCHAR},
+		#{pinyinsuoxie,jdbcType=VARCHAR},
+		#{cpcode,jdbcType=VARCHAR},
+		#{cpname,jdbcType=VARCHAR},
+		#{ordercode,jdbcType=VARCHAR},
+		#{iscollectfees,jdbcType=INTEGER},
+		#{collectfeesbag,jdbcType=VARCHAR},
+		#{originalname,jdbcType=VARCHAR},
+		#{actor,jdbcType=VARCHAR},
+		#{actorname,jdbcType=VARCHAR},
+		#{writer,jdbcType=VARCHAR},
+		#{writername,jdbcType=VARCHAR},
+		#{orgairdate,jdbcType=VARCHAR},
+		#{price,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{contentprovider,jdbcType=VARCHAR},
+		#{keyword,jdbcType=VARCHAR},
+		#{tag,jdbcType=VARCHAR},
+		#{viewpoint,jdbcType=VARCHAR},
+		#{starlevel,jdbcType=VARCHAR},
+		#{rating,jdbcType=VARCHAR},
+		#{awards,jdbcType=VARCHAR},
+		#{originalcountry,jdbcType=VARCHAR},
+		#{language,jdbcType=VARCHAR},
+		#{releaseyear,jdbcType=VARCHAR},
+		#{duration,jdbcType=VARCHAR},
+		#{channel,jdbcType=VARCHAR},
+		#{channelname,jdbcType=VARCHAR},
+		#{channel2,jdbcType=VARCHAR},
+		#{channelname2,jdbcType=VARCHAR},
+		#{label,jdbcType=VARCHAR},
+		#{labelname,jdbcType=VARCHAR},
+		#{label2,jdbcType=VARCHAR},
+		#{labelname2,jdbcType=VARCHAR},
+		#{enname,jdbcType=VARCHAR},
+		#{vname,jdbcType=VARCHAR},
+		#{definition,jdbcType=VARCHAR},
+		#{copyrightproperty,jdbcType=VARCHAR},
+		#{crbegindate,jdbcType=VARCHAR},
+		#{crenddate,jdbcType=VARCHAR},
+		#{copyright,jdbcType=VARCHAR}, #{cpcontentid,jdbcType=VARCHAR},
+		#{score,jdbcType=REAL}, #{sequence,jdbcType=INTEGER},
+		#{pictureurl1,jdbcType=VARCHAR},
+		#{pictureurl2,jdbcType=VARCHAR},
+		#{pictureurl3,jdbcType=VARCHAR}, #{pictureurl4,jdbcType=VARCHAR},
+		#{isvip,jdbcType=INTEGER}, #{corner,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},
+		#{cpseriescode,jdbcType=VARCHAR},
+		#{pictureurl5,jdbcType=VARCHAR}, #{cpcodelist,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="updateByPrimaryKey">
+		update
+		vod_phone_albuminfo
+		set currentnum =
+		#{currentnum,jdbcType=INTEGER},
+		update_time = now()
+		where seriescode =
+		#{seriescode,jdbcType=VARCHAR}
+
+	</update>
+</mapper>

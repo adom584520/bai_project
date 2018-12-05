@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.UserPositionInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.UserPositionInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="mobileNum" property="mobilenum" jdbcType="INTEGER" />
+    <result column="channelId" property="channelid" jdbcType="INTEGER" />
+    <result column="channelName" property="channelname" jdbcType="VARCHAR" />
+    <result column="channelSpot" property="channelspot" jdbcType="INTEGER" />
+    <result column="wholeId" property="wholeid" jdbcType="INTEGER" />
+    <result column="wholeName" property="wholename" jdbcType="VARCHAR" />
+    <result column="wholeSpot" property="wholespot" jdbcType="INTEGER" />
+    <result column="positionNum" property="positionnum" jdbcType="INTEGER" />
+    <result column="positionCode" property="positioncode" jdbcType="INTEGER" />
+    <result column="describe" property="describe" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, mobileNum, channelId, channelName, channelSpot, wholeId, wholeName, wholeSpot, 
+    positionNum, positionCode,  createTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_position_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectstatistics" resultMap="BaseResultMap" parameterType="Map" >
+    select 	    <include refid="Base_Column_List" />
+	from user_position_info WHERE date_format(createTime,'%Y-%m-%d') >= #{startTime} AND date_format(createTime,'%Y-%m-%d') <![CDATA[ <= ]]> #{endTime} group  by channelId;
+  </select>
+  <select id="selectstatisticsformodule" resultMap="BaseResultMap" parameterType="Map" >
+    select 	  wholeSpot
+	from user_position_info WHERE date_format(createTime,'%Y-%m-%d') >= #{startTime} AND date_format(createTime,'%Y-%m-%d') <![CDATA[ <= ]]> #{endTime} and  channelId =#{channelId} AND wholeId = #{wholeId} group  by wholeSpot;
+  </select>
+  <select id="selectstatisticsforbiaoqian" resultMap="BaseResultMap" parameterType="Map" >
+    select 	  positionNum
+	from user_position_info WHERE date_format(createTime,'%Y-%m-%d') >= #{startTime} AND date_format(createTime,'%Y-%m-%d') <![CDATA[ <= ]]> #{endTime} and  channelId =#{channelId} AND  wholeName = #{wholeName} group  by positionNum;
+  </select>
+  <select id="selectstatisticsforshanxuanbiaoqian" resultMap="BaseResultMap" parameterType="Map" >
+    select 	  wholeSpot
+	from user_position_info WHERE date_format(createTime,'%Y-%m-%d') >= #{startTime} AND date_format(createTime,'%Y-%m-%d') <![CDATA[ <= ]]> #{endTime} and  channelId =#{channelId} AND  wholeName = #{wholeName} group  by wholeSpot;
+  </select>
+  <select id="selectstatisticsforcainixihuan" resultMap="BaseResultMap" parameterType="Map" >
+    select 	  wholeSpot
+	from user_position_info WHERE date_format(createTime,'%Y-%m-%d') >= #{startTime} AND date_format(createTime,'%Y-%m-%d') <![CDATA[ <= ]]> #{endTime} and   wholeId = 100 GROUP BY wholeSpot;;
+  </select>
+  <select id="select" resultType="int" parameterType="Map" >
+    SELECT count(1) FROM user_position_info WHERE date_format(createTime,'%Y-%m-%d') >= #{startTime} AND date_format(createTime,'%Y-%m-%d') <![CDATA[ <= ]]> #{endTime}
+	<if test="channelId != null and channelId != '' and channelId != 0 and channelId != -1">
+		and	channelId=#{channelId}
+	</if>
+	<if test="channelId == 0">
+		and	channelId is null
+	</if>
+	<if test="channelId == -1">
+		and	channelId is not null
+	</if>
+	<if test="wholeId != null and wholeId != '' and wholeId != 0">
+		and wholeId=#{wholeId}
+	</if>
+	<if test="wholeId  == 0">
+		and wholeId is null
+	</if>
+	<if test="positionNum != null and positionNum != '' and positionNum != 7">
+		and positionNum = #{positionNum}
+	</if>
+	<if test=" positionNum == 0">
+		and positionNum = #{positionNum}
+	</if>
+	<if test=" positionNum == 7">
+		and positionNum is null
+	</if>
+	<if test="wholeSpot != null and wholeSpot != ''">
+		and wholeSpot = #{wholeSpot}
+	</if>
+	<if test=" wholeSpot == 0">
+		and wholeSpot = #{wholeSpot}
+	</if>
+	<if test=" wholeName != null and wholeName != '' ">
+		and wholeName = #{wholeName}
+	</if>
+;
+  </select>
+  <insert id="insertSelective" parameterType="com.pbtd.playuser.domain.UserPositionInfo" >
+    insert into user_position_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mobilenum != null  and mobilenum != ''" >
+        mobileNum,
+      </if>
+      <if test="channelid != null and channelid != ''" >
+        channelId,
+      </if>
+      <if test="channelname != null and channelname != ''" >
+        channelName,
+      </if>
+      <if test="channelspot != null and channelspot != ''" >
+        channelSpot,
+      </if>
+      <if test="wholeid != null  and wholeid != ''" >
+        wholeId,
+      </if>
+      <if test="wholename != null  and wholename  != ''" >
+        wholeName,
+      </if>
+      <if test="wholespot != null and wholespot != ''" >
+        wholeSpot,
+      </if>
+      <if test="wholedescribe != null and wholedescribe != ''" >
+        wholeDescribe,
+      </if>
+      <if test="positionnum != null  and positionnum != ''" >
+        positionNum,
+      </if>
+      <if test="positioncode != null  and positioncode != ''" >
+        positionCode,
+      </if>
+      <if test="describes != null and describes != ''" >
+        describes,
+      </if>
+      <if test="time != null" >
+        createTime
+      </if>
+        
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mobilenum != null and mobilenum != ''" >
+        #{mobilenum,jdbcType=INTEGER},
+      </if>
+      <if test="channelid != null and channelid != ''" >
+        #{channelid,jdbcType=INTEGER},
+      </if>
+      <if test="channelname != null and channelname != ''" >
+        #{channelname,jdbcType=VARCHAR},
+      </if>
+      <if test="channelspot != null and channelspot != ''" >
+        #{channelspot,jdbcType=INTEGER},
+      </if>
+      <if test="wholeid != null and wholeid != ''" >
+        #{wholeid,jdbcType=INTEGER},
+      </if>
+      <if test="wholename != null and wholename  != ''" >
+        #{wholename,jdbcType=VARCHAR},
+      </if>
+      <if test="wholespot != null and wholespot != ''" >
+        #{wholespot,jdbcType=INTEGER},
+      </if>
+       <if test="wholedescribe != null and wholedescribe != ''" >
+		#{wholedescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="positionnum != null and positionnum != ''" >
+        #{positionnum,jdbcType=INTEGER},
+      </if>
+      <if test="positioncode != null and positioncode != ''" >
+        #{positioncode,jdbcType=VARCHAR},
+      </if>
+      <if test="describes != null and describes != ''" >
+        #{describes,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null " >
+        #{time,jdbcType=TIMESTAMP}
+      </if>
+    </trim>
+  </insert>
+ 
+</mapper>

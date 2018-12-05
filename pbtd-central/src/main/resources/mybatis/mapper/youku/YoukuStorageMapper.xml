@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.playclick.youku.mapper.YoukuStorageMapper">
+	<!-- 根据id入库数据 -->
+	<insert id="insertsisStorageid" parameterType="Map">
+		insert into
+		vod_albuminfo (
+		SERIESNAME ,SERIESCODE
+		,VOLUMNCOUNT,CURRENTNUM,PINYIN,PINYINSUOXIE,CPCODE,CPNAME,ORDERCODE,ISCOLLECTFEES,ORIGINALNAME,ACTOR,WRITER,ACTORNAME,WRITERNAME,
+		ORGAIRDATE,PRICE,DESCRIPTION,CONTENTPROVIDER,KEYWORD,TAG,VIEWPOINT,STARLEVEL,RATING,AWARDS,ORIGINALCOUNTRY,LANGUAGE,RELEASEYEAR,DURATION,CHANNEL,
+		CHANNELNAME,LABEL,LABELNAME,ENNAME,VNAME,DEFINITION,COPYRIGHTPROPERTY,CRBEGINDATE,CRENDDATE,COPYRIGHT,CPCONTENTID,SCORE,PICTUREURL1,PICTUREURL2,PICTUREURL3,PICTUREURL4,PICTUREURL5,
+		cpcodelist,updatetime,offset ,pay_type,exclusive,oldlabel,oldlabelname
+		)
+		select title AS
+		SERIESNAME,show_id AS SERIESCODE,episode_count AS
+		VOLUMNCOUNT,count AS
+		CURRENTNUM,'' AS PINYIN,'' AS PINYINSUOXIE,
+		'5' AS CPCODE,'优酷付费' AS
+		CPNAME,'' AS ORDERCODE,0 AS ISCOLLECTFEES,title
+		AS ORIGINALNAME,'' AS
+		ACTOR,'' AS WRITER, substring_index(
+		substring_index(`performer_list`,',',20),'|',20) AS
+		ACTORNAME,director_list AS WRITERNAME,
+		'' AS ORGAIRDATE,price AS PRICE,
+		REPLACE ( concat( LEFT ( `description`, 800 ), '...' ), '\'', '’' ) AS
+		DESCRIPTION,'' AS CONTENTPROVIDER,
+		keyword AS KEYWORD,sub_category AS
+		TAG,'' AS VIEWPOINT,'' AS STARLEVEL,'' AS RATING,
+		'' AS AWARDS,area AS
+		ORIGINALCOUNTRY,'' AS LANGUAGE,release_date AS RELEASEYEAR,
+		'' AS
+		DURATION,categoryId AS CHANNEL,category AS CHANNELNAME,
+		''
+		AS LABEL,'' AS LABELNAME,'' AS ENNAME,'' AS VNAME,'' AS
+		DEFINITION,
+		0 AS COPYRIGHTPROPERTY,'' AS CRBEGINDATE,'' AS CRENDDATE,''
+		AS COPYRIGHT,
+		'' AS CPCONTENTID,youku_rating AS SCORE,
+		small_vthumb_url
+		AS PICTUREURL1,small_thumb_url AS PICTUREURL2,
+		vthumb_url AS
+		PICTUREURL3,thumb_url AS PICTUREURL4,'' AS PICTUREURL5 ,
+		'5' AS CPCODE
+		,now(),nextval('seq_vod_album') ,pay_type_list,exclusive,
+		sub_categoryId
+		AS oldlabel,sub_category AS oldlabelname
+		from
+		youk_vod_album
+		where show_id= #{id}
+	</insert>
+<select id="loadvodalbum" parameterType="Map" resultType="java.lang.Integer">
+		select count(1) from vod_albuminfo where 1=1
+				and cpcode=5
+			<if test="id != null and id != ''">
+            and SERIESCODE  =  #{id,jdbcType=VARCHAR} 
+        </if>
+	</select>
+	<!-- 更新剧集 专辑唯一标识 -->
+	<update id="updatealbuminfovideobycentral" parameterType="Map">
+		update vod_albuminfovideo b set
+		centralcode =
+		(select centralcode from
+		vod_albuminfo a where a.seriesCode=b.seriesCode and a.cpcode= 5 limit 1)
+		<choose>
+			<when test="id != null and id!=''">
+				where seriescode=#{id}
+			</when>
+			<otherwise>
+				where centralcode is null
+			</otherwise>
+		</choose>
+
+	</update>
+	<!--根据入库id更新 更新映射关系 -->
+	<update id="updatevodmappingid" parameterType="Map">
+		update vod_albuminfo
+		<set> 
+			<if test="phone_chnId != null and phone_chnId!=''">
+				channel= #{phone_chnId},
+				channelname= #{phone_chnname},
+			</if>
+			<if test="phone_tagId != null and phone_tagId!=''">
+				label=CONCAT(label,',','${phone_tagId}'),
+				labelname=CONCAT(labelname,',','${phone_tagname}'),
+			</if>
+		</set>
+		where cpcode=5 and seriesCode in (#{id} )
+		   <if test="phone_chnId != null and phone_chnId!=''">
+				and channel =#{cp_chnId,jdbcType=VARCHAR}
+			</if>
+			<if test="phone_tagId != null and phone_tagId!=''">
+				and oldlabel like '%${cp_tagId}%'
+				and label not like '%${phone_tagId}%'
+			</if>	
+	</update>
+	<!--根据id 更新演员 -->
+	<update id="updateactorsid" parameterType="Map">
+		update
+		vod_albuminfo set
+		writer=(
+		select GROUP_CONCAT(code) from
+		vod_actors
+		where
+		FIND_IN_SET(name,REPLACE(vod_albuminfo.writerName,'|',',')))
+		,actor=(
+		select GROUP_CONCAT(code) from vod_actors
+		where
+		FIND_IN_SET(name,REPLACE(vod_albuminfo.actorName,'|',',')))
+		where
+		cpcode=5  and issue=0
+		<if test="id != null and id!=''">
+			and seriesCode =#{id,jdbcType=VARCHAR}
+		</if>
+	</update>
+
+	<!--优酷根据id入库start -->
+	<update id="updateisStorageyouku" parameterType="Map">
+		update
+		youk_vod_album set isstorage=1,storagetime=now(),updatestatus=1
+		<choose>
+			<when test="id!=null and id!=''">
+				where show_id in (#{id} )
+			</when>
+			<otherwise>
+				where show_id in(select seriescode from youk_vod_albuminfo_strategy)
+			</otherwise>
+		</choose>
+
+	</update>
+	<update id="updatevideoisStorageyouku" parameterType="Map">
+		update
+		youk_vod_albumvideo set isstorage=1,storagetime=now()
+		<choose>
+			<when test="id!=null and id!=''">
+				where show_id in (#{id} )
+			</when>
+			<otherwise>
+				where video_id in(select bz from youk_vod_albuminfovideo_strategy)
+			</otherwise>
+		</choose>
+	</update>
+	<insert id="insertisStoragevideoyoukid" parameterType="Map">
+		insert
+		into vod_albuminfovideo
+		(duration,pic,version,resolution,definition,SourceType,type,movieUrl,
+		seriesCode,drama,dramaname,dramaviewPoint,fileurl,dramacode,dramasequence,isCollectfees,
+		cpcode,bz,isPositive,offset)
+		select duration,small_thumb_url pic,'2'
+		version, '' resolution,0
+		definition,'' SourceType, '' type, '-' as
+		movieUrl,show_id as
+		seriesCode, REPLACE(video_stage,'-','') as drama,
+		title dramaname,''
+		dramaviewPoint,''
+		fileurl,dramacode,sequence,IF (LENGTH(paid)>0,paid, 0)  paid,'5',
+		video_id,
+		if(video_type='正片',1,0)
+		isPositive,nextval('seq_vod_albumvideo')
+		from
+		youk_vod_albumvideo
+		where
+		show_id in (#{id} )
+		AND video_id NOT IN (
+		SELECT bz FROM
+		vod_albuminfovideo WHERE seriesCode IN (#{id}))
+	</insert>
+	
+	<update id="updatealbumareaYear" parameterType="Map"> 
+		update vod_albuminfo
+		set label=CONCAT(label,',','${labelid}'),labelname=CONCAT(labelname,'${labelname}')
+		 where seriesCode IN (#{id}) 
+		 and  label not like '%${labelid}%'
+		 <if test="type==1">
+			 	 and left(releaseYear,4)  BETWEEN  ${startyear} and ${endyear}
+		 </if>
+		 <if test="type==2">
+		 		and substring_index(originalCountry,'、',1)  = '${name}'
+		 </if>
+	</update>
+	<!--优酷根据id入库 end -->
+	 
+
+	<!-- 优酷自动更新入库 start -->
+	<delete id="deleteyoukualbum_strategy"  parameterType="Map">
+		delete from youk_vod_albuminfo_strategy
+	</delete>
+	<delete id="deleteyoukualbumvideo_strategy"  parameterType="Map">
+		delete from youk_vod_albuminfovideo_strategy
+	</delete>
+	<insert id="insertyoukualbum_strategy" parameterType="Map">
+		insert into
+		youk_vod_albuminfo_strategy (
+		SERIESNAME ,SERIESCODE
+		,VOLUMNCOUNT,CURRENTNUM,PINYIN,PINYINSUOXIE,CPCODE,CPNAME,ORDERCODE,ISCOLLECTFEES,ORIGINALNAME,ACTOR,WRITER,ACTORNAME,WRITERNAME,
+		ORGAIRDATE,PRICE,DESCRIPTION,CONTENTPROVIDER,KEYWORD,TAG,VIEWPOINT,STARLEVEL,RATING,AWARDS,ORIGINALCOUNTRY,LANGUAGE,RELEASEYEAR,DURATION,CHANNEL,
+		CHANNELNAME,LABEL,LABELNAME,ENNAME,VNAME,DEFINITION,COPYRIGHTPROPERTY,CRBEGINDATE,CRENDDATE,COPYRIGHT,CPCONTENTID,SCORE,PICTUREURL1,PICTUREURL2,PICTUREURL3,PICTUREURL4,PICTUREURL5,
+		cpcodelist,updatetime,pay_type,exclusive,updatestatus,oldlabel,oldlabelname
+		)
+		SELECT
+		title AS
+		SERIESNAME, show_id AS SERIESCODE, episode_count AS VOLUMNCOUNT,
+		count
+		AS CURRENTNUM, '' AS PINYIN,
+		'' AS PINYINSUOXIE, '5' AS CPCODE, '优酷付费'
+		AS CPNAME, '' AS ORDERCODE,
+		0 AS ISCOLLECTFEES, '' AS ORIGINALNAME, ''
+		AS ACTOR, '' AS WRITER,
+		substring_index(substring_index(performer_list,',',20),'|',20) AS
+		ACTORNAME,
+		substring_index(substring_index(director_list,',',20),'|',20) AS
+		WRITERNAME,
+		'' AS ORGAIRDATE, price AS PRICE,
+		REPLACE ( concat( LEFT (
+		description,800 ),'...' ),'\'','’') AS DESCRIPTION,
+		'' AS
+		CONTENTPROVIDER, LEFT (keyword,80) AS KEYWORD, sub_category AS TAG,
+		''
+		AS VIEWPOINT, '' AS STARLEVEL, '' AS RATING,
+		'' AS AWARDS, area AS
+		ORIGINALCOUNTRY, '' AS LANGUAGE, release_date AS RELEASEYEAR,
+		'' AS
+		DURATION, categoryId AS CHANNEL, category AS CHANNELNAME,
+		'' AS LABEL, '' AS LABELNAME, '' AS ENNAME,
+		'' AS
+		VNAME, '' AS DEFINITION, 0 AS COPYRIGHTPROPERTY, '' AS
+		CRBEGINDATE, ''
+		AS CRENDDATE, '' AS COPYRIGHT, '' AS CPCONTENTID,
+		youku_rating AS
+		SCORE,
+		small_vthumb_url AS PICTUREURL1, small_thumb_url
+		AS
+		PICTUREURL2,
+		vthumb_url AS PICTUREURL3, thumb_url AS PICTUREURL4, ''
+		AS PICTUREURL5,
+		'5' cpcodelist , now() AS UPDATETIME, pay_type_list AS
+		pay_type
+		,exclusive,if(isStorage =0,1,updatestatus) updatestatus,
+		sub_categoryId AS oldlabel, sub_category AS oldlabelname
+		FROM youk_vod_album WHERE
+		isStorage= 0 or updatestatus=0
+	</insert>
+		<insert id="insertyoukualbumvideo_strategy" parameterType="Map">
+		insert
+		into youk_vod_albuminfovideo_strategy
+		(duration,pic,version,resolution,definition,SourceType,type,movieUrl,
+		seriesCode,drama,dramaname,dramaviewPoint,fileurl,dramacode,dramasequence,isCollectfees,cpcode,bz
+		,isPositive,offset)
+		select duration, small_thumb_url pic,'2' version,
+		'' resolution,0 definition,'' SourceType, '' type,
+		'-' as
+		movieUrl,show_id as seriesCode, REPLACE(video_stage,'-','') as drama,
+		title dramaname,'' dramaviewPoint,'' fileurl,dramacode,sequence
+		dramasequence, IF (LENGTH(paid)>0,paid, 0)  isCollectfees,'5'
+		,video_id bz
+		,if(video_type='正片',1,0) isPositive ,nextval('seq_vod_albumvideo')
+		from youk_vod_albumvideo
+		WHERE isStorage = 0
+	</insert>
+	<update id="updatevodmapping_strategy" parameterType="Map">
+		update youk_vod_albuminfo_strategy
+		<set>
+			<if test="phone_chnId != null and phone_chnId!=''">
+				channel=#{phone_chnId},
+				channelname=#{phone_chnname},
+			</if>
+			<if test="phone_tagId != null and phone_tagId!=''">
+				label=CONCAT(label,',','${phone_tagId}'),
+				labelname=CONCAT(labelname,',','${phone_tagname}'),
+			</if> 
+		</set>
+		<where>
+			<if test="cpcode != null and cpcode!=''">
+				and cpcode =#{cpcode,jdbcType=INTEGER}
+			</if>
+			<if test="(cp_chnId != null and cp_chnId!='') and (cp_tagId == null or cp_tagId=='')">
+				and channel =#{cp_chnId,jdbcType=VARCHAR}
+			</if>
+			<if test="cp_tagId != null and cp_tagId!=''">
+				and oldlabel like '%${cp_tagId}%'
+			</if>
+		</where>
+	</update>
+	<update id="updateactors_strategy" parameterType="Map">
+		update
+		youk_vod_albuminfo_strategy set
+		writer=(
+		select GROUP_CONCAT(code) from
+		vod_actors
+		where
+		FIND_IN_SET(name,REPLACE(writerName,'|',',')))
+		,actor=(
+		select GROUP_CONCAT(code) from vod_actors
+		where
+		FIND_IN_SET(name,REPLACE(actorName,'|',',')))
+		where updatestatus=1
+	</update>
+	<update id="updatealbumcurnum" parameterType="Map">
+		update
+		 vod_albuminfo  set  offset=nextval('seq_vod_album'), updatetime=now(),
+		currentNum=(select currentNum from	youk_vod_albuminfo_strategy where seriescode=vod_albuminfo.seriescode),
+		volumnCount=(select volumnCount from	youk_vod_albuminfo_strategy where seriescode=vod_albuminfo.seriescode)
+		where   seriescode in(
+		   select seriescode from	youk_vod_albuminfo_strategy where   updatestatus=0
+		)
+	</update>
+	<select id="findvodalbum_strategy" parameterType="Map" resultType="Map">
+	select
+		SERIESNAME ,seriescode ,PINYIN,PINYINSUOXIE,cpcode from
+		youk_vod_albuminfo_strategy
+	</select>
+	
+	<!--  更改临时表中的拼音 -->
+		<update id="updatevodalbumpinyin_strategy" parameterType="Map">
+		update youk_vod_albuminfo_strategy
+		set pinyin = #{pinyin,jdbcType=VARCHAR},
+		pinyinsuoxie = #{pinyinsuoxie,jdbcType=VARCHAR}
+		where seriescode =	#{seriescode,jdbcType=VARCHAR}
+		and cpcode	=#{cpcode,jdbcType=VARCHAR}
+	</update>
+	<insert id="insertyoukualbum" parameterType="Map">
+		insert into
+		vod_albuminfo (
+		SERIESNAME ,SERIESCODE
+		,VOLUMNCOUNT,CURRENTNUM,PINYIN,PINYINSUOXIE,CPCODE,CPNAME,ORDERCODE,ISCOLLECTFEES,ORIGINALNAME,ACTOR,WRITER,ACTORNAME,WRITERNAME,
+		ORGAIRDATE,PRICE,DESCRIPTION,CONTENTPROVIDER,KEYWORD,TAG,VIEWPOINT,STARLEVEL,RATING,AWARDS,ORIGINALCOUNTRY,LANGUAGE,RELEASEYEAR,DURATION,CHANNEL,
+		CHANNELNAME,LABEL,LABELNAME,ENNAME,VNAME,DEFINITION,COPYRIGHTPROPERTY,CRBEGINDATE,CRENDDATE,COPYRIGHT,CPCONTENTID,SCORE,PICTUREURL1,PICTUREURL2,PICTUREURL3,PICTUREURL4,PICTUREURL5,
+		cpcodelist,updatetime,pay_type,exclusive,offset
+		)
+		SELECT
+		SERIESNAME ,SERIESCODE
+		,VOLUMNCOUNT,CURRENTNUM,PINYIN,PINYINSUOXIE,CPCODE,CPNAME,ORDERCODE,ISCOLLECTFEES,ORIGINALNAME,ACTOR,WRITER,ACTORNAME,WRITERNAME,
+		ORGAIRDATE,PRICE,DESCRIPTION,CONTENTPROVIDER,KEYWORD,TAG,VIEWPOINT,STARLEVEL,RATING,AWARDS,ORIGINALCOUNTRY,LANGUAGE,RELEASEYEAR,DURATION,CHANNEL,
+		CHANNELNAME,LABEL,LABELNAME,ENNAME,VNAME,DEFINITION,COPYRIGHTPROPERTY,CRBEGINDATE,CRENDDATE,COPYRIGHT,CPCONTENTID,SCORE,PICTUREURL1,PICTUREURL2,PICTUREURL3,PICTUREURL4,PICTUREURL5,
+		cpcodelist,updatetime,pay_type,exclusive,nextval('seq_vod_album')
+		FROM youk_vod_albuminfo_strategy
+		 WHERE updatestatus=1
+	</insert>
+	<insert id="insertyoukualbumvideo" parameterType="Map">
+		insert into vod_albuminfovideo
+		(duration,pic,version,resolution,definition,SourceType,type,movieUrl,
+		seriesCode,drama,dramaname,dramaviewPoint,fileurl,dramacode,dramasequence,isCollectfees,cpcode,bz
+		,isPositive,offset)
+		select duration,pic,version,resolution,definition,SourceType,type,movieUrl,
+		seriesCode,drama,dramaname,dramaviewPoint,fileurl,dramacode,dramasequence,isCollectfees,cpcode,bz
+		,isPositive,nextval('seq_vod_albumvideo')
+		from youk_vod_albuminfovideo_strategy  
+	</insert>
+	<!--更新数据更新集数 -->
+	<update id="updatealbuminfocurrentNum" parameterType="Map">
+		update
+		vod_albuminfo set offset=nextval('seq_vod_album'), UPDATETIME=now(),
+		currentNum=(select count from
+		youk_vod_album where show_id=vod_albuminfo.seriescode
+		and vod_albuminfo.cpcode=5),
+		volumnCount=(select episode_count from
+		youk_vod_album where show_id=vod_albuminfo.seriescode
+		and vod_albuminfo.cpcode=5)
+		where cpcode=5
+			<if test="id != null and id !=''">
+					and seriesCode =#{id,jdbcType=VARCHAR}
+			</if>
+	</update>
+	
+	<select id="findyouk_areaYear" parameterType="Map" resultType="Map"> 
+		select name,labelid,labelname,type,typename,startyear,endyear from  youk_vod_areaYear
+	</select>
+	<update id="updateyouk_areaYear" parameterType="Map"> 
+		update youk_vod_albuminfo_strategy
+		set label=CONCAT(label,',','${labelid}'),labelname=CONCAT(labelname,'${labelname}')
+		 where   label not like '%${labelid}%'
+		 <if test="type==1">
+			 	 and left(releaseYear,4)  BETWEEN  ${startyear} and ${endyear}
+		 </if>
+		 <if test="type==2">
+		 		and substring_index(originalCountry,'、',1)  = '${name}'
+		 </if>
+	</update>
+	<update id="updatevod_albumissue" parameterType="Map"> 
+		update  vod_albuminfo 
+		set issue=1,issuetime=now()
+		 where    seriesCode in
+		   (select seriescode from	youk_vod_albuminfo_strategy) 
+	</update>
+	<!-- 优酷自动更新入库 start -->
+
+
+</mapper>

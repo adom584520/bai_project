@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playclick.pinyin.mapper.PinYinMapper">
+	<!-- 演员列表查询 -->
+	<select id="selectYpinyin" resultType="com.pbtd.playclick.pinyin.domain.Ypinyin">
+		SELECT
+		code,
+		name,
+		pinyin,
+		pinyinsuoxie
+		FROM
+		vod_actors
+		WHERE
+		pinyin ='' OR pinyinsuoxie =''
+	</select>
+
+	<update id="updateYpinyin">
+		update
+		vod_actors
+		set pinyin = #{pinyin,jdbcType=VARCHAR},
+		pinyinsuoxie = #{pinyinsuoxie,jdbcType=VARCHAR}
+		where code = #{code,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 手机专辑列表查询 -->
+	<select id="selectZpinyin" resultType="com.pbtd.playclick.pinyin.domain.Zpinyin">
+		SELECT
+		seriesCode,
+		seriesName,
+		pinyin,
+		pinyinsuoxie
+		FROM
+		vod_albuminfo
+		WHERE
+		pinyin = ''
+		OR pinyinsuoxie = ''
+	</select>
+
+	<update id="updateZpinyin">
+		update
+		vod_albuminfo
+		set pinyin = #{pinyin,jdbcType=VARCHAR},
+		pinyinsuoxie = #{pinyinsuoxie,jdbcType=VARCHAR}
+		where seriesCode =
+		#{seriesCode,jdbcType=VARCHAR}
+	</update>
+ 
+</mapper>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.page.mapper.DictionaryMapper">
+	<resultMap id="resultMap" type="com.pbtd.manager.vod.page.domain.Dictionary">
+		<result column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="ISPARENT" property="isParent" jdbcType="VARCHAR" />
+		<result column="PID" property="pid" jdbcType="VARCHAR" />
+		<result column="NOCHECK" property="nocheck" jdbcType="VARCHAR" />
+		<result column="OPEN" property="open" jdbcType="VARCHAR" />
+		<result column="EXTRACT" property="extract" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!--cp源信息列表 -->
+	<select id="choosecpsource" parameterType="Map" resultType="Map">
+		select code as ID,name as NAME from cp_source
+		where status =1
+		order by code
+	</select>
+	<!-- vod phone 频道列表 -->
+	<select id="choosechannel" parameterType="Map" resultMap="resultMap">
+		select channelCode AS ID, channelName AS NAME from vod_phone_channel
+		where 1=1
+		<if test="id != null and id  !=''">
+			and ID = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="levels != null and levels  !=''">
+			and levels = #{levels,jdbcType=INTEGER}
+		</if>
+		<if test="channelCode != null and channelCode  !=''">
+			and channelCode = #{channelCode,jdbcType=INTEGER}
+		</if>
+		<if test="parentCode != null and parentCode  !=''">
+			and parentCode = #{parentCode,jdbcType=INTEGER}
+		</if>
+		<if test="navigationtype != null and navigationtype !=''">
+			and navigationtype = #{navigationtype,jdbcType=INTEGER}
+		</if>
+
+		<if test="status != null and status  !=''">
+			and status = #{status,jdbcType=INTEGER}
+		</if>
+		ORDER BY SEQUENCE
+	</select>
+	<!-- vod phone b标签列表 -->
+	<select id="chooselabel" parameterType="Map" resultMap="resultMap">
+		select id,name,type,status from vod_phone_label
+		where 1=1
+		<if test="id != null and id  !=''">
+			and ID = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="type != null and type  !=''">
+			and type = #{type,jdbcType=INTEGER}
+		</if>
+		<if test="status != null and status  !=''">
+			and status = #{status,jdbcType=INTEGER}
+		</if>
+		<if test="channelCode != null and channelCode  !=''">
+			and id in( select label from vod_labelchannel where 
+			type='phone' and channel=#{channelCode,jdbcType=INTEGER})
+		</if>
+		ORDER BY SEQUENCE
+	</select>
+	<!-- vod tv 频道列表 -->
+	<select id="choosechanneltv" parameterType="Map" resultMap="resultMap">
+		select
+		channelCode AS ID,
+		channelName AS NAME
+		from vod_tv_channel
+		where 1=1
+		<if test="id != null and id  !=''">
+			and ID = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="levels != null and levels  !=''">
+			and levels = #{levels,jdbcType=INTEGER}
+		</if>
+		<if test="channelCode != null and channelCode  !=''">
+			and channelCode = #{channelCode,jdbcType=INTEGER}
+		</if>
+		<if test="parentCode != null and parentCode  !=''">
+			and parentCode = #{parentCode,jdbcType=INTEGER}
+		</if>
+		<if test="navigationtype != null and navigationtype !=''">
+			and navigationtype = #{navigationtype,jdbcType=INTEGER}
+		</if>
+		<if test="status != null and status  !=''">
+			and status = #{status,jdbcType=INTEGER}
+		</if>
+		ORDER BY SEQUENCE
+	</select>
+
+	<!-- vod tv b标签列表 -->
+	<select id="chooselabeltv" parameterType="Map" resultMap="resultMap">
+		select id,name,type,status from vod_tv_label
+		<where>
+			<if test="id != null and id  !=''">
+				and ID = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="type != null and type  !=''">
+				and type = #{type,jdbcType=INTEGER}
+			</if>
+			<if test="status != null and status  !=''">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="channelCode != null and channelCode  !=''">
+				and id in( select label from vod_labelchannel 
+				where type='tv' 
+				and channel=#{channelCode,jdbcType=INTEGER})
+			</if>
+		</where>
+		ORDER BY SEQUENCE
+	</select>
+
+	<!-- 分组管理 查询关联频道 start -->
+	<select id="choosebusschannel" parameterType="Map" resultMap="resultMap">
+		select
+		b.channelCode as ID,
+		b.channelName AS NAME
+		from vod_buss_channel a
+		left join vod_tv_channel b on a.channelCode=b.channelCode
+		where levels =1
+		<if test="bussId != null and bussId  !=''">
+			and bussId = #{bussId,jdbcType=INTEGER}
+		</if>
+		<if test="groupId != null and groupId  !=''">
+			and groupId = #{groupId,jdbcType=INTEGER}
+		</if>
+	</select>
+	<select id="choosebusschannelno" parameterType="Map" resultMap="resultMap">
+		select
+		a.channelCode as ID,
+		a.channelName AS NAME
+		from vod_tv_channel a
+		where levels =1
+		and channelCode not in(
+		select channelCode from vod_buss_channel
+		where 1=1
+		<if test="bussId != null and bussId  !=''">
+			and bussId = #{bussId,jdbcType=INTEGER}
+		</if>
+		<if test="groupId != null and groupId  !=''">
+			and groupId = #{groupId,jdbcType=INTEGER}
+		</if>
+		)
+	</select>
+	<!-- 分组管理 查询关联频道 -->
+</mapper>

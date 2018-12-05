@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.ActivityPrizesInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playlive.domain.ActivityPrizesInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="prizeCode" property="prizecode" jdbcType="INTEGER" />
+    <result column="prizeNum" property="prizenum" jdbcType="INTEGER" />
+    <result column="prizeResNum" property="prizeresnum" jdbcType="INTEGER" />
+    <result column="language" property="language" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="activeName" property="activename" jdbcType="VARCHAR" />
+    <result column="startTime" property="starttime" jdbcType="BIGINT" />
+    <result column="endTime" property="endtime" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.pbtd.playlive.domain.ActivityPrizesInfo" extends="BaseResultMap" >
+    <result column="prizeName" property="prizename" jdbcType="VARBINARY" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, prizeCode, prizeNum, prizeResNum, language, createTime, updateTime, activeName, 
+    startTime, endTime
+  </sql>
+  <sql id="Blob_Column_List" >
+    prizeName
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from activity_prizes_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from activity_prizes_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pbtd.playlive.domain.ActivityPrizesInfo" >
+    insert into activity_prizes_info (id, prizeCode, prizeNum, 
+      prizeResNum, language, createTime, 
+      updateTime, activeName, startTime, 
+      endTime, prizeName)
+    values (#{id,jdbcType=INTEGER}, #{prizecode,jdbcType=INTEGER}, #{prizenum,jdbcType=INTEGER}, 
+      #{prizeresnum,jdbcType=INTEGER}, #{language,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{activename,jdbcType=VARCHAR}, #{starttime,jdbcType=BIGINT}, 
+      #{endtime,jdbcType=BIGINT}, #{prizename,jdbcType=VARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pbtd.playlive.domain.ActivityPrizesInfo" >
+    insert into activity_prizes_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="prizecode != null" >
+        prizeCode,
+      </if>
+      <if test="prizenum != null" >
+        prizeNum,
+      </if>
+      <if test="prizeresnum != null" >
+        prizeResNum,
+      </if>
+      <if test="language != null" >
+        language,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+      <if test="activename != null" >
+        activeName,
+      </if>
+      <if test="starttime != null" >
+        startTime,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+      <if test="prizename != null" >
+        prizeName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="prizecode != null" >
+        #{prizecode,jdbcType=INTEGER},
+      </if>
+      <if test="prizenum != null" >
+        #{prizenum,jdbcType=INTEGER},
+      </if>
+      <if test="prizeresnum != null" >
+        #{prizeresnum,jdbcType=INTEGER},
+      </if>
+      <if test="language != null" >
+        #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activename != null" >
+        #{activename,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=BIGINT},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=BIGINT},
+      </if>
+      <if test="prizename != null" >
+        #{prizename,jdbcType=VARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playlive.domain.ActivityPrizesInfo" >
+    update activity_prizes_info
+    <set >
+      <if test="prizecode != null" >
+        prizeCode = #{prizecode,jdbcType=INTEGER},
+      </if>
+      <if test="prizenum != null" >
+        prizeNum = #{prizenum,jdbcType=INTEGER},
+      </if>
+      <if test="prizeresnum != null" >
+        prizeResNum = #{prizeresnum,jdbcType=INTEGER},
+      </if>
+      <if test="language != null" >
+        language = #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activename != null" >
+        activeName = #{activename,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        startTime = #{starttime,jdbcType=BIGINT},
+      </if>
+      <if test="endtime != null" >
+        endTime = #{endtime,jdbcType=BIGINT},
+      </if>
+      <if test="prizename != null" >
+        prizeName = #{prizename,jdbcType=VARBINARY},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pbtd.playlive.domain.ActivityPrizesInfo" >
+    update activity_prizes_info
+    set prizeCode = #{prizecode,jdbcType=INTEGER},
+      prizeNum = #{prizenum,jdbcType=INTEGER},
+      prizeResNum = #{prizeresnum,jdbcType=INTEGER},
+      language = #{language,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      activeName = #{activename,jdbcType=VARCHAR},
+      startTime = #{starttime,jdbcType=BIGINT},
+      endTime = #{endtime,jdbcType=BIGINT},
+      prizeName = #{prizename,jdbcType=VARBINARY}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playlive.domain.ActivityPrizesInfo" >
+    update activity_prizes_info
+    set prizeCode = #{prizecode,jdbcType=INTEGER},
+      prizeNum = #{prizenum,jdbcType=INTEGER},
+      prizeResNum = #{prizeresnum,jdbcType=INTEGER},
+      language = #{language,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      activeName = #{activename,jdbcType=VARCHAR},
+      startTime = #{starttime,jdbcType=BIGINT},
+      endTime = #{endtime,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

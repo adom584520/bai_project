@@ -1,0 +1,140 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>cn.sjr</groupId>
+  <artifactId>QMS</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>QMS Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>javax.servlet-api</artifactId>
+	    <version>3.1.0</version>
+	    <scope>provided</scope>
+	</dependency>
+	
+    <dependency>
+	    <groupId>org.projectlombok</groupId>
+	    <artifactId>lombok</artifactId>
+	    <version>1.16.18</version>
+	    <scope>provided</scope>
+	</dependency>
+	      
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-webmvc</artifactId>
+	    <version>4.3.14.RELEASE</version>
+	</dependency>
+	
+	<!-- responsebody -->
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-core</artifactId>
+	    <version>2.9.4</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-databind</artifactId>
+	    <version>2.9.4</version>
+	</dependency>
+	<dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>1.7.22</version>
+    </dependency>
+	
+	
+	<!-- 本地jar -->
+	<dependency> 
+		<groupId>activation</groupId> 
+		<artifactId>activation</artifactId> 
+		<version>1.0</version> 
+		<scope>system</scope> 
+		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/activation.jar</systemPath> 
+	</dependency> 
+	<dependency> 
+		<groupId>axis</groupId> 
+		<artifactId>axis</artifactId> 
+		<version>1.0</version> 
+		<scope>system</scope> 
+		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/axis.jar</systemPath> 
+	</dependency> 
+	<dependency> 
+		<groupId>commons-discovery</groupId> 
+		<artifactId>commons-discovery</artifactId> 
+		<version>0.2</version> 
+		<scope>system</scope> 
+		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/commons-discovery-0.2.jar</systemPath> 
+	</dependency> 
+	<dependency> 
+		<groupId>commons-logging</groupId> 
+		<artifactId>commons-logging</artifactId> 
+		<version>1.0.4</version> 
+		<scope>system</scope> 
+		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/commons-logging-1.0.4.jar</systemPath> 
+	</dependency> 
+	<dependency> 
+		<groupId>jaxrpc</groupId> 
+		<artifactId>jaxrpc</artifactId> 
+		<version>1.0</version> 
+		<scope>system</scope> 
+		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/jaxrpc.jar</systemPath> 
+	</dependency> 
+	<dependency> 
+		<groupId>log4j</groupId> 
+		<artifactId>log4j</artifactId> 
+		<version>1.2.8</version> 
+		<scope>system</scope> 
+		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/log4j-1.2.8.jar</systemPath> 
+	</dependency> 
+	<dependency>
+		<groupId>mail</groupId> 
+		<artifactId>mail</artifactId> 
+		<version>1.0</version> 
+		<scope>system</scope> 
+		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/mail.jar</systemPath> 
+	</dependency> 
+	<dependency> 
+		<groupId>saaj</groupId> 
+		<artifactId>saaj</artifactId> 
+		<version>1.0</version> 
+		<scope>system</scope> 
+		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/saaj.jar</systemPath> 
+	</dependency> 
+	<dependency> 
+		<groupId>wsdl4j</groupId> 
+		<artifactId>wsdl4j</artifactId> 
+		<version>1.5.1</version> 
+		<scope>system</scope> 
+		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/wsdl4j-1.5.1.jar</systemPath> 
+	</dependency> 
+    
+  </dependencies>
+  <build>
+    <finalName>QMS</finalName>
+     <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.tomcat.maven</groupId>
+          <artifactId>tomcat6-maven-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.tomcat.maven</groupId>
+          <artifactId>tomcat7-maven-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+       
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

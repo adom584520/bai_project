@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.launcher.mapper.PositionTypeMapper">
+    <!-- 模糊查询 -->
+    <sql id="whrClauseLike">
+        <if test="id != null and id > -1">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="name != null and name != ''">
+            and name like '%${name}%'  
+        </if>
+    </sql>
+    <sql id="whrClauseLikeMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <!-- 精确查询 -->
+    <sql id="whrClauseEqual">
+       <if test="id != null and id > -1">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="name != null and name != ''">
+            and name=#{name,jdbcType="VARCHAR"}  
+        </if>
+    </sql>
+    <sql id="whrClauseEqualMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+<insert id="add" parameterType="com.pbtd.manager.launcher.domain.PositionType" >
+ insert into launcher_position_type
+ (name) values (#{name,jdbcType=VARCHAR})
+</insert>
+<update id="modify" parameterType="Map">
+	 update launcher_position_type 
+		 <set>			
+			 <if test="name!=null ">
+			 name=#{name,jdbcType=VARCHAR},
+			 </if>
+		 </set>
+	 where id=#{id,jdbcType=INTEGER}
+</update>
+ <delete id="deletes" parameterType="Map">
+ delete from launcher_position_type 
+ where 1=1
+      <include refid="whrClauseLike" />
+      <include refid="whrClauseEqual" />
+	  <include refid="whrClauseLikeMore" />
+ </delete>	
+   <select id="generatePosition" parameterType="Map" resultType="java.lang.Integer">
+        select max(id) + 1 as count
+        from  launcher_position_type  
+        where 1=1
+    </select>
+    <select id="load" parameterType="java.lang.Integer" resultType="com.pbtd.manager.launcher.domain.PositionType">
+         select id,name from  launcher_position_type  
+        where id= #{id,jdbcType=INTEGER}
+    </select>
+     <select id="count" parameterType="Map" resultType="java.lang.Integer">
+        select count(id)
+        from  launcher_position_type 
+        where 1=1
+    </select>
+      <select id="find" parameterType="Map" resultType="Map">
+       select id,name from  launcher_position_type
+        where 1=1
+        <if test="name!=null">
+        and name like '%${name}%'
+        </if>
+       limit #{start},#{pageSize} 	
+    </select>
+</mapper>

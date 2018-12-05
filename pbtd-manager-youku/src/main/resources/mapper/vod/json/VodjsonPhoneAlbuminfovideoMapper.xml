@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.pbtd.manager.vod.phone.json.mapper.VodjsonPhoneAlbuminfovideoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.pbtd.manager.vod.phone.json.domain.VodjsonPhoneAlbuminfovideo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="seriesCode" property="seriescode" jdbcType="VARCHAR" />
+		<result column="drama" property="drama" jdbcType="INTEGER" />
+		<result column="dramaname" property="dramaname" jdbcType="VARCHAR" />
+		<result column="dramaviewPoint" property="dramaviewpoint"
+			jdbcType="VARCHAR" />
+		<result column="Resolution" property="resolution" jdbcType="VARCHAR" />
+		<result column="Definition" property="definition" jdbcType="INTEGER" />
+		<result column="SourceType" property="sourcetype" jdbcType="VARCHAR" />
+		<result column="Type" property="type" jdbcType="VARCHAR" />
+		<result column="updatetime" property="updatetime" jdbcType="DATE" />
+		<result column="duration" property="duration" jdbcType="VARCHAR" />
+		<result column="priority" property="priority" jdbcType="INTEGER" />
+		<result column="Injectiontime" property="injectiontime"
+			jdbcType="DATE" />
+		<result column="pic" property="pic" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="CHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="dispatchurl" property="dispatchurl" jdbcType="VARCHAR" />
+		<result column="zxversionlist" property="zxversionlist"
+			jdbcType="CHAR" />
+		<result column="zxfileurl" property="fileurl" jdbcType="VARCHAR" />
+		<result column="zxmovieUrl" property="movieurl" jdbcType="VARCHAR" />
+		<result column="zxversion" property="zxversion" jdbcType="VARCHAR" />
+		<result column="hwversionlist" property="hwversionlist"
+			jdbcType="CHAR" />
+		<result column="hwversion" property="hwversion" jdbcType="VARCHAR" />
+		<result column="hwmovieUrl" property="hwmovieurl" jdbcType="VARCHAR" />
+		<result column="hwfileurl" property="hwfileurl" jdbcType="VARCHAR" />
+		<result column="isShow" property="isshow" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, seriesCode, drama, dramaname, dramaviewPoint, Resolution, Definition,
+		SourceType,
+		Type, updatetime, duration, priority, Injectiontime, pic, title,
+		description, dispatchurl,
+		zxversionlist, zxfileurl, zxmovieUrl, zxversion, hwversionlist, hwversion,
+		hwmovieUrl,
+		hwfileurl, isShow, create_time, create_user, update_time, update_user
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from vod_phone_albuminfovideo
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteByPrimaryKey">
+		delete from vod_phone_albuminfovideo
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert"
+		parameterType="com.pbtd.manager.vod.phone.json.domain.VodjsonPhoneAlbuminfovideo">
+		insert into vod_phone_albuminfovideo (id, seriesCode, drama,
+		dramaname, dramaviewPoint, Resolution,
+		Definition, SourceType, Type,
+		updatetime, duration, priority,
+		Injectiontime, pic, title,
+		description, dispatchurl, zxversionlist,
+		zxfileurl, zxmovieUrl, zxversion,
+		hwversionlist, hwversion, hwmovieUrl,
+		hwfileurl, isShow
+		)
+		values (#{id,jdbcType=INTEGER}, #{seriescode,jdbcType=VARCHAR},
+		#{drama,jdbcType=INTEGER},
+		#{dramaname,jdbcType=VARCHAR}, #{dramaviewpoint,jdbcType=VARCHAR}, #{resolution,jdbcType=VARCHAR},
+		#{definition,jdbcType=INTEGER}, #{sourcetype,jdbcType=VARCHAR},
+		#{type,jdbcType=VARCHAR},
+		#{updatetime,jdbcType=DATE}, #{duration,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER},
+		#{injectiontime,jdbcType=DATE}, #{pic,jdbcType=VARCHAR},
+		#{title,jdbcType=CHAR},
+		#{description,jdbcType=VARCHAR}, #{dispatchurl,jdbcType=VARCHAR}, #{zxversionlist,jdbcType=CHAR},
+		#{fileurl,jdbcType=VARCHAR}, #{movieurl,jdbcType=VARCHAR},
+		#{zxversion,jdbcType=VARCHAR},
+		#{hwversionlist,jdbcType=CHAR}, #{hwversion,jdbcType=VARCHAR}, #{hwmovieurl,jdbcType=VARCHAR},
+		#{hwfileurl,jdbcType=VARCHAR}, 0
+		)
+	</insert>
+
+	<update id="updateByPrimaryKey">
+		update vod_phone_albuminfovideo
+		set seriesCode = #{seriescode,jdbcType=VARCHAR},
+		drama = #{drama,jdbcType=INTEGER},
+		dramaname = #{dramaname,jdbcType=VARCHAR},
+		dramaviewPoint = #{dramaviewpoint,jdbcType=VARCHAR},
+		Resolution = #{resolution,jdbcType=VARCHAR},
+		Definition = #{definition,jdbcType=INTEGER},
+		SourceType = #{sourcetype,jdbcType=VARCHAR},
+		Type = #{type,jdbcType=VARCHAR},
+		updatetime = #{updatetime,jdbcType=DATE},
+		duration = #{duration,jdbcType=VARCHAR},
+		priority = #{priority,jdbcType=INTEGER},
+		Injectiontime = #{injectiontime,jdbcType=DATE},
+		pic = #{pic,jdbcType=VARCHAR},
+		title = #{title,jdbcType=CHAR},
+		description = #{description,jdbcType=VARCHAR},
+		dispatchurl = #{dispatchurl,jdbcType=VARCHAR},
+		zxversionlist = #{zxversionlist,jdbcType=CHAR},
+		zxfileurl = #{fileurl,jdbcType=VARCHAR},
+		zxmovieUrl = #{movieurl,jdbcType=VARCHAR},
+		zxversion = #{zxversion,jdbcType=VARCHAR},
+		hwversionlist = #{hwversionlist,jdbcType=CHAR},
+		hwversion = #{hwversion,jdbcType=VARCHAR},
+		hwmovieUrl = #{hwmovieurl,jdbcType=VARCHAR},
+		hwfileurl = #{hwfileurl,jdbcType=VARCHAR},
+		isShow = #{isshow,jdbcType=INTEGER},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		create_user = #{createUser,jdbcType=VARCHAR},
+		update_user = #{updateUser,jdbcType=VARCHAR},
+		update_time = new()
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateSeriesCode">
+		UPDATE `vod_phone_albuminfovideo` a
+		INNER JOIN `vod_phone_albuminfo` b ON a.seriesCode = b.cpseriesCode
+		SET a.seriesCode = b.seriesCode
+		WHERE
+		a.seriesCode = b.cpseriesCode
+		AND date_format(a.create_time, '%Y-%m-%d') = date_format(now(),
+		'%Y-%m-%d')
+	</update>
+	
+</mapper>

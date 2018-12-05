@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.UserPhoneHBMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.UserPhoneHB" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="PHONE_NO" property="phoneNo" jdbcType="VARCHAR" />
+    <result column="REGION_CODE" property="regionCode" jdbcType="VARCHAR" />
+    <result column="size" property="size" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, PHONE_NO, REGION_CODE, size
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_phone_hb
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="select" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select * from user_phone_hb  where PHONE_NO = #{mobile} AND size = #{size} 
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_phone_hb
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pbtd.playuser.domain.UserPhoneHB" >
+    insert into user_phone_hb (id, PHONE_NO, REGION_CODE, 
+      size)
+    values (#{id,jdbcType=INTEGER}, #{phoneNo,jdbcType=VARCHAR}, #{regionCode,jdbcType=VARCHAR}, 
+      #{size,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pbtd.playuser.domain.UserPhoneHB" >
+    insert into user_phone_hb
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="phoneNo != null" >
+        PHONE_NO,
+      </if>
+      <if test="regionCode != null" >
+        REGION_CODE,
+      </if>
+      <if test="size != null" >
+        size,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="phoneNo != null" >
+        #{phoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null" >
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        #{size,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playuser.domain.UserPhoneHB" >
+    update user_phone_hb
+    <set >
+      <if test="phoneNo != null" >
+        PHONE_NO = #{phoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null" >
+        REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        size = #{size,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playuser.domain.UserPhoneHB" >
+    update user_phone_hb
+    set PHONE_NO = #{phoneNo,jdbcType=VARCHAR},
+      REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      size = #{size,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

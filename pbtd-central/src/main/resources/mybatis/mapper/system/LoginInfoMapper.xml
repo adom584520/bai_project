@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.LoginInfoMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.domain.LoginInfo" >
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="realname" property="realName"/>
+        <result column="createdate" property="createDate"/>
+    </resultMap>
+    
+    <select id="login" resultMap="baseResultMap">
+    	select id,username,password,realname,createdate
+    	from converge_logininfo
+    	where username=#{username} and password=#{password}
+    </select>
+</mapper>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LiveVideoMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.live.domain.LiveVideo">
+		<id column="id" property="videoid" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="CHAR" />
+		<result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+		<result column="startTime" property="starttime" jdbcType="CHAR" />
+		<result column="endTime" property="endtime" jdbcType="CHAR" />
+		<result column="packageCode" property="packagecode" jdbcType="VARCHAR" />
+		<result column="createTime" property="createtime" jdbcType="BIGINT" />
+		<result column="updateTime" property="updatetime" jdbcType="BIGINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, title, chnCode, startTime, endTime, packageCode,
+		createTime,
+		updateTime
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from live_video_source
+		<where>
+			<if test="videoid != null">
+				id = #{videoid,jdbcType=INTEGER}
+			</if>
+
+		</where>
+	</select>
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(1)
+		FROM
+		live_video_source a
+		LEFT JOIN (
+		SELECT
+		chnCode,
+		oldChnCode
+		FROM
+		live_channel
+		GROUP
+		BY
+		oldChnCode
+		) b ON a.chnCode = b.oldChnCode
+		<where>
+			<if test="packagecode != null">
+				packageCode = #{packagecode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="getvideo" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select * from live_video_source a
+		WHERE
+		a.startTime > (UNIX_TIMESTAMP()*1000 - 1000*60*60*24*4)
+		ORDER BY
+		startTime;
+	</select>
+
+	<select id="find" parameterType="Map" resultMap="BaseResultMap">
+		select
+		a.id,
+		a.title,
+		b.chnCode,
+		a.startTime,
+		a.endTime,
+		a.packageCode,
+		a.createTime,
+		a.updateTime
+		FROM
+		live_video_source a
+		LEFT JOIN (
+		SELECT
+		chnCode,
+		oldChnCode
+		FROM
+		live_channel
+		GROUP BY
+		oldChnCode
+		) b ON
+		a.chnCode =
+		b.oldChnCode
+		<where>
+			<if test="packagecode != null">
+				packageCode = #{packagecode,jdbcType=VARCHAR}
+			</if>
+		</where>
+		limit #{start},#{pageSize}
+	</select>
+
+	<select id="load" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_video_source
+		where packageCode =
+		#{packagecode,jdbcType=INTEGER}
+	</select>
+
+	<insert id="insert" parameterType="com.pbtd.manager.live.domain.LiveVideo">
+		insert into live_video_source (
+		id,
+		title,
+		chnCode,
+		startTime,
+		endTime,
+		packageCode,
+		createTime,
+		updateTime)
+		values (
+		#{videoid,jdbcType=INTEGER},
+		#{title,jdbcType=VARCHAR},
+		#{chncode,jdbcType=VARCHAR},
+		#{starttime,jdbcType=TIMESTAMP},
+		#{endtime,jdbcType=TIMESTAMP},
+		#{packagecode,jdbcType=VARCHAR},
+		now(),
+		now())
+	</insert>
+
+	<update id="update" parameterType="com.pbtd.manager.live.domain.LiveVideo">
+		update live_video_source
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=CHAR},
+			</if>
+			<if test="chncode != null">
+				chnCode = #{chncode,jdbcType=VARCHAR},
+			</if>
+			<if test="starttime != null">
+				startTime = #{starttime,jdbcType=CHAR},
+			</if>
+			<if test="endtime != null">
+				endTime = #{endtime,jdbcType=CHAR},
+			</if>
+			<if test="tagid != null">
+				tagId = #{tagid,jdbcType=INTEGER},
+			</if>
+			<if test="packageid != null">
+				packageId = #{packageid,jdbcType=INTEGER},
+			</if>
+			<if test="packagecode != null">
+				packageCode = #{packagecode,jdbcType=VARCHAR},
+			</if>
+			updateTime = now(),
+		</set>
+		where id = #{videoid,jdbcType=INTEGER}
+	</update>
+
+
+	<delete id="deleteTimeOut" parameterType="java.lang.Integer">
+	
+	<![CDATA[ delete from live_video_source  where startTime < (UNIX_TIMESTAMP()*1000 - 1000*60*60*24*5) ]]>
+
+	</delete>
+
+</mapper>

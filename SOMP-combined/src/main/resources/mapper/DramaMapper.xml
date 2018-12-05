@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.DramaMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.domain.Drama" >
+    	<id column="id" property="id"/>
+        <result column="seriesCode" property="seriesCode"/>
+        <result column="drama" property="drama"/>
+        <result column="dramaname" property="dramaname"/>
+        <result column="type" property="type"/>
+        <result column="duration" property="duration"/>
+        <result column="description" property="description"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+    
+    <sql id="column">
+    	id,seriesCode,drama,dramaname,type,duration,description,updateTime,createTime
+    </sql>
+    
+    <select id="queryBySeriesCode" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from drama
+    	where seriesCode = #{seriesCode}
+    </select>
+    
+    <select id="queryById" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from drama
+    	where id=#{id}
+    </select>
+    
+    <select id="queryBySeriesCodeAndDrama" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from drama
+    	where seriesCode = #{seriesCode} and drama = #{drama}
+    </select>
+    
+    <insert id="insert">
+    	insert into drama
+    	(seriesCode,drama,dramaname,type,duration,description,updateTime,createTime)
+    	values
+    	(#{seriesCode},#{drama},#{dramaname},#{type},#{duration},#{description},#{updateTime},
+    	#{createTime})
+    </insert>
+    
+    <update id="update">
+    	update drama
+    	set seriesCode=#{seriesCode},dramaname=#{dramaname},type=#{type},duration=#{duration},
+    	description=#{description},updateTime=#{updateTime}
+    	where seriesCode=#{seriesCode} and drama=#{drama}
+    </update>
+    
+    <select id="queryByDramaName" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from drama
+    	where drama=#{drama} and dramaname=#{dramaname} and duration=#{duration}
+    </select>
+</mapper>

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playclick.guoguang.mapper.CibnAlbumMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playclick.guoguang.domain.GgAlbumsinfo" >
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="isdelete" property="isdelete" jdbcType="INTEGER" />
+    <result column="pictureURL1" property="pictureURL1" jdbcType="VARCHAR" />
+    <result column="pictureURL2" property="pictureURL2" jdbcType="VARCHAR" />
+    <result column="pictureURL3" property="pictureURL3" jdbcType="VARCHAR" />
+    <result column="pictureURL4" property="pictureURL4" jdbcType="VARCHAR" />
+    <result column="writerDisplay" property="writerDisplay" jdbcType="VARCHAR" />
+    <result column="actorDisplay" property="actorDisplay" jdbcType="VARCHAR" />
+    <result column="programType" property="programType" jdbcType="VARCHAR" />
+    <result column="programType2" property="programType2" jdbcType="VARCHAR" />
+    <result column="releaseYear" property="releaseYear" jdbcType="VARCHAR" />
+    <result column="volumnCount" property="volumnCount" jdbcType="INTEGER" />
+    <result column="currentNum" property="currentNum" jdbcType="INTEGER" />
+    <result column="originalCountry" property="originalCountry" jdbcType="VARCHAR" />
+    <result column="duration" property="duration" jdbcType="INTEGER" />
+    <result column="viewPoint" property="viewPoint" jdbcType="VARCHAR" />
+    <result column="cpName" property="cpName" jdbcType="VARCHAR" />
+    <result column="programTypeids" property="programTypeids" jdbcType="VARCHAR" />
+    <result column="programType2ids" property="programType2ids" jdbcType="VARCHAR" />
+    <result column="isStorage" property="isStorage" jdbcType="INTEGER" />
+     <result column="storagetime" property="storagetime" jdbcType="VARCHAR" /> 
+     <result column="updatetime" property="updatetime" jdbcType="VARCHAR" /> 
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.pbtd.playclick.guoguang.domain.GgAlbumsinfo" extends="BaseResultMap" >
+    <result column="description" property="description" jdbcType="LONGVARCHAR" />
+  </resultMap>
+    <sql id="Base_Column_List" >
+  code,name,status,isdelete,pictureURL1,pictureURL2,pictureURL3,pictureURL4,writerDisplay,actorDisplay,programType 
+ ,programType2,releaseYear,volumnCount,currentNum,originalCountry,duration 
+ ,viewPoint,cpName,programTypeids,programType2ids,isStorage,
+   DATE_FORMAT(storagetime, '%Y.%m.%d %H:%i:%s') storagetime,
+    DATE_FORMAT(updatetime, '%Y.%m.%d %H:%i:%s') updatetime
+    
+    </sql>
+  <sql id="Blob_Column_List" >
+        description
+  </sql>
+  <insert id="insert" parameterType="com.pbtd.playclick.guoguang.domain.GgAlbumsinfo" >
+    insert into gg_vod_albuminfo (updatetime,code, name, status, 
+      isdelete, pictureURL1, pictureURL2, 
+      pictureURL3, pictureURL4, writerDisplay, 
+      actorDisplay, programType, programType2, 
+      releaseYear, volumnCount, currentNum, 
+      originalCountry, duration, viewPoint, 
+      cpName, programTypeids, programType2ids, 
+      description)
+    values (now(),#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{isdelete,jdbcType=INTEGER}, #{pictureurl1,jdbcType=VARCHAR}, #{pictureurl2,jdbcType=VARCHAR}, 
+      #{pictureurl3,jdbcType=VARCHAR}, #{pictureurl4,jdbcType=VARCHAR}, #{writerdisplay,jdbcType=VARCHAR}, 
+      #{actordisplay,jdbcType=VARCHAR}, #{programtype,jdbcType=VARCHAR}, #{programtype2,jdbcType=VARCHAR}, 
+      #{releaseyear,jdbcType=VARCHAR}, #{volumncount,jdbcType=INTEGER}, #{currentnum,jdbcType=INTEGER}, 
+      #{originalcountry,jdbcType=VARCHAR}, #{duration,jdbcType=INTEGER}, #{viewpoint,jdbcType=VARCHAR}, 
+      #{cpname,jdbcType=VARCHAR}, #{programtypeids,jdbcType=VARCHAR}, #{programtype2ids,jdbcType=VARCHAR}, 
+      #{description,jdbcType=LONGVARBINARY})
+  </insert>
+    <select id="count" parameterType="Map" resultType="java.lang.Integer">
+     select   count(1)
+    from gg_vod_albuminfo where 1=1
+       <if test="code != null" >
+       and  code=#{code,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null" >
+      and   name like '%${name}%'
+      </if>
+      <if test="actorDisplay != null" >
+      and   actorDisplay like '%${actorDisplay}%'
+      </if>
+     <if test="writerDisplay != null" >
+      and   writerDisplay like '%${writerDisplay}%'
+      </if>
+      <if test="isStorage != null  and isStorage>-1" >
+       and   isStorage=#{isStorage}
+      </if>
+      <if test="status != null" >
+       and  status=#{status,jdbcType=INTEGER}
+      </if>
+        <if test="programtype != null" >
+     	 and programtype=  #{programtype,jdbcType=VARCHAR}
+      </if>
+      <if test="programtype2 != null" >
+      and  programtype2 like '%${programtype2}%'
+      </if>
+      <if test="cpname != null" >
+      and   cpname=#{cpname,jdbcType=VARCHAR}
+      </if>
+      <if test="programTypeids != null" >
+      and   programTypeids=#{programTypeids,jdbcType=VARCHAR}
+      </if>
+      <if test="programType2ids != null" >
+      and programType2ids like '%${programType2ids}%'
+      </if>
+    </select>
+    <select id="load" resultType="com.pbtd.playclick.guoguang.domain.GgAlbumsinfo"  parameterType="Map"  >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from gg_vod_albuminfo where 1=1
+     <if test="code != null" >
+       and  code=#{code,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null" >
+      and   name like '%${name}%'
+      </if>
+      <if test="status != null" >
+       and  status=#{status,jdbcType=INTEGER}
+      </if>
+        <if test="programtype != null" >
+      and programtype=  #{programtype,jdbcType=VARCHAR}
+      </if>
+      <if test="programtype2 != null" >
+      and  programtype2 like '%${programtype2}%'
+      </if>
+      <if test="cpname != null" >
+      and   cpname=#{cpname,jdbcType=VARCHAR}
+      </if>
+      <if test="programTypeids != null" >
+      and   programTypeids=#{programTypeids,jdbcType=VARCHAR}
+      </if>
+      <if test="programType2ids != null" >
+      and programType2ids like '%${programType2ids}%'
+      </if>
+    </select>
+    <select id="find" resultMap="ResultMapWithBLOBs"  parameterType="Map"  >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from gg_vod_albuminfo where 1=1
+     <if test="code != null" >
+       and  code=#{code,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null" >
+      and   name like '%${name}%'
+      </if>
+      <if test="name != null" >
+      and   name like '%${name}%'
+      </if>
+      <if test="actorDisplay != null" >
+      and   actorDisplay like '%${actorDisplay}%'
+      </if>
+     <if test="writerDisplay != null" >
+      and   writerDisplay like '%${writerDisplay}%'
+      </if>
+      <if test="isStorage != null  and isStorage>-1" >
+       and   isStorage=#{isStorage}
+      </if>
+      <if test="status != null" >
+       and  status=#{status,jdbcType=INTEGER}
+      </if>
+        <if test="programtype != null" >
+     	 and programtype=  #{programtype,jdbcType=VARCHAR}
+      </if>
+      <if test="programtype2 != null" >
+      and  programtype2 like '%${programtype2}%'
+      </if>
+      <if test="cpname != null" >
+      and   cpname=#{cpname,jdbcType=VARCHAR}
+      </if>
+      <if test="programTypeids != null" >
+      and   programTypeids=#{programTypeids,jdbcType=VARCHAR}
+      </if>
+      <if test="programType2ids != null" >
+      and programType2ids like '%${programType2ids}%'
+      </if>
+       order by updatetime desc
+       limit #{start},#{pageSize}
+    </select>
+   
+      <update id="update" parameterType="com.pbtd.playclick.guoguang.domain.GgAlbumsinfo" >
+     update gg_vod_albuminfo
+		<set>
+		updatetime=now(),
+			<if test="programType2!=null">
+				programType2=#{programType2,jdbcType=VARCHAR},
+			</if>
+			<if test="programType!=null">
+				programType=#{programType,jdbcType=VARCHAR},
+			</if>
+			<if test="programType2ids!=null">
+				programType2ids=#{programType2ids,jdbcType=VARCHAR},
+			</if>
+			<if test="programTypeids!=null">
+				programTypeids=#{programTypeids,jdbcType=VARCHAR},
+			</if>
+			<if test="actorDisplay!=null">
+				actorDisplay=#{actorDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="writerDisplay!=null">
+				writerDisplay=#{writerDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureURL1!=null">
+				pictureURL1=#{pictureURL1,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureURL2!=null">
+				pictureURL2=#{pictureURL2,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureURL3!=null">
+				pictureURL3=#{pictureURL3,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureURL4!=null">
+				pictureURL4=#{pictureURL4,jdbcType=VARCHAR},
+			</if>
+			<if test="isdelete!=null">
+				isdelete=#{isdelete,jdbcType=INTEGER},
+			</if>
+			<if test="status!=null">
+				status=#{status,jdbcType=INTEGER},
+			</if>
+			<if test="name!=null">
+				name=#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="status!=null">
+				status=#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="releaseYear!=null">
+				releaseYear=#{releaseYear,jdbcType=VARCHAR},
+			</if>
+			<if test="volumnCount!=null">
+				volumnCount=#{volumnCount,jdbcType=INTEGER},
+			</if>
+			<if test="currentNum!=null">
+				currentNum=#{currentNum,jdbcType=INTEGER},
+			</if>
+			<if test="description!=null">
+				description=#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="originalCountry!=null">
+				originalCountry=#{originalCountry,jdbcType=VARCHAR},
+			</if>
+			<if test="duration!=null">
+				duration=#{duration,jdbcType=INTEGER},
+			</if>
+			<if test="viewPoint!=null">
+				viewPoint=#{viewPoint,jdbcType=VARCHAR},
+			</if>
+			<if test="cpName!=null">
+				cpName=#{cpName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where code=#{code,jdbcType=INTEGER}
+    </update>
+    <select id="findAlbumsinfovideo" parameterType="Map" resultType="Map">
+    select volumn,name,playURL,fileURL,code,updatetime,id
+     from gg_vod_albuminfovideo
+    where 1=1
+ 			<if test="volumn !=null">
+				and volumn=#{volumn,jdbcType=VARCHAR}
+			</if>
+			<if test="name !=null">
+				and name=#{name,jdbcType=VARCHAR}
+			</if>
+			<if test="code !=null">
+				and code=#{code,jdbcType=VARCHAR}
+			</if>
+			<if test="id !=null and id>0">
+				and id=#{id,jdbcType=INTEGER}
+			</if>
+ 	
+ 	order by CAST(volumn as SIGNED)  
+    </select>
+</mapper>

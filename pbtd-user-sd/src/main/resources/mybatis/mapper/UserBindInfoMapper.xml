@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.UserBindInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.UserBindInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="userId" property="userid" jdbcType="BIGINT" />
+    <result column="loginId" property="loginid" jdbcType="BIGINT" />
+    <result column="mac" property="mac" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updatetime" jdbcType="BIGINT" />
+    <result column="createTime" property="createtime" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, loginId, mac, updateTime, createTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_bind_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_bind_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.pbtd.playuser.domain.UserBindInfo" >
+    insert into user_bind_info (id, userId, loginId, 
+      mac, updateTime, createTime
+      )
+    values (#{id,jdbcType=BIGINT}, #{userid,jdbcType=BIGINT}, #{loginid,jdbcType=BIGINT}, 
+      #{mac,jdbcType=VARCHAR}, #{updatetime,jdbcType=BIGINT}, #{createtime,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pbtd.playuser.domain.UserBindInfo" >
+    insert into user_bind_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="loginid != null" >
+        loginId,
+      </if>
+      <if test="mac != null" >
+        mac,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="loginid != null" >
+        #{loginid,jdbcType=BIGINT},
+      </if>
+      <if test="mac != null" >
+        #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=BIGINT},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playuser.domain.UserBindInfo" >
+    update user_bind_info
+    <set >
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="loginid != null" >
+        loginId = #{loginid,jdbcType=BIGINT},
+      </if>
+      <if test="mac != null" >
+        mac = #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=BIGINT},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playuser.domain.UserBindInfo" >
+    update user_bind_info
+    set userId = #{userid,jdbcType=BIGINT},
+      loginId = #{loginid,jdbcType=BIGINT},
+      mac = #{mac,jdbcType=VARCHAR},
+      updateTime = #{updatetime,jdbcType=BIGINT},
+      createTime = #{createtime,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

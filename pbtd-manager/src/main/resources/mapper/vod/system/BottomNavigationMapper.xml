@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.system.mapper.BottomNavigationMapper">
+    <!-- 模糊查询 -->
+    <sql id="whrClauseLike">
+        <if test="id != null and id > -1">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="name != null and name != ''">
+            and name like '%${name}%'  
+        </if>
+        <if test="type != null and type != ''">
+            and type=#{type,jdbcType=INTEGER} 
+        </if>          
+    </sql>
+    <sql id="whrClauseLikeMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <!-- 精确查询 -->
+    <sql id="whrClauseEqual">
+       <if test="id != null and id > -1">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="name != null and name != ''">
+            and name=#{name,jdbcType="VARCHAR"}  
+        </if>
+        <if test="type != null and type != ''">
+            and type=#{type,jdbcType=INTEGER} 
+        </if>
+    </sql>
+    <sql id="whrClauseEqualMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+<select id="showAll" resultType="com.pbtd.manager.vod.system.domain.BottomNavigation">
+ select id,type,name,imgselect,imgNor from vod_bottomNavigation
+ limit #{start},#{pageSize}
+</select>
+<insert id="add" parameterType="com.pbtd.manager.vod.system.domain.BottomNavigation" >
+ insert into vod_bottomNavigation
+ (type,name,imgNor,imgSelect)
+ values
+ (
+ #{type,jdbcType=INTEGER},
+ #{name,jdbcType=VARCHAR},
+ #{imgNor,jdbcType=VARCHAR},
+ #{imgSelect,jdbcType=VARCHAR}
+ )
+</insert>
+<update id="modify" parameterType="com.pbtd.manager.vod.system.domain.BottomNavigation">
+	 update vod_bottomNavigation 
+		 <set>
+			 <if test="type!=null">
+			 type=#{type,jdbcType=INTEGER},
+			 </if>
+			 <if test="name!=null ">
+			 name=#{name,jdbcType=VARCHAR},
+			 </if>
+			 <if test="imgNor!=null ">
+			 imgNor=#{imgNor,jdbcType=VARCHAR},
+			 </if>
+			 <if test="imgSelect!=null ">
+				imgSelect=#{imgSelect,jdbcType=VARCHAR},
+			 </if>
+		 </set>
+	 where id=#{id,jdbcType=INTEGER}
+</update>
+ <delete id="deletes" parameterType="Map">
+ delete from vod_bottomNavigation 
+ where 1=1
+      <include refid="whrClauseLike" />
+      <include refid="whrClauseEqual" />
+	  <include refid="whrClauseLikeMore" />
+ </delete>	
+ <update id="updateImg" parameterType="Map">
+   update vod_bottomNavigation 
+   <set>
+   <if test="imgNor!=null">
+    imgNor=#{imgNor,jdbcType=VARCHAR},
+    </if>
+    <if test="imgSelect!=null">
+    imgSelect=#{imgSelect,jdbcType=VARCHAR},
+    </if>
+    </set>
+     where id=#{id,jdbcType=INTEGER}
+ </update>
+   <select id="generatePosition" parameterType="Map" resultType="java.lang.Integer">
+        select max(id) + 1 as count
+        from  vod_bottomNavigation  
+        where 1=1
+    </select>
+    <select id="load" parameterType="java.lang.Integer" resultType="com.pbtd.manager.vod.system.domain.BottomNavigation">
+         select id,type,name,imgNor,imgSelect  from  vod_bottomNavigation  
+        where id= #{id,jdbcType=INTEGER}
+    </select>
+     <select id="count" parameterType="Map" resultType="java.lang.Integer">
+        select count(id)
+        from  vod_bottomNavigation 
+        where 1=1
+    </select>
+      <select id="find" parameterType="Map" resultType="Map">
+       select id,type,name,imgNor,imgSelect from  vod_bottomNavigation
+        where 1=1
+        <if test="type!=null and type!=-1">
+        and type=#{type,jdbcType=VARCHAR}
+        </if>
+        <if test="name!=null">
+        and name like '%${name}%'
+        </if>
+       limit #{start},#{pageSize} 	
+    </select>
+</mapper>

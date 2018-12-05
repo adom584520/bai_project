@@ -1,0 +1,96 @@
+<!DOCTYPE struts PUBLIC    
+	 "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"    
+	 "http://struts.apache.org/dtds/struts-2.0.dtd">    
+<struts> 
+<constant name="struts.i18n.encoding" value="UTF-8"></constant>   
+	<!-- 该属性指定Struts 2文件上传中整个请求内容允许的最大字节数 
+
+		<constant name="struts.enable.DynamicMethodInvocation" value="true" />   
+		<constant name="struts.devMode" value="false" /> 
+	-->
+	<constant name="struts.multipart.maxSize" value="102400000000000" />
+	<constant name="struts.multipart.saveDir" value="/tmp"/>
+	<package name="user" extends="struts-default">
+		<action name="login" class="com.zckj.service.LoginAction">    
+			<result name="success">jsondate.jsp</result>
+		</action>
+		<action name="upload" class="com.zckj.service.UploadFile">    
+			<result name="success">/success.jsp</result>
+			<!--<interceptor-ref name="fileUploadStack"></interceptor-ref>  
+				<result type="json">  
+					<param name="contentType">text/html;charset=utf-8</param>  
+					<param name="includeProperties">  
+						   success,resultMsg  
+					</param>       
+				</result>  -->
+		</action>
+		<action name="versioninfo" class="com.zckj.service.VersionInfoBean" method="getVersionInfo">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="saveinfo" class="com.zckj.service.VersionInfoBean" method="saveAddVersionInfo">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="editinfo" class="com.zckj.service.VersionInfoBean" method="saveEditVersionInfo">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="releasestate" class="com.zckj.service.VersionInfoBean" method="saveState">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="distory" class="com.zckj.service.VersionInfoBean" method="distoryVersion">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="versionids" class="com.zckj.service.VersionInfoBean" method="getVersionIds">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="filesmerge" class="com.zckj.service.UpdateFilesMerge" method="filesMerge">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="mergeproc" class="com.zckj.service.UpdateFilesMerge" method="filesMergeProc">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="mergeinfo" class="com.zckj.service.UpdateFilesMerge" method="getMergeFileInfo">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="update" class="com.zckj.service.VersionUpdate" method="getVersionUpdatePkgName">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="pmanifest" class="com.zckj.service.VersionUpdate" method="getProjectManifestFile">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="vmanifest" class="com.zckj.service.VersionUpdate" method="getVersionManifestFile">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="createchannel" class="com.zckj.service.ChannelBean" method="createChannelInfo">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="channelinfo" class="com.zckj.service.ChannelBean" method="getChannelInfo">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="channelnames" class="com.zckj.service.ChannelBean" method="getChannelNames">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="editchannel" class="com.zckj.service.ChannelBean" method="editChannelInfo">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="delchannel" class="com.zckj.service.ChannelBean" method="delChannelInfo">
+			<result name="success">/success.jsp</result>
+		</action>
+		
+	<!--  通知  -->
+		<action name="createnotice" class="com.zckj.service.NoticeBean" method="createNoticeInfo">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="noticeinfo" class="com.zckj.service.NoticeBean" method="getNoticeInfo">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="editnotice" class="com.zckj.service.NoticeBean" method="editNoticeInfo">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="delnotice" class="com.zckj.service.NoticeBean" method="delNoticeInfo">
+			<result name="success">/success.jsp</result>
+		</action>
+		<action name="getNoticeJson" class="com.zckj.service.NoticeBean" method="getNoticeJson">
+			<result name="success">/success.jsp</result>
+		</action>
+	</package>
+</struts>

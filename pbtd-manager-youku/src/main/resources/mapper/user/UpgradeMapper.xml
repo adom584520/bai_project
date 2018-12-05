@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.user.mapper.UpgradeMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.user.domain.Upgrade" >
+        <id column="id" property="id"/>
+        <result column="grade_name" property="gradeName"/>
+        <result column="group_id" property="groupId"/>
+        <result column="download" property="download"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+        <result column="version_info" property="versionInfo"/>
+        <result column="version" property="version"/>
+        <result column="logininfo_name" property="logininfoName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+    
+    <sql id="columns">
+    	id,grade_name,group_id,download,type,status,version_info,version,logininfo_name,create_time,modify_time
+    </sql>
+    <sql id="queryAndlimit">
+    	<where>
+    		<if test="status!=null and status > 0">
+    			and status = #{status}
+    		</if>
+    		<if test="type!=null">
+    			and type = #{type}
+    		</if>
+    	</where>
+    </sql>
+    <select id="queryCount" resultType="long">
+    	select count(id)
+    	from user_upgrade
+    	<include refid="queryAndlimit"/>
+    </select>
+    <select id="queryList" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from user_upgrade
+    	<include refid="queryAndlimit"/>
+    	order by type asc
+    	limit #{start},#{pageSize}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    	insert into user_upgrade
+    	(grade_name,group_id,download,type,status,version_info,version,logininfo_name,
+    	create_time,modify_time)
+    	values(#{gradeName},#{groupId},#{download},#{type},#{status},#{versionInfo},#{version},
+    	#{logininfoName},#{createTime},#{modifyTime})
+    </insert>
+    
+    <update id="update">
+    	update user_upgrade
+    	set grade_name=#{gradeName},group_id=#{groupId},download=#{download},type=#{type},
+    	status=#{status},version_info=#{versionInfo},version=#{version},logininfo_name=#{logininfoName},
+    	modify_time=#{modifyTime}
+    	where id = #{id}
+    </update>
+    
+    <delete id="delete">
+    	delete from user_upgrade
+    	where id = #{id}
+    </delete>
+    
+    <select id="queryByType" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from user_upgrade
+    	where type = #{type} and status = #{status}
+    </select>
+    
+    <update id="updateByType">
+    	update user_upgrade
+    	set status = #{status}
+    	where type = #{type}
+    </update>
+</mapper>

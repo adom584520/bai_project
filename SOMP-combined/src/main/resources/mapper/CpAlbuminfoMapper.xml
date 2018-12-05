@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.CpAlbuminfoMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.domain.CpAlbuminfo" >
+    	<id column="id" property="id"/>
+        <result column="cpSeriesCode" property="cpSeriesCode"/>
+        <result column="cpSeriesName" property="cpSeriesName"/>
+        <result column="seriesName" property="seriesName"/>
+        <result column="seriesCode" property="seriesCode"/>
+        <result column="volumnCount" property="volumnCount"/>
+        <result column="currentNum" property="currentNum"/>
+        <result column="status" property="status"/>
+        <result column="joinStatus" property="joinStatus"/>
+        <result column="cpCode" property="cpCode"/>
+        <result column="originalName" property="originalName"/>
+        <result column="actorName" property="actorName"/>
+        <result column="writerName" property="writerName"/>
+        <result column="orgairDate" property="orgairDate"/>
+        <result column="description" property="description"/>
+        <result column="tag" property="tag"/>
+        <result column="viewPoint" property="viewPoint"/>
+        <result column="originalCountry" property="originalCountry"/>
+        <result column="releaseYear" property="releaseYear"/>
+        <result column="duration" property="duration"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+    
+    <sql id="column">
+    	id,cpSeriesCode,cpSeriesName,seriesName,seriesCode,volumnCount,currentNum,status,joinStatus,cpCode,
+    	originalName,actorName,writerName,orgairDate,description,tag,viewPoint,originalCountry,
+    	releaseYear,duration,updateTime,createTime
+    </sql>
+    
+    <sql id="queryLimit">
+    	<where>
+    		<if test="cpCode!=null">
+    			and cpCode = #{cpCode}
+    		</if>
+    		<if test="joinStatus!=null and joinStatus>-1">
+    			and joinStatus = #{joinStatus}
+    		</if>
+    		<if test="status!=null and status>-1">
+    			and status = #{status}
+    		</if>
+    		<if test="seriesName!=null">
+    			and (cpSeriesName like concat("%",#{seriesName},"%") or seriesName like concat("%",#{seriesName},"%"))
+    		</if>
+    		<if test="seriesCode!=null">
+    			and (cpSeriesCode = #{seriesCode} or seriesCode = #{seriesCode})
+    		</if>
+    	</where>
+    </sql>
+    
+    <select id="queryCount" resultType="long">
+    	select count(*)
+    	from cp_albuminfo
+    	<include refid="queryLimit"/>
+    </select>
+    
+    <select id="queryList" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_albuminfo
+    	<include refid="queryLimit"/>
+    	limit #{start},#{pageSize}
+    </select>
+    
+    <select id="queryById" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_albuminfo
+    	where id = #{id}
+    </select>
+    
+    <select id="queryBySeriesCode" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_albuminfo
+    	where seriesCode = #{seriesCode} and cpCode = #{cpCode}
+    </select>
+    <select id="queryByCpSeriesCode" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_albuminfo
+    	where cpSeriesCode = #{cpSeriesCode} and cpCode = #{cpCode}
+    </select>
+    
+    <insert id="insert">
+    	insert into cp_albuminfo
+    	(cpSeriesCode,cpSeriesName,seriesCode,seriesName,volumnCount,currentNum,status,joinStatus,cpCode,
+    	originalName,actorName,writerName,orgairDate,description,tag,viewPoint,originalCountry,
+    	releaseYear,duration,updateTime,createTime)
+    	values
+    	(#{cpSeriesCode},#{cpSeriesName},#{seriesCode},#{seriesName},#{volumnCount},#{currentNum},#{status},#{joinStatus},
+    	#{cpCode},#{originalName},#{actorName},#{writerName},#{orgairDate},#{description},
+    	#{tag},#{viewPoint},#{originalCountry},#{releaseYear},#{duration},#{updateTime},
+    	#{createTime})
+    </insert>
+    
+    <update id="update">
+    	update cp_albuminfo
+    	set cpSeriesName=#{cpSeriesName},volumnCount=#{volumnCount},currentNum=#{currentNum},
+    	status=#{status},cpCode=#{cpCode},originalName=#{originalName},actorName=#{actorName},
+    	writerName=#{writerName},writerName=#{writerName},orgairDate=#{orgairDate},
+    	description=#{description},tag=#{tag},viewPoint=#{viewPoint},originalCountry=#{originalCountry},
+    	releaseYear=#{releaseYear},duration=#{duration},updateTime=#{updateTime}
+    	where cpSeriesCode=#{cpSeriesCode} and cpCode=#{cpCode}
+    </update>
+    
+    <update id="bindingAlbum">
+    	update cp_albuminfo
+    	set seriesName=#{seriesName},seriesCode=#{seriesCode},joinStatus=#{joinStatus}
+    	where id = #{id}
+    </update>
+    
+    <update id="unpinless">
+    	update cp_albuminfo
+    	set seriesCode=#{ca.seriesCode},seriesName=#{ca.seriesName},joinStatus=#{ca.joinStatus}
+    	where id in
+    	<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </update>
+    
+    <select id="queryByIds" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_albuminfo
+    	where id in 
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </select>
+    
+    <update id="updateStatus">
+    	update cp_albuminfo
+    	set status=#{status}
+    	where cpSeriesCode=#{cpSeriesCode} and cpCode=#{cpCode}
+    </update>
+    
+    <select id="queryBySeriesCodeCpCode" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_albuminfo
+    	where seriesCode=#{seriesCode} and cpCode=#{cpCode}
+    </select>
+    
+    <update id="confirm">
+    	update cp_albuminfo
+    	set joinStatus=#{joinStatus}
+    	where id in
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </update>
+</mapper>

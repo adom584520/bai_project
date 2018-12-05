@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.phone.hotseries.mapper.VodHotseriesMapper">
+<!-- 热播管理 -->
+ <select id="find" parameterType="Map" resultType="Map">
+   select id,name,channelCode,count,status,type,create_time,create_user,update_time,update_user
+    from vod_phone_hotseries
+   where 1=1
+   <if test="id!=null and id!=''">
+     and id=#{id,jdbcType=INTEGER}
+   </if>
+   <if test="name!=null and name!=''">
+     and name=#{name,jdbcType=VARCHAR}
+   </if>
+   <if test="channelCode!=null and channelCode!=''">
+     and channelCode=#{channelCode,jdbcType=INTEGER}
+   </if>
+   <if test="status!=null and status!=''">
+     and status=#{status,jdbcType=INTEGER}
+   </if>
+   <if test="type!=null and type!=''">
+     and type=#{type,jdbcType=INTEGER}
+   </if>
+  </select> 
+  <select id="load" parameterType="INTEGER" resultType="com.pbtd.manager.vod.phone.hotseries.domain.VodHotseries">
+    select id,name,channelCode,count,status,type from vod_phone_hotseries
+    where id=#{id,jdbcType=INTEGER}
+  </select>
+  <select id="count" parameterType="Map" resultType="INTEGER">
+    select count(id) from vod_phone_hotseries
+    where 1=1
+   <if test="id!=null and id!=''">
+     and id=#{id,jdbcType=INTEGER}
+   </if>
+   <if test="name!=null and name!=''">
+     and name=#{name,jdbcType=VARCHAR}
+   </if>
+   <if test="channelCode!=null and channelCode!=''">
+     and channelCode=#{channelCode,jdbcType=INTEGER}
+   </if>
+   <if test="status!=null and status!=''">
+     and status=#{status,jdbcType=INTEGER}
+   </if>
+   <if test="type!=null and type!=''">
+     and type=#{type,jdbcType=INTEGER}
+   </if>
+  </select>
+  
+  <insert id="add" parameterType="Map">
+   insert into vod_phone_hotseries
+   (name,channelCode,count,status,type,create_user,create_time,update_user,update_time)
+    values
+   (#{name},#{channelCode},#{count},#{status},#{type},#{create_user},now(),#{update_user},#{update_time})
+  </insert>
+   <insert id="insertjson" parameterType="Map">
+   insert into vod_phone_hotseries
+   (id,name,channelCode,count,status,type,create_user,create_time,update_user,update_time)
+    values
+   (#{id},#{name},#{channelCode},#{count},#{status},#{type},#{create_user},now(),#{update_user},#{update_time})
+  </insert>
+  
+  <update id="modify" parameterType="Map">
+    update vod_phone_hotseries
+    <set>
+    <if test="name!=null and name!=''">
+     name=#{name,jdbcType=VARCHAR},
+   </if>
+   <if test="channelCode!=null and channelCode!=''">
+    channelCode=#{channelCode,jdbcType=INTEGER},
+   </if>
+   <if test="status!=null and status!=''">
+    status=#{status,jdbcType=INTEGER},
+   </if>
+   <if test="type!=null and type!=''">
+     type=#{type,jdbcType=INTEGER},
+   </if>
+   <if test="count!=null and count!=''">
+     count=#{count,jdbcType=INTEGER},
+   </if>
+   <if test="update_user!=null and update_user!=''">
+     update_user=#{update_user,jdbcType=VARCHAR},
+     update_time=now();
+   </if>
+   </set>  
+    where id=#{id,jdbcType=INTEGER}     
+  </update>
+  
+  <update id="updateStatus" parameterType="Map">
+    update vod_phone_hotseries set status=#{status,jdbcType=INTEGER}
+    where 1=1
+    <if test="id!=null">
+	    and id=#{id,jdbcType=INTEGER}
+	 </if>
+    </update>
+  <delete id="deletes" parameterType="Map">
+     delete from vod_phone_hotseries
+     <where>
+	      <if test="id!=null">
+	       and id=#{id,jdbcType=INTEGER}
+		   </if>
+		   <if test="id_!=null">
+		     and id in
+		     <foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=INTEGER}
+			</foreach>
+		   </if>	     
+     </where>  
+  </delete>
+  <!-- 热播 管理end -->
+  
+  <!-- 热播绑定专辑 -->
+  <!-- 查询热播绑定专辑 -->
+   <select id="pagealbum" parameterType="Map" resultType="Map">
+ 			select  a.seriesCode,b.seriesName,b.ChannelName,b.actorName,
+ 			writerName,b.volumncount,b.currentnum,b.status,a.sequence
+		     from vod_phone_hotseriesvideo a
+		   left join vod_phone_albuminfo b on  a.seriesCode=b.seriesCode
+           where 1=1
+			     <if test="hot_id != null and hot_id !='' ">
+			     and a.hot_id=#{hot_id,jdbcType=INTEGER}
+			     </if>
+			      <if test="seriesCode != null and seriesCode !='' ">
+			     and a.seriesCode=#{seriesCode,jdbcType=INTEGER}
+			     </if>				     			     
+         	order by 	a.sequence
+     	 <if test="start != null  ">
+            limit #{start},#{pageSize}
+        </if>
+	 </select>
+     <select id="countalbum" parameterType="Map" resultType="INTEGER">
+       select count(hot_id) from vod_phone_hotseriesvideo
+       where 1=1
+       <if test="hot_id!= null  ">
+         and  hot_id=#{hot_id,jdbcType=INTEGER}
+        </if>
+         <if test="seriesCode!= null  ">
+         and  seriesCode=#{seriesCode,jdbcType=INTEGER}
+        </if>
+       <if test="start != null  ">
+            limit #{start},#{pageSize}
+        </if>
+     </select>
+    <insert id="addalbuminfo" parameterType="Map">
+        insert into vod_phone_hotseriesvideo 
+        (hot_id,seriesCode,sequence)
+        values
+        (#{hot_id},#{seriesCode},#{sequence})
+    </insert>
+    <update id="updatesequence" parameterType="Map">
+      update vod_phone_hotseriesvideo set sequence=#{sequence,jdbcType=INTEGER}
+      where hot_id=#{hot_id,jdbcType=INTEGER} and seriesCode=#{seriesCode,jdbcType=INTEGER}
+    </update>
+    <delete id="deletealbuminfo" parameterType="Map">
+       delete from vod_phone_hotseriesvideo 
+       <where>
+           <if test="hot_id_!=null and hot_id_!=''">
+	       and hot_id=#{hot_id,jdbcType=INTEGER}
+		   </if>
+		   <if test="seriesCode!=null and seriesCode!=''">
+            and seriesCode=#{seriesCode,jdbcType=INTEGER}
+		   </if>
+		    <if test="id_!=null">
+		     and hot_id in
+		     <foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=INTEGER}
+			</foreach>	   
+		   </if>	      
+       </where>
+    </delete>
+     <select id="findalbummaxVSminsequence" parameterType="Map" resultType="Map">
+		select max(sequence) max, min(sequence) min
+		from vod_phone_hotseriesvideo a
+		<where>
+			<if test="hot_id!=null ">
+				and a.hot_id=#{hot_id,jdbcType=INTEGER}
+			</if>
+			<if test="albumid!=null ">
+				and a.seriesCode   in (${albumid})
+			</if>
+		</where>
+	</select>
+	<select id="findalbumsequencesum" parameterType="Map" resultType="Map">
+		select  sequence 
+		from vod_phone_hotseriesvideo a
+		<where>
+			<if test="hot_id!=null ">
+				and a.hot_id=#{hot_id,jdbcType=INTEGER}
+			</if>
+			<if test="albumid!=null ">
+				and a.seriesCode   in (${albumid})
+			</if>
+		</where>
+			order by a.sequence
+	</select>
+	<select id="findalbumsequence" parameterType="Map" resultType="Map">
+		select a.seriesCode,a.sequence
+		from vod_phone_hotseriesvideo a
+		<where>
+			<if test="hot_id!=null ">
+				and a.hot_id=#{hot_id,jdbcType=INTEGER}
+			</if>
+			<if test="albumid!=null ">
+				and a.seriesCode not in (${albumid})
+			</if>
+			<if test="max!=null and max!='' ">
+			       	<![CDATA[    and sequence<= #{max,jdbcType=INTEGER}]]>
+			</if>
+			<if test="min!=null and min!='' ">
+			        <![CDATA[    and sequence>= #{min,jdbcType=INTEGER}]]>
+			</if>
+		</where>
+		order by a.sequence
+	</select>       
+</mapper>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.common.corner.mapper.VodCollectfeesbagMapper">
+    <resultMap id="resultMap" type="com.pbtd.manager.vod.common.corner.domain.VodCollectfeesbag">
+        <result column="id" property="id" jdbcType="INTEGER" />      
+        <result column="name" property="name" jdbcType="VARCHAR" /> 
+         <result column="code" property="code" jdbcType="INTEGER" /> 
+        <result column="status" property="status" jdbcType="INTEGER" /> 
+         <result column="type" property="type" jdbcType="INTEGER" /> 
+        <result column="starttime" property="starttime" jdbcType="DATE" /> 
+        <result column="endtime" property="endtime" jdbcType="DATE" />
+        <result column="create_time" property="create_time" jdbcType="DATE" />  
+        <result column="discountrate" property="discountrate" jdbcType="FLOAT" /> 
+         <result column="price" property="price" jdbcType="FLOAT" />  
+
+    </resultMap>
+    <sql id="columns" >
+        id	,code,name	,starttime,endtime	,type	,create_time,discountrate,price,status 
+    </sql>
+    <!-- 模糊查询 -->
+    <sql id="whrClauseLike">
+        <if test="name != null and name != ''">
+            and name like '%${name}%'  
+        </if>
+    </sql>
+    <sql id="whrClauseLikeMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <!-- 精确查询 -->
+    <sql id="whrClauseEqual">
+        <if test="id != null and id > -1">
+            and ID = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="code != null and code > -1">
+            and code = #{code,jdbcType=INTEGER}
+        </if>
+        <if test="status != null and status > -1">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="starttime != null and starttime != '' ">
+            and date_format(starttime,'%Y-%m-%d') = #{starttime,jdbcType=DATE}
+        </if>
+          <if test="endtime != null and endtime != '' ">
+            and date_format(endtime,'%Y-%m-%d') = #{endtime,jdbcType=DATE}
+        </if>
+        <if test="create_time != null and create_time != '' ">
+            and date_format(create_time,'%Y-%m-%d') = #{create_time,jdbcType=DATE}
+        </if>
+    </sql>
+    <sql id="whrClauseEqualMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <sql id="orderByClause">
+    	<choose>
+        	<when test="sort != null and sort != ''">
+        		order by ${sort} <if test="order != null and order != ''">${order}</if>
+        	</when>
+        	<otherwise>
+        		order by code
+        	</otherwise>
+        </choose>
+    </sql>
+    <!--SElECT查询语句-->
+    <select id="count" parameterType="Map" resultType="java.lang.Integer">
+        select count(ID)
+        from  vod_Collectfeesbag  
+        where 1=1
+        <include refid="whrClauseLike" />
+         <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+    </select>
+    <select id="page" parameterType="Map" resultMap="resultMap">
+ 		select 
+      id	,code,name	, starttime,endtime	,type	,discountrate,price,status 
+        from  vod_Collectfeesbag a  
+        where 1=1
+       <include refid="whrClauseLike" />
+         <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+			order by code   	
+		<if test="start !=null ">
+			limit #{start},#{pageSize}
+		</if>
+         
+    </select>
+    <select id="find" parameterType="Map" resultMap="resultMap">
+      select 
+       <include refid="columns" />
+        from  vod_Collectfeesbag a  
+        where 1=1
+       <include refid="whrClauseLike" />
+         <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+         	order by code    	
+		 <if test="start != null   ">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+    
+    <select id="countCollectfeesbag" parameterType="Map" resultType="java.lang.Integer">
+        select count(ID)
+        from  vod_Collectfeesbag  
+        where status = 1
+    </select>
+    <select id="findCollectfeesbag" parameterType="Map" resultMap="resultMap">
+      select 
+       <include refid="columns" />
+        from  vod_Collectfeesbag a  
+        where status = 1
+         	order by code    	
+		 <if test="start != null  ">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+    
+    <select id="generatePosition" parameterType="Map" resultType="java.lang.Integer">
+        select case when max(code) is not null then max(code) + 1 else max(id) + 1 end as count
+        from  vod_Collectfeesbag  
+        where 1=1
+    </select>
+    <select id="load" parameterType="java.lang.Integer" resultMap="resultMap">
+        select 
+        <include refid="columns" />
+        from  vod_Collectfeesbag  
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <!--INSERT/UPDATE/DELETE 执行语句-->
+    <insert id="insert" parameterType="com.pbtd.manager.vod.common.corner.domain.VodCollectfeesbag">
+        insert into 
+        vod_Collectfeesbag 
+        (
+   			code,name	,starttime,endtime	,create_time,type	,discountrate,price,status
+        )
+        values 
+        (
+        #{code,jdbcType=INTEGER},
+        #{name,jdbcType=VARCHAR},
+        #{starttime,jdbcType=DATE},
+        #{endtime,jdbcType=DATE},
+        now(),
+        #{type,jdbcType=INTEGER},
+        #{discountrate,jdbcType=FLOAT},
+        #{price,jdbcType=FLOAT},
+        #{status,jdbcType=INTEGER}
+        )
+    </insert>
+    <update id="update" parameterType="com.pbtd.manager.vod.common.corner.domain.VodCollectfeesbag">
+        update vod_Collectfeesbag
+        <set>
+	    <if test="name != null ">
+              name = #{name,jdbcType=VARCHAR},
+        </if>
+         <if test="starttime != null">
+              starttime = #{starttime,jdbcType=DATE},
+        </if>
+        <if test="endtime != null">
+              endtime = #{endtime,jdbcType=DATE},
+        </if>
+          <if test="status != null">
+           status = #{status,jdbcType=INTEGER},
+        </if>
+          <if test="type != null">
+           type = #{type,jdbcType=INTEGER},
+        </if>
+           <if test="discountrate != null">
+           discountrate = #{discountrate,jdbcType=FLOAT},
+        </if>
+          <if test="price != null">
+           price = #{price,jdbcType=FLOAT},
+        </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+      <update id="updateStatus" parameterType="Map">
+		update vod_Collectfeesbag
+		set status = #{status,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+    
+    <delete id="deletes" parameterType="Map" >
+        delete from vod_Collectfeesbag
+        where 1=1
+        <include refid="whrClauseLike" />
+        <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+    </delete>
+</mapper>

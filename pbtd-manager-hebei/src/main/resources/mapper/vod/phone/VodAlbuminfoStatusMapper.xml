@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.pbtd.manager.vod.phone.album.mapper.VodAlbuminfoStatusMapper">
+	<update id="updatestatus" parameterType="Map">
+		update vod_phone_albuminfo
+			<if test="type =='phone'">
+			  set update_time=now(), status= (select status_next from vod_albuminfoshow where showid =cpseriesCode)
+			</if>
+			<if test="type =='tv'">
+				set update_time=now(), tvstatus=(select status_next from vod_albuminfoshow where showid =cpseriesCode)
+			</if>
+		where seriesCode = #{seriesCode,jdbcType=INTEGER}
+	</update>
+
+
+	<update id="updatepaid" parameterType="Map">
+		update vod_phone_albuminfo
+		 set  update_time=now(), isCollectfees=(select paid_next from vod_albuminfoshow where showid =cpseriesCode)
+		where seriesCode = #{seriesCode,jdbcType=INTEGER}
+	</update>
+</mapper>

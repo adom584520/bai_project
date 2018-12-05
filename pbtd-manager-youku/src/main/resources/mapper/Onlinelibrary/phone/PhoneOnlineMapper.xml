@@ -1,0 +1,795 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vodOnlinelibrary.mapper.PhoneOnlineMapper">
+	<insert id="insertalbum" parameterType="map">
+		insert into
+		vod_phone_albuminfo
+		( seriesCode, seriesName , code, volumncount,
+		currentnum, pinyin, pinyinsuoxie, cpCode, cpName,
+		orderCode,
+		isCollectfees, Collectfeesbag, originalName, actor, writer, actorName,
+		writerName, orgairDate,
+		price, description, contentProvider, keyWord,
+		tag, viewPoint, starLevel, rating, awards, originalCountry, language,
+		releaseYear, duration, channel,
+		channelName, channel2, channelName2,
+		label, labelName, label2, labelName2, enName, vName,
+		definition,
+		copyRightProperty, crBeginDate, crEndDate, copyright, cpContentID,
+		score, Sequence, pictureurl1, pictureurl2, pictureurl3,
+		pictureurl4,
+		pictureurl5, isvip, corner,cornerimg, status, cpCodelist,
+		cpseriescode, create_time,
+		create_user, update_time, update_user,epis )
+		values
+		(
+		#{seriesCode,jdbcType=VARCHAR},
+		#{seriesName,jdbcType=VARCHAR},
+		#{code,jdbcType=INTEGER},
+		#{volumncount,jdbcType=INTEGER},
+		#{currentnum,jdbcType=INTEGER},
+		#{pinyin,jdbcType=VARCHAR},
+		#{pinyinsuoxie,jdbcType=VARCHAR},
+		#{cpCode,jdbcType=VARCHAR},
+		#{cpName,jdbcType=VARCHAR},
+		#{orderCode,jdbcType=VARCHAR},
+		#{isCollectfees,jdbcType=INTEGER},
+		#{Collectfeesbag,jdbcType=VARCHAR},
+		#{originalName,jdbcType=VARCHAR},
+		#{actor,jdbcType=VARCHAR},
+		#{writer,jdbcType=VARCHAR},
+		#{actorName,jdbcType=VARCHAR},
+		#{writerName,jdbcType=VARCHAR},
+		#{orgairDate,jdbcType=VARCHAR},
+		#{price,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{contentProvider,jdbcType=VARCHAR},
+		#{keyWord,jdbcType=VARCHAR},
+		#{tag,jdbcType=VARCHAR},
+		#{viewPoint,jdbcType=VARCHAR},
+		#{starLevel,jdbcType=VARCHAR},
+		#{rating,jdbcType=VARCHAR},
+		#{awards,jdbcType=VARCHAR},
+		#{originalCountry,jdbcType=VARCHAR},
+		#{language,jdbcType=VARCHAR},
+		#{releaseYear,jdbcType=VARCHAR},
+		#{duration,jdbcType=VARCHAR},
+		#{Channel,jdbcType=VARCHAR},
+		#{ChannelName,jdbcType=VARCHAR},
+		#{Channel2,jdbcType=VARCHAR},
+		#{ChannelName2,jdbcType=VARCHAR},
+		#{Label,jdbcType=VARCHAR},
+		#{LabelName,jdbcType=VARCHAR},
+		#{Label2,jdbcType=VARCHAR},
+		#{LabelName2,jdbcType=VARCHAR},
+		#{enName,jdbcType=VARCHAR},
+		#{vName,jdbcType=VARCHAR},
+		#{definition,jdbcType=VARCHAR},
+		#{copyRightProperty,jdbcType=INTEGER},
+		#{crBeginDate,jdbcType=VARCHAR},
+		#{crEndDate,jdbcType=VARCHAR},
+		#{copyright,jdbcType=VARCHAR},
+		#{cpContentID,jdbcType=VARCHAR},
+		#{score,jdbcType=FLOAT},
+		#{Sequence,jdbcType=INTEGER},
+		#{pictureurl1,jdbcType=VARCHAR},
+		#{pictureurl2,jdbcType=VARCHAR},
+		#{pictureurl3,jdbcType=VARCHAR},
+		#{pictureurl4,jdbcType=VARCHAR},
+		#{pictureurl5,jdbcType=VARCHAR},
+		#{isvip,jdbcType=INTEGER},
+		#{corner,jdbcType=VARCHAR},
+		#{cornerimg,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},
+		#{cpCodelist,jdbcType=VARCHAR},
+		#{cpseriescode,jdbcType=VARCHAR},
+		#{create_time,jdbcType=DATE},
+		#{create_user,jdbcType=VARCHAR},
+		#{update_time,jdbcType=DATE},
+		#{update_user,jdbcType=VARCHAR},
+		#{epis,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!-- 删除节目 -->
+	<delete id="deletealbum" parameterType="Map">
+		delete from
+		vod_phone_albuminfo
+		where
+		seriesCode=#{seriesCode,jdbcType=INTEGER}
+	</delete>
+	<!-- 新增剧集 -->
+	<insert id="insertvideo" parameterType="Map">
+		insert into
+		vod_phone_albuminfovideo
+		(id,seriesCode,drama,dramaname,dramaviewPoint,Resolution,Definition,SourceType,
+		Type,duration,priority,Injectiontime,pic,title,description,
+		zxdispatchurl,zxversionlist,zxfileurl,zxmovieUrl,zxversion,
+		hwversionlist,hwversion,hwmovieUrl,hwfileurl,isShow,create_time,
+		create_user,hwdispatchurl,dramasequence,isCollectfees,collectfeesbag
+		,cpvideoId,isPositive)
+		values
+		(#{id},#{seriesCode},#{drama},#{dramaname},#{dramaviewPoint},#{Resolution},#{Definition},#{SourceType},
+		#{Type},#{duration},#{priority},#{Injectiontime},#{pic},#{title},#{description},
+		#{zxdispatchurl},#{zxversionlist},#{zxfileurl},#{zxmovieUrl},#{zxversion},
+		#{hwversionlist},#{hwversion},#{hwmovieUrl},#{hwfileurl},#{isShow},#{create_time},#{create_user}
+		,#{hwdispatchurl},#{dramasequence},#{isCollectfees},#{collectfeesbag},#{cpvideoId},#{isPositive})
+	</insert>
+	<!-- 删除剧集 -->
+	<delete id="deletesvideo" parameterType="Map">
+		delete from
+		vod_phone_albuminfovideo
+		where
+		seriesCode=#{seriesCode,jdbcType=INTEGER}
+	</delete>
+	<!-- 添加节目关联推荐 -->
+	<insert id="addalbumrecommend" parameterType="Map">
+		insert into
+		vod_phone_albuminfo_recommend
+		(id,seriesCode,status, sequence,
+		pictureurl1,seriesName,
+		pictureurl2,description,score,viewPoint,
+		duration,corner,cornerimg,isvip,epis,volumncount,
+		currentnum
+		)
+		values
+		(#{id,jdbcType=INTEGER},
+		#{seriesCode,jdbcType=INTEGER},
+		#{status,jdbcType=INTEGER},
+		#{sequence,jdbcType=INTEGER},
+		#{pictureurl1,jdbcType=VARCHAR},
+		#{seriesName,jdbcType=VARCHAR},
+		#{pictureurl2,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{score,jdbcType=VARCHAR},
+		#{viewPoint,jdbcType=VARCHAR},
+		#{duration,jdbcType=VARCHAR},
+		#{corner,jdbcType=VARCHAR},
+		#{cornerimg,jdbcType=VARCHAR},
+		#{isvip,jdbcType=INTEGER} ,
+		#{epis,jdbcType=INTEGER},
+		#{volumncount,jdbcType=INTEGER},
+		#{currentnum,jdbcType=INTEGER}
+		)
+	</insert>
+	<!-- 删除关联推荐节目 -->
+	<delete id="deletealbumrecommend" parameterType="Map">
+		delete from
+		vod_phone_albuminfo_recommend
+		where
+		id=#{seriesCode,jdbcType=INTEGER}
+	</delete>
+	<!-- 频道 -->
+	<insert id="insertchannel" parameterType="map">
+		insert into
+		vod_phone_channel
+		(id,
+		channelName,channelCode,levels,sequence ,
+		parentCode, status,
+		navigationtype,count, type,labels
+		, img,isshow_img,isshow_right,isshow_left 
+		)
+		values
+		(#{id,jdbcType=INTEGER},
+		#{channelName,jdbcType=VARCHAR},
+		#{channelCode,jdbcType=INTEGER},
+		#{levels,jdbcType=INTEGER},
+		#{sequence,jdbcType=INTEGER},
+		#{parentCode,jdbcType=INTEGER},
+		#{status,jdbcType=INTEGER},
+		#{navigationtype,jdbcType=INTEGER},
+		#{count,jdbcType=INTEGER},
+		#{type,jdbcType=INTEGER},
+		#{labels,jdbcType=VARCHAR},
+		#{img,jdbcType=VARCHAR},
+		#{isshow_img,jdbcType=INTEGER},
+		#{isshow_right,jdbcType=INTEGER},
+		#{isshow_left,jdbcType=INTEGER}
+		)
+	</insert>
+	<delete id="deleteschannel" parameterType="Map">
+		delete from
+		vod_phone_channel
+		where channelCode= #{channelCode,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insertchannelalbum" parameterType="Map">
+		insert into
+		vod_phone_channel_albuminfo
+		(
+		id,channelCode,sequence,status,seriesCode,seriesName,
+		pictureurl2,pictureurl1,parentName,channelName,parentCode,viewPoint,score,
+		description,corner,duration,cornerimg,isvip,epis,volumncount,currentnum
+		)
+		values
+		(
+		#{id,jdbcType=VARCHAR},
+		#{channelCode,jdbcType=VARCHAR},
+		#{sequence,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{seriesCode,jdbcType=VARCHAR},
+		#{seriesName,jdbcType=VARCHAR},
+		#{pictureurl2,jdbcType=VARCHAR},
+		#{pictureurl1,jdbcType=VARCHAR},
+		#{parentName,jdbcType=VARCHAR},
+		#{channelName,jdbcType=VARCHAR},
+		#{parentCode,jdbcType=VARCHAR},
+		#{viewPoint,jdbcType=VARCHAR},
+		#{score,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{corner,jdbcType=VARCHAR},
+		#{duration,jdbcType=VARCHAR},
+		#{cornerimg,jdbcType=VARCHAR},
+		#{isvip,jdbcType=VARCHAR},
+		#{epis,jdbcType=VARCHAR},
+		#{volumncount,jdbcType=VARCHAR},
+		#{currentnum,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deleteschannelalbum" parameterType="Map">
+		delete from vod_phone_channel_albuminfo
+		where 1=1
+		<if test="channelCode != null and channelCode !='' ">
+			and channelCode=#{channelCode,jdbcType=INTEGER}
+		</if>
+	</delete>
+	<!-- 频道 end -->
+	<!-- 标签 start -->
+	<insert id="insertlabel" parameterType="map">
+		insert into
+		vod_phone_label
+		(id,name,type,level,sequence, status	)
+		values
+		(
+		#{id,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
+		#{type,jdbcType=INTEGER},
+		#{level,jdbcType=INTEGER},
+		#{sequence,jdbcType=INTEGER},
+		#{status,jdbcType=INTEGER}
+
+		)
+	</insert>
+	<delete id="deleteslabel" parameterType="Map">
+		delete from
+		vod_phone_label 
+		where id=#{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insertlabelchannel" parameterType="map">
+		insert into
+		vod_labelchannel
+		(id,label,channel,type	)
+		values
+		(
+		#{id,jdbcType=INTEGER},
+		#{label,jdbcType=VARCHAR},
+		#{channel,jdbcType=INTEGER},
+		#{type,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deleteslabelchannel" parameterType="Map">
+		delete from
+		vod_labelchannel
+		where label=#{id,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 标签end -->
+	<!-- 专题 start -->
+	<insert id="insertspecial" parameterType="map">
+		insert into
+		vod_phone_special
+		(id,
+		name ,imgurl ,backgroundimg,viewPoint,describes,
+		status ,sequence ,web_url ,type,template,
+		create_time , create_user,textcolor
+
+		)
+		values
+		(#{id,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
+		#{imgurl,jdbcType=VARCHAR},
+		#{backgroundimg,jdbcType=VARCHAR},
+		#{viewPoint,jdbcType=VARCHAR},
+		#{describes,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},
+		#{sequence,jdbcType=INTEGER},
+		#{web_url,jdbcType=VARCHAR},
+		#{type,jdbcType=INTEGER},
+		#{template,jdbcType=INTEGER},
+		now(),
+		#{create_user,jdbcType=VARCHAR},
+		#{textcolor,jdbcType=INTEGER}
+		)
+	</insert>
+	<delete id="deletesspecial" parameterType="Map">
+		delete from
+		vod_phone_special
+		where id=#{id,jdbcType=INTEGER}
+	</delete>
+	<!-- 添加专题绑定信息 -->
+	<insert id="insertspecialalbum" parameterType="Map">
+		insert into
+		vod_phone_special_albuminfo
+		(
+		special_id,seriesCode,sequence,seriesName,pictureurl2,pictureurl1,score,description,viewPoint,duration,corner,
+		cornerimg,isvip,isCollectfees,status
+
+		)
+		values
+		(
+		#{special_id,jdbcType=VARCHAR},
+		#{seriesCode,jdbcType=VARCHAR},
+		#{sequence,jdbcType=VARCHAR},
+		#{seriesName,jdbcType=VARCHAR},
+		#{pictureurl2,jdbcType=VARCHAR},
+		#{pictureurl1,jdbcType=VARCHAR},
+		#{score,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{viewPoint,jdbcType=VARCHAR},
+		#{duration,jdbcType=VARCHAR},
+		#{corner,jdbcType=VARCHAR},
+		#{cornerimg,jdbcType=VARCHAR},
+		#{isvip,jdbcType=VARCHAR},
+		#{isCollectfees,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER}
+		)
+	</insert>
+	<delete id="deletesspecialalbum" parameterType="Map">
+		delete from
+		vod_phone_special_albuminfo
+		where special_id=#{id,jdbcType=INTEGER}
+	</delete>
+	<!-- 专题end -->
+	<!-- 热搜Start -->
+
+	<insert id="inserthotsearch" parameterType="map">
+		<if test="seriesCode!=null and seriesCode!=''">
+			insert into
+			vod_phone_hotsearch(id,seriesCode,status,sequence,user_id,seriesName,pictureurl1,pictureurl2,
+			score,description,viewPoint,duration,corner,cornerimg,isvip,volumncount,currentnum
+			)
+			values(
+			#{id,jdbcType=VARCHAR},
+			#{seriesCode,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{sequence,jdbcType=VARCHAR},
+			#{user_id,jdbcType=VARCHAR},
+			#{seriesName,jdbcType=VARCHAR},
+			#{pictureurl1,jdbcType=VARCHAR},
+			#{pictureurl2,jdbcType=VARCHAR},
+			#{score,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{viewPoint,jdbcType=VARCHAR},
+			#{duration,jdbcType=VARCHAR},
+			#{corner,jdbcType=VARCHAR},
+			#{cornerimg,jdbcType=VARCHAR},
+			#{isvip,jdbcType=VARCHAR},
+			#{volumncount,jdbcType=INTEGER},
+			#{currentnum,jdbcType=VARCHAR}
+			)
+		</if>
+	</insert>
+	<delete id="deleteshotsearch" parameterType="Map">
+		delete from vod_phone_hotsearch
+	</delete>
+	<!-- 热搜end -->
+
+	<!-- 专区推荐图片 start -->
+	<insert id="insertrecommandpic" parameterType="map">
+		insert into
+		vod_phone_recommandpic
+		(type,channel_id,name,imageUrl,target_code,id,status,update_time,playurl,weburl,sequence,viewPoint)
+		values(#{type,jdbcType=VARCHAR},#{channel_id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},
+		#{imageUrl,jdbcType=VARCHAR},#{target_code,jdbcType=VARCHAR},#{id,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},#{update_time,jdbcType=VARCHAR} ,
+		#{playurl,jdbcType=VARCHAR},#{weburl,jdbcType=VARCHAR}
+		,#{sequence,jdbcType=VARCHAR},#{viewPoint,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deleterecommandpic" parameterType="Map">
+		delete from
+		vod_phone_recommandpic
+	</delete>
+	<!-- 专区推荐图片 end -->
+
+
+
+
+	<!--底部导航 start -->
+	<insert id="insertbottomnavigation" parameterType="map">
+		insert into
+		vod_bottomnavigation
+		(id,type,name,imgNor,imgSelect)
+		values(#{id,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},
+		#{imgNor,jdbcType=VARCHAR},#{imgSelect,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deletebottomnavigation" parameterType="Map">
+		delete from
+		vod_bottomnavigation
+	</delete>
+	<!-- 底部导航end -->
+	<!--文字描述 start -->
+	<insert id="inserttextrecommendation" parameterType="map">
+		insert into
+		vod_textrecommendation
+		(
+		id,channelCode,seriesCode,seriesName,status,text,playurl,weburl,type,create_time,
+		update_time
+		)
+		values(#{id,jdbcType=INTEGER},#{channelCode,jdbcType=INTEGER},#{seriesCode,jdbcType=INTEGER},
+		#{seriesName,jdbcType=VARCHAR},#{status,jdbcType=INTEGER} ,
+		#{text,jdbcType=VARCHAR},#{playurl,jdbcType=VARCHAR} ,
+		#{weburl,jdbcType=VARCHAR},#{type,jdbcType=INTEGER} ,
+		#{create_time,jdbcType=VARCHAR},#{update_time,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deletetextrecommendation" parameterType="Map">
+		delete from
+		vod_textrecommendation
+	</delete>
+<!-- 文字描述end -->
+
+	<!-- 文字描述end -->
+
+	<!--logo start -->
+	<insert id="insertlogo" parameterType="map">
+		insert into vod_phone_logo
+		(id,name,logo,instruction )
+		values(#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{logo,jdbcType=VARCHAR},
+		#{instruction,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deletelogo" parameterType="Map">
+		delete from vod_phone_logo
+	</delete>
+	<!--logo end -->
+
+
+
+	<!--播放地址 start -->
+	<insert id="insertmovieurl" parameterType="map">
+		insert into vod_movieurl
+		(id,name,title,status,levels )
+		values(#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},#{levels,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deletemovieurl" parameterType="Map">
+		delete from vod_movieurl
+	</delete>
+	<!--播放地址 end -->
+
+	<!--热播推荐 start -->
+	<insert id="inserthotseries" parameterType="map">
+		insert into
+		vod_phone_hotseries(id,name,channelCode,count,status,type)
+		values(
+		#{id},#{name},#{channelCode},#{count},#{status},#{type}
+		)
+		</insert>
+		<delete id="deletehotseries" parameterType="Map">
+		delete from
+		vod_phone_hotseries
+	</delete>
+	<insert id="inserthotseriesalbum" parameterType="map">
+		insert into
+		vod_phone_hotseriesvideo
+		(seriesCode,status,sequence,seriesName,pictureurl1,
+		pictureurl2,score,description,viewPoint,duration,corner,
+		cornerimg,isvip,epis,volumncount,currentnum
+		)
+		values(
+		#{seriesCode,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{sequence,jdbcType=VARCHAR},
+		#{seriesName,jdbcType=VARCHAR},
+		#{pictureurl1,jdbcType=VARCHAR},
+		#{pictureurl2,jdbcType=VARCHAR},
+		#{score,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{viewPoint,jdbcType=VARCHAR},
+		#{duration,jdbcType=VARCHAR},
+		#{corner,jdbcType=VARCHAR},
+		#{cornerimg,jdbcType=VARCHAR},
+		#{isvip,jdbcType=VARCHAR},
+		#{epis,jdbcType=VARCHAR},
+		#{volumncount,jdbcType=VARCHAR},
+		#{currentnum,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deletehotseriesalbum" parameterType="Map">
+		delete from
+		vod_phone_hotseriesvideo
+	</delete>
+	<!--热播推荐 end -->
+
+
+
+	<!--专区轮播图 start -->
+	<insert id="insertslideshow" parameterType="map">
+		insert into
+		vod_phone_slideshow
+		(id,name,type,image_url,target_code,playurl,weburl,status,content_point ,sequence)
+		values(#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},
+		#{image_url,jdbcType=VARCHAR},#{target_code,jdbcType=VARCHAR},#{playurl,jdbcType=VARCHAR},
+		#{weburl,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{content_point,jdbcType=VARCHAR},
+		#{sequence,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deleteslideshow" parameterType="Map">
+		delete from
+		vod_phone_slideshow
+	</delete>
+	<!--专区轮播图 end -->
+
+	<!-- 开机轮播图 start -->
+	<insert id="insertstartslideshow" parameterType="map">
+		insert into
+		vod_phone_start_slideshow
+		(id,name,type,image_url,target_code,playurl,weburl,status,skip_time ,show_type)
+		values(#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},
+		#{image_url,jdbcType=VARCHAR},#{target_code,jdbcType=VARCHAR},#{playurl,jdbcType=VARCHAR},
+		#{weburl,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{skip_time,jdbcType=VARCHAR},
+		#{show_type,jdbcType=VARCHAR}
+		
+		)
+	</insert>
+	<delete id="deletestartslideshow" parameterType="Map">
+		delete from
+		vod_phone_start_slideshow
+	</delete>
+	<!--开机轮播图 end -->
+		<!-- 以下是更新语句 -->
+	<!-- 更新关联推荐绑定专辑信息 -->
+		<update id="updatealbumrecommend" parameterType="Map">
+		update
+		vod_phone_albuminfo_recommend
+		<set>
+		<if test="status!=null">
+		 status=#{status,jdbcType=INTEGER},
+		</if>
+		<if test="pictureurl1!=null">
+		pictureurl1=#{pictureurl1,jdbcType=VARCHAR},
+		</if>
+		<if test="seriesName!=null">
+		seriesName=#{seriesName,jdbcType=VARCHAR},
+		</if>
+		<if test="pictureurl2!=null">
+		pictureurl2=#{pictureurl2,jdbcType=VARCHAR},
+		</if>
+		<if test="description!=null">
+		description=#{description,jdbcType=VARCHAR},
+		</if>
+		<if test="score!=null">
+		score=#{score,jdbcType=VARCHAR},
+		</if>
+		<if test="viewPoint!=null">
+		viewPoint=#{viewPoint,jdbcType=VARCHAR},
+		</if>
+		<if test="duration!=null">
+		duration=#{duration,jdbcType=VARCHAR},
+		</if>
+		<if test="corner!=null">
+		corner=#{corner,jdbcType=VARCHAR},
+		</if>
+		<if test="cornerimg!=null">
+		cornerimg=#{cornerimg,jdbcType=VARCHAR},
+		</if>
+		<if test="isvip!=null">
+		isvip=#{isvip,jdbcType=INTEGER} ,
+		</if> 
+		<if test="epis!=null">
+		epis=#{epis,jdbcType=INTEGER},
+		</if>
+		<if test="volumncount!=null">
+		volumncount=#{volumncount,jdbcType=INTEGER},
+		</if>
+		<if test="currentnum!=null">
+		currentnum=#{currentnum,jdbcType=INTEGER},
+		</if>
+		</set>
+		where seriesCode=#{seriesCode,jdbcType=INTEGER}
+	</update>
+	<!-- 更新二级栏目下绑定的专辑信息 -->
+	<update id="updatechannelalbuminfo" parameterType="Map">
+	  update vod_phone_channel_albuminfo
+	  <set>
+	    <if test="status!=null">
+	     status=#{status,jdbcType=INTEGER},
+	    </if>
+		<if test="pictureurl1!=null">
+		pictureurl1=#{pictureurl1,jdbcType=VARCHAR},
+		</if>
+		<if test="seriesName!=null">
+		seriesName=#{seriesName,jdbcType=VARCHAR},
+		</if>
+		<if test="pictureurl2!=null">
+		pictureurl2=#{pictureurl2,jdbcType=VARCHAR},
+		</if>
+		<if test="description!=null">
+		description=#{description,jdbcType=VARCHAR},
+		</if>
+		<if test="score!=null">
+		score=#{score,jdbcType=VARCHAR},
+		</if>
+		<if test="viewPoint!=null">
+		viewPoint=#{viewPoint,jdbcType=VARCHAR},
+		</if>
+		<if test="duration!=null">
+		duration=#{duration,jdbcType=VARCHAR},
+		</if>
+		<if test="corner!=null">
+		corner=#{corner,jdbcType=VARCHAR},
+		</if>
+		<if test="cornerimg!=null">
+		cornerimg=#{cornerimg,jdbcType=VARCHAR},
+		</if>
+		<if test="isvip!=null">
+		isvip=#{isvip,jdbcType=INTEGER} ,
+		</if> 
+		<if test="epis!=null">
+		epis=#{epis,jdbcType=INTEGER},
+		</if>
+		<if test="volumncount!=null">
+		volumncount=#{volumncount,jdbcType=INTEGER},
+		</if>
+		<if test="currentnum!=null">
+		currentnum=#{currentnum,jdbcType=INTEGER},
+		</if>
+		</set>
+		where seriesCode=#{seriesCode,jdbcType=INTEGER}	
+	</update>
+	<!-- 更新专题下绑定的专辑信息 -->
+	<update id="updatespecialalbuminfo" parameterType="Map">
+	  update vod_phone_special_albuminfo
+	  <set>
+	    <if test="status!=null">
+		status=#{status,jdbcType=INTEGER},
+		</if>
+		<if test="pictureurl1!=null">
+		pictureurl1=#{pictureurl1,jdbcType=VARCHAR},
+		</if>
+		<if test="seriesName!=null">
+		seriesName=#{seriesName,jdbcType=VARCHAR},
+		</if>
+		<if test="pictureurl2!=null">
+		pictureurl2=#{pictureurl2,jdbcType=VARCHAR},
+		</if>
+		<if test="description!=null">
+		description=#{description,jdbcType=VARCHAR},
+		</if>
+		<if test="score!=null">
+		score=#{score,jdbcType=VARCHAR},
+		</if>
+		<if test="viewPoint!=null">
+		viewPoint=#{viewPoint,jdbcType=VARCHAR},
+		</if>
+		<if test="duration!=null">
+		duration=#{duration,jdbcType=VARCHAR},
+		</if>
+		<if test="corner!=null">
+		corner=#{corner,jdbcType=VARCHAR},
+		</if>
+		<if test="cornerimg!=null">
+		cornerimg=#{cornerimg,jdbcType=VARCHAR},
+		</if>
+		<if test="isvip!=null">
+		isvip=#{isvip,jdbcType=INTEGER} ,
+		</if> 
+		<if test="isCollectfees!=null">
+		isCollectfees=#{isCollectfees,jdbcType=INTEGER},
+		</if>
+		</set>				
+		where seriesCode=#{seriesCode,jdbcType=INTEGER}	
+	</update>
+		<!-- 更新热搜中绑定的专辑信息 -->
+	<update id="updatehotsearchalbuminfo" parameterType="Map">
+	  update vod_phone_hotsearch
+	  <set>
+	   <if test="status!=null">
+		status=#{status,jdbcType=VARCHAR},
+		</if>
+		<if test="pictureurl1!=null">
+		pictureurl1=#{pictureurl1,jdbcType=VARCHAR},
+		</if>
+		<if test="seriesName!=null">
+		seriesName=#{seriesName,jdbcType=VARCHAR},
+		</if>
+		<if test="pictureurl2!=null">
+		pictureurl2=#{pictureurl2,jdbcType=VARCHAR},
+		</if>
+		<if test="description!=null">
+		description=#{description,jdbcType=VARCHAR},
+		</if>
+		<if test="score!=null">
+		score=#{score,jdbcType=VARCHAR},
+		</if>
+		<if test="viewPoint!=null">
+		viewPoint=#{viewPoint,jdbcType=VARCHAR},
+		</if>
+		<if test="duration!=null">
+		duration=#{duration,jdbcType=VARCHAR},
+		</if>
+		<if test="corner!=null">
+		corner=#{corner,jdbcType=VARCHAR},
+		</if>
+		<if test="cornerimg!=null">
+		cornerimg=#{cornerimg,jdbcType=VARCHAR},
+		</if>
+		<if test="isvip!=null">
+		isvip=#{isvip,jdbcType=INTEGER} ,
+		</if> 
+		<if test="volumncount!=null">
+		volumncount=#{volumncount,jdbcType=INTEGER},
+		</if>
+		<if test="currentnum!=null">
+		currentnum=#{currentnum,jdbcType=INTEGER},
+		</if>
+		</set>
+		where seriesCode=#{seriesCode,jdbcType=INTEGER}	
+	  </update>
+	  <update id="updatehotseriesalbuminfo" parameterType="Map">
+	  update vod_phone_hotseriesvideo
+	  <set>
+	   <if test="status!=null">
+		status=#{status,jdbcType=INTEGER} ,
+		</if> 
+		<if test="pictureurl1!=null">
+		pictureurl1=#{pictureurl1,jdbcType=VARCHAR},
+		</if>
+		<if test="seriesName!=null">
+		seriesName=#{seriesName,jdbcType=VARCHAR},
+		</if>
+		<if test="pictureurl2!=null">
+		pictureurl2=#{pictureurl2,jdbcType=VARCHAR},
+		</if>
+		<if test="description!=null">
+		description=#{description,jdbcType=VARCHAR},
+		</if>
+		<if test="score!=null">
+		score=#{score,jdbcType=VARCHAR},
+		</if>
+		<if test="viewPoint!=null">
+		viewPoint=#{viewPoint,jdbcType=VARCHAR},
+		</if>
+		<if test="duration!=null">
+		duration=#{duration,jdbcType=VARCHAR},
+		</if>
+		<if test="corner!=null">
+		corner=#{corner,jdbcType=VARCHAR},
+		</if>
+		<if test="cornerimg!=null">
+		cornerimg=#{cornerimg,jdbcType=VARCHAR},
+		</if>
+		<if test="isvip!=null">
+		isvip=#{isvip,jdbcType=INTEGER} ,
+		</if> 
+		<if test="epis!=null">
+		epis=#{epis,jdbcType=INTEGER},
+		</if>
+		<if test="volumncount!=null">
+		volumncount=#{volumncount,jdbcType=INTEGER},
+		</if>
+		<if test="currentnum!=null">
+		currentnum=#{currentnum,jdbcType=INTEGER},
+		</if>
+		</set>
+		where seriesCode=#{seriesCode,jdbcType=INTEGER}	
+	</update>
+	
+	
+	
+	<!--标签分类 start -->
+	<insert id="insertlabeltype" parameterType="map">
+		insert into vod_labeltype (id,name,sequence,update_time)
+		values(
+		#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},
+		#{sequence,jdbcType=VARCHAR},now()
+		)
+	</insert>
+	<delete id="deletelabeltype" parameterType="Map">
+		delete from
+		vod_labeltype
+	</delete>
+	<!--标签分类 end -->
+	
+</mapper>

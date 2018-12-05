@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.UserPositionMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.UserPosition" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="mobileNum" property="mobilenum" jdbcType="BIGINT" />
+    <result column="channelId" property="channelid" jdbcType="INTEGER" />
+    <result column="lunbotu" property="lunbotu" jdbcType="INTEGER" />
+    <result column="moban" property="moban" jdbcType="INTEGER" />
+    <result column="biaoqian" property="biaoqian" jdbcType="INTEGER" />
+    <result column="tuijian" property="tuijian" jdbcType="INTEGER" />
+    <result column="wenzi" property="wenzi" jdbcType="INTEGER" />
+    <result column="zhuanji" property="zhuanji" jdbcType="INTEGER" />
+    <result column="yunyinwei" property="yunyinwei" jdbcType="INTEGER" />
+    <result column="seriesCode" property="seriescode" jdbcType="VARCHAR" />
+    <result column="beizhu" property="beizhu" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, mobileNum, channelId, lunbotu, moban, biaoqian, tuijian, wenzi, zhuanji, yunyinwei, 
+    seriesCode, beizhu, createTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_position
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_position
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pbtd.playuser.domain.UserPosition" >
+    insert into user_position (id, mobileNum, channelId, 
+      lunbotu, moban, biaoqian, 
+      tuijian, wenzi, zhuanji, 
+      yunyinwei, seriesCode, beizhu, 
+      createTime)
+    values (#{id,jdbcType=INTEGER}, #{mobilenum,jdbcType=BIGINT}, #{channelid,jdbcType=INTEGER}, 
+      #{lunbotu,jdbcType=INTEGER}, #{moban,jdbcType=INTEGER}, #{biaoqian,jdbcType=INTEGER}, 
+      #{tuijian,jdbcType=INTEGER}, #{wenzi,jdbcType=INTEGER}, #{zhuanji,jdbcType=INTEGER}, 
+      #{yunyinwei,jdbcType=INTEGER}, #{seriescode,jdbcType=VARCHAR}, #{beizhu,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="Map" >
+    insert into user_position
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="mobileNum != null" >
+        mobileNum,
+      </if>
+      <if test="channelId != null" >
+        channelId,
+      </if>
+      <if test="lunbotu != null" >
+        lunbotu,
+      </if>
+      <if test="moban != null" >
+        moban,
+      </if>
+      <if test="biaoqian != null" >
+        biaoqian,
+      </if>
+      <if test="tuijian != null" >
+        tuijian,
+      </if>
+      <if test="wenzi != null" >
+        wenzi,
+      </if>
+      <if test="zhuanji != null" >
+        zhuanji,
+      </if>
+      <if test="yunyinwei != null" >
+        yunyinwei,
+      </if>
+      <if test="seriesCode != null" >
+        seriesCode,
+      </if>
+      <if test="beizhu != null" >
+        beizhu,
+      </if>
+        createTime
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mobileNum != null" >
+        #{mobileNum,jdbcType=BIGINT},
+      </if>
+      <if test="channelId != null" >
+        #{channelId,jdbcType=INTEGER},
+      </if>
+      <if test="lunbotu != null" >
+        #{lunbotu,jdbcType=INTEGER},
+      </if>
+      <if test="moban != null" >
+        #{moban,jdbcType=INTEGER},
+      </if>
+      <if test="biaoqian != null" >
+        #{biaoqian,jdbcType=INTEGER},
+      </if>
+      <if test="tuijian != null" >
+        #{tuijian,jdbcType=INTEGER},
+      </if>
+      <if test="wenzi != null" >
+        #{wenzi,jdbcType=INTEGER},
+      </if>
+      <if test="zhuanji != null" >
+        #{zhuanji,jdbcType=INTEGER},
+      </if>
+      <if test="yunyinwei != null" >
+        #{yunyinwei,jdbcType=INTEGER},
+      </if>
+      <if test="seriesCode != null" >
+        #{seriesCode,jdbcType=VARCHAR},
+      </if>
+      <if test="beizhu != null" >
+        #{beizhu,jdbcType=VARCHAR},
+      </if>
+       now()
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playuser.domain.UserPosition" >
+    update user_position
+    <set >
+      <if test="mobilenum != null" >
+        mobileNum = #{mobilenum,jdbcType=BIGINT},
+      </if>
+      <if test="channelid != null" >
+        channelId = #{channelid,jdbcType=INTEGER},
+      </if>
+      <if test="lunbotu != null" >
+        lunbotu = #{lunbotu,jdbcType=INTEGER},
+      </if>
+      <if test="moban != null" >
+        moban = #{moban,jdbcType=INTEGER},
+      </if>
+      <if test="biaoqian != null" >
+        biaoqian = #{biaoqian,jdbcType=INTEGER},
+      </if>
+      <if test="tuijian != null" >
+        tuijian = #{tuijian,jdbcType=INTEGER},
+      </if>
+      <if test="wenzi != null" >
+        wenzi = #{wenzi,jdbcType=INTEGER},
+      </if>
+      <if test="zhuanji != null" >
+        zhuanji = #{zhuanji,jdbcType=INTEGER},
+      </if>
+      <if test="yunyinwei != null" >
+        yunyinwei = #{yunyinwei,jdbcType=INTEGER},
+      </if>
+      <if test="seriescode != null" >
+        seriesCode = #{seriescode,jdbcType=VARCHAR},
+      </if>
+      <if test="beizhu != null" >
+        beizhu = #{beizhu,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playuser.domain.UserPosition" >
+    update user_position
+    set mobileNum = #{mobilenum,jdbcType=BIGINT},
+      channelId = #{channelid,jdbcType=INTEGER},
+      lunbotu = #{lunbotu,jdbcType=INTEGER},
+      moban = #{moban,jdbcType=INTEGER},
+      biaoqian = #{biaoqian,jdbcType=INTEGER},
+      tuijian = #{tuijian,jdbcType=INTEGER},
+      wenzi = #{wenzi,jdbcType=INTEGER},
+      zhuanji = #{zhuanji,jdbcType=INTEGER},
+      yunyinwei = #{yunyinwei,jdbcType=INTEGER},
+      seriesCode = #{seriescode,jdbcType=VARCHAR},
+      beizhu = #{beizhu,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

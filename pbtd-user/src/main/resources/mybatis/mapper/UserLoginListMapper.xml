@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.UserLoginListMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.UserLoginList" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="userMobile" property="usermobile" jdbcType="CHAR" />
+    <result column="sourceFlag" property="sourceflag" jdbcType="INTEGER" />
+    <result column="creatTime" property="creattime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userMobile, sourceFlag, creatTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_login_list
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_login_list
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pbtd.playuser.domain.UserLoginList" >
+    insert into user_login_list (userMobile, sourceFlag, 
+      creatTime)
+    values (#{usermobile,jdbcType=CHAR}, #{sourceflag,jdbcType=INTEGER}, 
+      now())
+  </insert>
+  <insert id="insertSelective" parameterType="com.pbtd.playuser.domain.UserLoginList" >
+    insert into user_login_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="usermobile != null" >
+        userMobile,
+      </if>
+      <if test="sourceflag != null" >
+        sourceFlag,
+      </if>
+      <if test="creattime != null" >
+        creatTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="usermobile != null" >
+        #{usermobile,jdbcType=CHAR},
+      </if>
+      <if test="sourceflag != null" >
+        #{sourceflag,jdbcType=INTEGER},
+      </if>
+      <if test="creattime != null" >
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playuser.domain.UserLoginList" >
+    update user_login_list
+    <set >
+      <if test="usermobile != null" >
+        userMobile = #{usermobile,jdbcType=CHAR},
+      </if>
+      <if test="sourceflag != null" >
+        sourceFlag = #{sourceflag,jdbcType=INTEGER},
+      </if>
+      <if test="creattime != null" >
+        creatTime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playuser.domain.UserLoginList" >
+    update user_login_list
+    set userMobile = #{usermobile,jdbcType=CHAR},
+      sourceFlag = #{sourceflag,jdbcType=INTEGER},
+      creatTime = #{creattime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+   <select id="count"  resultType="java.lang.Integer" >
+    select count(1)
+    from user_login_list
+  </select>
+   <select id="countindate"   parameterType="Map" resultType="java.lang.Integer" >
+   SELECT count(1) from (
+    select count(1)
+    from user_login_list a
+    <if test="startTime != null">
+	where date(a.creatTime) BETWEEN #{startTime} and  #{endTime}
+	</if>
+	GROUP BY userMobile ) a;
+  </select>
+   <select id="listcount"  parameterType="Map"  resultType="java.util.HashMap">
+   SELECT t.time,count(1) activecount from(
+	SELECT
+	DATE_FORMAT(creatTime, '%Y-%m-%d') AS time,
+	id,userMobile
+	FROM
+	user_login_list a 
+	<if test="startTime != null">
+	where date(a.creatTime) BETWEEN #{startTime} and  #{endTime}
+	</if>
+	GROUP BY
+	userMobile,time) as t GROUP BY t.time order by t.time
+  </select>
+</mapper>

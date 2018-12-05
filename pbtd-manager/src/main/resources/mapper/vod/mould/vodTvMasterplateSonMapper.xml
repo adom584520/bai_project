@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.pbtd.manager.vod.common.mould.mapper.vodMasterplateSonMapper">
+	<resultMap id="BaseResultMap"
+		type="com.pbtd.manager.vod.common.mould.domain.vodMasterplateSon">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="masterplateid" property="masterplateid"
+			jdbcType="INTEGER" />
+		<result column="count" property="count" jdbcType="INTEGER" />
+		<result column="masterplatenum" property="masterplatenum"
+			jdbcType="INTEGER" />
+		<result column="masterplatename" property="masterplatename"
+			jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+	  	id, masterplateid, count, masterplatenum,name
+	</sql>
+	<!-- 模糊查询 -->
+	<sql id="whrClauseLike">
+		<if test="masterplateName != null and masterplateName != ''">
+			and name like '%${name}%'
+		</if>
+	</sql>
+	<!-- 精确查询 -->
+	<sql id="whrClauseEqual">
+		<if test="masterplateid != null and masterplateid > -1">
+			and masterplateid = #{masterplateid,jdbcType=INTEGER}
+		</if>
+	</sql>
+	<sql id="orderByClause">
+		<choose>
+			<when test="sort != null and sort != ''">
+				order by ${sort}
+				<if test="order != null and order != ''">${order}</if>
+			</when>
+			<otherwise>
+				order by id
+			</otherwise>
+		</choose>
+	</sql>
+	<select id="count" parameterType="Map" resultType="INTEGER">
+		select count(1)
+		from vod_masterplate_son
+		where 1=1
+		<include refid="whrClauseLike" />
+		<include refid="whrClauseEqual" />
+	</select>
+	<select id="page" parameterType="Map" resultMap="BaseResultMap">
+		select a.id, a.masterplateid, a.count,
+		a.masterplatenum,name,b.masterplateName masterplatename
+		from
+		vod_masterplate_son a
+		left join vod_masterplate b on
+		a.masterplateid=b.id
+		<where>
+			<if test="name != null and name != ''">
+				and a.name like '%${name}%'
+			</if>
+			<if test="masterplateid != null and masterplateid > -1">
+				and a.masterplateid = #{masterplateid,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by a.masterplateid,a.masterplatenum
+		<if test="start != null  ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="find" parameterType="Map" resultMap="BaseResultMap">
+		select a.id, a.masterplateid, a.count,
+		a.masterplatenum,name,b.masterplateName masterplatename
+		from
+		vod_masterplate_son a
+		left join vod_masterplate b on
+		a.masterplateid=b.id
+		<where>
+			<if test="name != null and name != ''">
+				and a.name like '%${name}%'
+			</if>
+			<if test="masterplateid != null and masterplateid > -1">
+				and a.masterplateid = #{masterplateid,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by a.masterplateid,a.masterplatenum
+		<if test="start != null  ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="findSon" parameterType="Map" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List"></include>
+		from vod_masterplate_son
+		<where>
+			<if test="ids!=null and ids!=''">
+				and masterplateid in 
+				<foreach collection="ids" item="moduleId" open="(" separator="," close=")">
+					#{moduleId,jdbcType=INTEGER}
+				</foreach>
+			</if>
+		</where>
+		order by masterplateid,masterplatenum
+	</select>
+	
+	<select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from vod_masterplate_son
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="delete" parameterType="map">
+		delete from vod_masterplate_son
+		where 1=1
+		<if test="id != null and id!=''">
+			and id = #{id,jdbcType=INTEGER}
+		</if>
+	</delete>
+	<insert id="insert"
+		parameterType="com.pbtd.manager.vod.common.mould.domain.vodMasterplateSon">
+		insert into vod_masterplate_son ( masterplateid,
+		masterplatenum,
+		count,name)
+		values (
+		#{masterplateid,jdbcType=VARCHAR},
+		#{masterplatenum,jdbcType=INTEGER},
+		#{count,jdbcType=INTEGER},#{name,jdbcType=VARCHAR})
+	</insert>
+	<update id="update"
+		parameterType="com.pbtd.manager.vod.common.mould.domain.vodMasterplateSon">
+		update vod_masterplate_son
+		<set>
+			<if test="masterplateid != null">
+				masterplateid = #{masterplateid,jdbcType=VARCHAR},
+			</if>
+			<if test="masterplatenum != null">
+				masterplatenum = #{masterplatenum,jdbcType=INTEGER},
+			</if>
+			<if test="count != null">
+				count = #{count,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from vod_masterplate_son
+		where masterplateId = #{id} order by masterplateNum
+	</select>
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.launcher.mapper.AdvertisementMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.launcher.domain.Advertisement" >
+        <id column="id" property="id"/>
+        <result column="group_id" property="groupId"/>
+        <result column="adv_name" property="advName"/>
+        <result column="type" property="type"/>
+        <result column="show_type" property="showType"/>
+        <result column="images" property="images"/>
+        <result column="video" property="video"/>
+        <result column="adv_time" property="advTime"/>
+        <result column="status" property="status"/>
+    </resultMap>
+    
+    <sql id="columns">
+    	id,group_id,adv_name,type,show_type,images,video,adv_time,status
+    </sql>
+    
+    <select id="queryStartAdvByGroupId" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from launcher_advertisement
+    	where group_id = #{groupId} and type = #{type} and status = #{status}
+    </select>
+</mapper>

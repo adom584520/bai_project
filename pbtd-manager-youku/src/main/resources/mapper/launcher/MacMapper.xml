@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.launcher.mapper.MacMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.launcher.domain.Mac" >
+        <id column="id" property="id"/>
+        <result column="mac_name" property="macName"/>
+        <result column="logininfo_name" property="loginInfoName"/>
+        <result column="group_id" property="groupId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+    
+    <sql id="columns">
+    	id,mac_name,logininfo_name,group_id,create_time
+    </sql>
+    <sql id="queryAndlimit">
+    	<where>
+    		<if test="macName!=null">
+    			and mac_name like concat("%",#{macName},"%")
+    		</if>
+    		<if test="groupId!=null">
+    			and group_id = #{groupId}
+    		</if>
+    	</where>
+    </sql>
+    <select id="queryCount" resultType="long">
+    	select count(id)
+    	from launcher_mac
+    	<include refid="queryAndlimit"/>
+    </select>
+    <select id="queryList" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from launcher_mac
+    	<include refid="queryAndlimit"/>
+    	order by create_time desc,id asc
+    	limit #{start},#{pageSize}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    	insert into launcher_mac
+    	(mac_name,logininfo_name,group_id,create_time)
+    	values(#{macName},#{loginInfoName},#{groupId},#{createTime})
+    </insert>
+    
+    <update id="update">
+    	update launcher_mac
+    	set mac_name=#{macName},group_id=#{groupId}
+    	where id = #{id}
+    </update>
+    
+    <delete id="delete">
+    	delete from launcher_mac
+    	where id = #{id}
+    </delete>
+    
+    <select id="getMacByMacName" resultMap="baseResultMap">
+    	select id,mac_name,logininfo_name,group_id,create_time
+    	from launcher_mac
+    	where mac_name = #{macName}
+    </select>
+    
+    <select id="queryListGroupIdByMacName" resultType="long">
+    	select group_id
+    	from launcher_mac
+    	where mac_name like concat("%",#{macName},"%")
+    </select>
+    
+    <select id="batchQueryByMacName" resultType="string">
+    	select mac_name
+    	from launcher_mac
+    	where mac_name in
+    	<foreach collection="list" index="index" item="macName" open="(" separator="," close=")">  
+    		#{macName}  
+    	</foreach>
+    </select>
+    
+    <insert id="batchInsert">
+    	insert into launcher_mac
+    	(mac_name,logininfo_name,group_id,create_time)
+    	values
+    	<foreach collection="list" index="index" item="mac" separator=",">  
+    		(#{mac.macName},#{mac.loginInfoName},#{mac.groupId},#{mac.createTime})
+    	</foreach>
+    </insert>
+    
+    <select id="batchExportByGroupId" resultType="com.pbtd.manager.launcher.domain.Mac">
+    	select m.id id,m.mac_name macName,m.logininfo_name loginInfoName,m.create_time createTime,g.group_name groupName
+    	from launcher_mac m join launcher_group g
+    	on(m.group_id=g.id)
+    	where m.group_id = #{groupId}
+    </select>
+    
+    <delete id="deleteBatch">
+    	delete from launcher_mac
+    	where id in 
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    
+    <delete id="deleteByGroupIdList">
+    	delete from launcher_mac
+    	where group_id in 
+    	<foreach collection="list" index="index" item="groupId" open="(" separator="," close=")">
+    		#{groupId}
+    	</foreach>
+    </delete>
+</mapper>

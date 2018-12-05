@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.PlayHistoryInfoTVMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.PlayHistoryInfo">
+		<id column="id" property="id"/>
+		<result column="mac" property="mac"/>
+		<result column="palypos" property="playpos"/>
+		<result column="dram" property="drama"/>
+		<result column="dramaname" property="dramaname"/>
+		<result column="seriesCode" property="seriesCode"/>
+		<result column="pictureurl1" property="pictureurl1"/>
+		<result column="pictureurl2" property="pictureurl2"/>
+		<result column="duration" property="duration"/>
+		<result column="viewPoint" property="viewPoint"/>
+		<result column="seriesName" property="seriesName"/>
+		<result column="status" property="status"/>
+		<result column="createTime" property="createTime"/>
+	</resultMap>
+	
+	<sql id="column">
+		id, mac, palypos,dram, dramaname, seriesCode, pictureurl1,pictureurl2,duration,
+		viewPoint,seriesName,status,createTime
+	</sql>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into user_play_history_info_tv
+		(mac, palypos, dram,dramaname, seriesCode,status,createTime)
+		values (
+		#{mac},#{playpos},#{drama},#{dramaname},#{seriesCode},#{status},#{createTime})
+	</insert>
+	
+	<update id="update">
+		update user_play_history_info_tv
+		set pictureurl1=#{pictureurl1},pictureurl2=#{pictureurl2},duration=#{duration},
+		viewPoint=#{viewPoint},seriesName=#{seriesName}
+		where id = #{id}
+	</update>
+	
+	<update id="updateStatusBatch">
+		update user_play_history_info_tv
+		set status = #{status}
+		<where>
+			mac = #{mac}
+			<if test="list!=null and list.size()>0">
+				and seriesCode in
+				<foreach collection="list" item="code" open="(" separator="," close=")">
+					#{code}
+				</foreach>
+			</if>
+			and status = #{queryStatus}
+		</where>
+	</update>
+	
+	<update id="updateStatus">
+		update user_play_history_info_tv
+		set status = #{status}
+		<where>
+			mac = #{mac}
+			<if test="seriesCode!=null">
+				and seriesCode=#{seriesCode}
+			</if>
+			and status = #{queryStatus}
+		</where>
+	</update>
+	
+	<select id="queryAll" resultMap="BaseResultMap">
+		select <include refid="column" />
+		from user_play_history_info_tv
+		<where>
+			and mac = #{mac}
+			<if test="status!=null">
+				and status = #{status}
+			</if>
+		</where>
+		order by createTime DESC,id asc
+		limit #{pagination},#{row}
+	</select>
+	
+	<select id="queryOne" resultMap="BaseResultMap">
+		select <include refid="column"/>
+		from user_play_history_info_tv
+		where mac=#{mac} and seriesCode=#{seriesCode} and status=#{status}
+	</select>
+	
+	<update id="updateStatusByGtId">
+		update user_play_history_info_tv
+		set status = #{status}
+		where mac=#{mac} and (createTime = #{createTime} or createTime &lt; #{createTime}) and status = #{queryStatus}
+	</update>
+</mapper>

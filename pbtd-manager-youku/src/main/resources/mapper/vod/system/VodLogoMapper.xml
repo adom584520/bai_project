@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.system.mapper.LogoMapper">
+  <!-- 查询数据 -->
+  <select id="find" resultType="Map" >
+  select id,name,logo,instruction,create_time,create_user,modify_time,modify_user
+   from vod_phone_logo where 1=1
+   <if test="name!=null and name!=''">
+    and name like '%#{name,jdbcType=VARCHART}%'
+    </if>
+    <if test="id!=null and id!=''">
+    and id=#{id,jdbcType=INTEGER}
+    </if> 
+  </select>
+  
+   <select id="load" parameterType="INTEGER" resultType="com.pbtd.manager.vod.system.domain.Logo" >
+   select id,name,logo,instruction
+   from vod_phone_logo
+   where  id=#{id,jdbcType=INTEGER}   
+  </select>
+  
+  <select id="count" parameterType="Map" resultType="INTEGER" >
+    select count(id) count from vod_phone_logo    
+  </select>
+  
+  <insert id="add" parameterType="Map">
+   insert into vod_phone_logo 
+   (name,logo,instruction,create_time,create_user,modify_time,modify_user)
+   values
+   (#{name},#{logo},#{instruction},now(),#{create_user},#{modify_time,},#{modify_user})
+  </insert>
+  
+  <update id="modify" parameterType="Map">
+    update vod_phone_logo
+    <set>
+    <if test="name!=null and name!=''">
+    name=#{name,jdbcType=VARCHAR},
+    </if>
+    <if test="logo!=null and logo!=''">
+  	 logo=#{logo,jdbcType=VARCHAR},
+    </if>
+    <if test="instruction!=null and instruction!=''">
+  	instruction=#{instruction,jdbcType=VARCHAR},
+    </if>
+    <if test="modify_user!=null and modify_user!=''">
+  	 modify_user=#{modify_user,jdbcType=VARCHAR},
+  	 modify_time=now()
+    </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}   
+  </update>
+  
+  <delete id="delete" parameterType="Map">
+  delete from vod_phone_logo
+  where 1=1
+   <if test="id != null and id > -1">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+      <if test="id_!= null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+  </delete>  
+</mapper>

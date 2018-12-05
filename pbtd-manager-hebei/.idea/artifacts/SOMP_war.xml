@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="SOMP:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="SOMP-20181018-2.1.19.war">
+      <element id="artifact" artifact-name="SOMP:war exploded" />
+    </root>
+  </artifact>
+</component>

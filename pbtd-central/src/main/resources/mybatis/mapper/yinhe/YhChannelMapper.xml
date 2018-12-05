@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.playclick.yinhe.mapper.YhChannelMapper">
+	<resultMap id="resultMap" type="com.pbtd.playclick.yinhe.domain.YhChannel">
+		<result column="chnId" property="chnId" jdbcType="VARCHAR" />
+		<result column="chnName" property="chnName" jdbcType="VARCHAR" />
+		<result column="level" property="level" jdbcType="VARCHAR" />
+		<result column="bz" property="bz" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="columns">
+		chnId, chnName, level,bz,status
+	</sql>
+	
+	<!-- 模糊查询 -->
+	<sql id="whrClauseLike">
+		<if test="chnId != null and chnId > -1">
+			and chnId = #{chnId,jdbcType=VARCHAR}
+		</if>
+		<if test="level != null and level > -1">
+			and level = #{level,jdbcType=VARCHAR}
+		</if>
+		<if test="chnName != null and chnName != ''">
+			and chnName like CONCAT('%', #{chnName,jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="status != null and status != ''">
+			and status =#{status,jdbcType=VARCHAR}
+		</if>
+	</sql>
+
+	<!-- 精确查询 -->
+	<sql id="whrClauseEqual">
+		<if test="chnId != null and chnId > -1">
+			and chnId = #{chnId,jdbcType=VARCHAR}
+		</if>
+		<if test="level != null and level > -1">
+			and level = #{level,jdbcType=VARCHAR}
+		</if>
+		<if test="chnName != null and chnName != ''">
+			and chnName like CONCAT('%', #{chnName,jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="status != null and status != ''">
+			and status =#{status,jdbcType=VARCHAR}
+		</if>
+	</sql>
+	
+	<sql id="whrClauseEqualMore">
+		<if test="id_ != null">
+			and ID in
+			<foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=VARCHAR}
+			</foreach>
+		</if>
+	</sql>
+	
+	<sql id="orderByClause">
+		<choose>
+			<when test="sort != null and sort != ''">
+				order by ${sort}
+				<if test="order != null and order != ''">${order}</if>
+			</when>
+			<otherwise>
+				order by ID asc
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<!--SElECT查询语句 -->
+	<select id="count" parameterType="Map" resultType="java.lang.String">
+		select count(1)
+		from yh_vod_channel
+		where 1=1
+		<if test="chnId != null and chnId > -1">
+			and chnId = #{chnId,jdbcType=VARCHAR}
+		</if>
+		<if test="level != null and level > -1">
+			and level = #{level,jdbcType=VARCHAR}
+		</if>
+		<if test="chnName != null and chnName != ''">
+			and chnName like CONCAT('%', #{chnName,jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="status != null and status != ''">
+			and status =#{status,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<select id="page" parameterType="Map" resultMap="resultMap">
+		select
+		chnId, chnName, level,bz,status from yh_vod_channel a
+		where 1=1
+		<if test="chnId != null and chnId > -1">
+			and chnId = #{chnId,jdbcType=VARCHAR}
+		</if>
+		<if test="level != null and level > -1">
+			and level = #{level,jdbcType=VARCHAR}
+		</if>
+		<if test="chnName != null and chnName != ''">
+			and chnName like CONCAT('%', #{chnName,jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="status != null and status != ''">
+			and status =#{status,jdbcType=VARCHAR}
+		</if>
+		limit #{start},#{pageSize}
+	</select>
+	
+	<select id="find" parameterType="Map" resultMap="resultMap">
+		select
+		chnId, chnName, level,bz,status from yh_vod_channel a
+		where 1=1
+		<if test="chnId != null and chnId > -1">
+			and chnId = #{chnId,jdbcType=VARCHAR}
+		</if>
+		<if test="level != null and level > -1">
+			and level = #{level,jdbcType=VARCHAR}
+		</if>
+		<if test="chnName != null and chnName != ''">
+			and chnName like CONCAT('%', #{chnName,jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="status != null and status != ''">
+			and status =#{status,jdbcType=VARCHAR}
+		</if>
+		limit #{start},#{pageSize}
+	</select>
+  
+  <select id="selectByPrimaryKey" resultMap="resultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="columns" />
+    from yh_vod_channel
+    where chnId = #{chnId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from yh_vod_channel
+    where chnId = #{chnId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.pbtd.playclick.yinhe.domain.YhChannel" >
+    insert into yh_vod_channel (chnId, chnName, level, 
+      bz, status)
+    values (#{chnId,jdbcType=VARCHAR}, #{chnName,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, 
+      #{bz,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.pbtd.playclick.yinhe.domain.YhChannel" >
+    insert into yh_vod_channel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="chnId != null" >
+        chnId,
+      </if>
+      <if test="chnName != null" >
+        chnName,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="bz != null" >
+        bz,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="chnId != null" >
+        #{chnId,jdbcType=VARCHAR},
+      </if>
+      <if test="chnName != null" >
+        #{chnName,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null" >
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playclick.yinhe.domain.YhChannel" >
+    update yh_vod_channel
+    <set >
+      <if test="chnName != null" >
+        chnName = #{chnName,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null" >
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where chnId = #{chnId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playclick.yinhe.domain.YhChannel" >
+    update yh_vod_channel
+    set chnName = #{chnName,jdbcType=VARCHAR},
+      level = #{level,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where chnId = #{chnId,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

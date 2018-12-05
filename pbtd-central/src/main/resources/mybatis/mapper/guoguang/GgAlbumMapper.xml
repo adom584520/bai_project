@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playclick.guoguang.mapper.GgAlbumMapper">
+	<!-- 更新时间 start -->
+
+	<select id="getupdate" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select updatetime from gg_vod_uptime
+	</select>
+	<update id="updatetime" parameterType="java.lang.String">
+		update gg_vod_uptime set
+		updatetime=#{time,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 更新时间 end -->
+	<!-- 产品 start -->
+	<insert id="insertAlbums" parameterType="com.pbtd.playclick.guoguang.domain.GgAlbums">
+		insert into gg_vod_album
+		(
+		code ,name,status,isdelete,updatetime
+		)
+		values(
+		#{code,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},
+		#{isdelete,jdbcType=INTEGER},
+		#{updatetime,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="updateAlbums" parameterType="com.pbtd.playclick.guoguang.domain.GgAlbums">
+		update gg_vod_album
+		<set>
+			<if test="name!=null">
+				name=#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="status!=null">
+				status=#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="isdelete!=null">
+				isdelete=#{isdelete,jdbcType=VARCHAR},
+			</if>
+			<if test="updatetime!=null">
+				updatetime=#{updatetime,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where code=#{code,jdbcType=INTEGER}
+	</update>
+	<select id="countAlbums" parameterType="com.pbtd.playclick.guoguang.domain.GgAlbums"
+		resultType="java.lang.Integer">
+		select count(1)
+		from gg_vod_album where 1=1
+		and
+		code=#{code,jdbcType=INTEGER}
+
+	</select>
+	<!-- 产品 end -->
+	<!-- 专辑 start -->
+	<insert id="insertAlbuminfo" parameterType="com.pbtd.playclick.guoguang.domain.GgAlbumsinfo">
+		insert into
+		gg_vod_albuminfo
+		(
+		code
+		,name,status,isdelete,pictureURL1,pictureURL2,pictureURL3,pictureURL4,writerDisplay,
+		actorDisplay,programType,programType2,programTypeids,programType2ids,releaseYear,volumnCount,currentNum,description,originalCountry,
+		duration,viewPoint,cpName
+		)
+		values
+		(
+		#{code,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},
+		#{isdelete,jdbcType=INTEGER},
+		#{pictureURL1,jdbcType=VARCHAR},
+		#{pictureURL2,jdbcType=VARCHAR},
+		#{pictureURL3,jdbcType=VARCHAR},
+		#{pictureURL4,jdbcType=VARCHAR},
+		#{writerDisplay,jdbcType=VARCHAR},
+		#{actorDisplay,jdbcType=VARCHAR},
+		#{programType,jdbcType=VARCHAR},
+		#{programType2,jdbcType=VARCHAR},
+		#{programTypeids,jdbcType=VARCHAR},
+		#{programType2ids,jdbcType=VARCHAR},
+		#{releaseYear,jdbcType=VARCHAR},
+		#{volumnCount,jdbcType=INTEGER},
+		#{currentNum,jdbcType=INTEGER},
+		#{description,jdbcType=VARCHAR},
+		#{originalCountry,jdbcType=VARCHAR},
+		#{duration,jdbcType=INTEGER},
+		#{viewPoint,jdbcType=VARCHAR},
+		#{cpName,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updateAlbuminfo" parameterType="com.pbtd.playclick.guoguang.domain.GgAlbumsinfo">
+		update gg_vod_albuminfo
+		<set>
+			updatetime=now(),updatestatus=0,
+			<if test="programType2!=null">
+				programType2=#{programType2,jdbcType=VARCHAR},
+			</if>
+			<if test="programType!=null">
+				programType=#{programType,jdbcType=VARCHAR},
+			</if>
+			<if test="programType2ids!=null">
+				programType2ids=#{programType2ids,jdbcType=VARCHAR},
+			</if>
+			<if test="programTypeids!=null">
+				programTypeids=#{programTypeids,jdbcType=VARCHAR},
+			</if>
+			<if test="actorDisplay!=null">
+				actorDisplay=#{actorDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="writerDisplay!=null">
+				writerDisplay=#{writerDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureURL1!=null">
+				pictureURL1=#{pictureURL1,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureURL2!=null">
+				pictureURL2=#{pictureURL2,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureURL3!=null">
+				pictureURL3=#{pictureURL3,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureURL4!=null">
+				pictureURL4=#{pictureURL4,jdbcType=VARCHAR},
+			</if>
+			<if test="isdelete!=null">
+				isdelete=#{isdelete,jdbcType=INTEGER},
+			</if>
+			<if test="status!=null">
+				status=#{status,jdbcType=INTEGER},
+			</if>
+			<if test="name!=null">
+				name=#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="status!=null">
+				status=#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="releaseYear!=null">
+				releaseYear=#{releaseYear,jdbcType=VARCHAR},
+			</if>
+			<if test="volumnCount!=null">
+				volumnCount=#{volumnCount,jdbcType=INTEGER},
+			</if>
+			<if test="currentNum!=null">
+				currentNum=#{currentNum,jdbcType=INTEGER},
+			</if>
+			<if test="description!=null">
+				description=#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="originalCountry!=null">
+				originalCountry=#{originalCountry,jdbcType=VARCHAR},
+			</if>
+			<if test="duration!=null">
+				duration=#{duration,jdbcType=INTEGER},
+			</if>
+			<if test="viewPoint!=null">
+				viewPoint=#{viewPoint,jdbcType=VARCHAR},
+			</if>
+			<if test="cpName!=null">
+				cpName=#{cpName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where code=#{code,jdbcType=INTEGER}
+	</update>
+	<select id="countAlbuminfo" parameterType="com.pbtd.playclick.guoguang.domain.GgAlbums"
+		resultType="java.lang.Integer">
+		select count(1)
+		from gg_vod_albuminfo where 1=1
+		and
+		code=#{code,jdbcType=INTEGER}
+	</select>
+	<!-- 专辑 end -->
+
+	<!-- 专辑明细 start -->
+	<insert id="insertAlbuminfovideo"
+		parameterType="com.pbtd.playclick.guoguang.domain.GgAlbumsinfovideo">
+		insert into gg_vod_albuminfovideo
+		(
+		code,volumn,name
+		,playURL,fileURL,dramacode
+		)
+		values
+		(
+		#{code,jdbcType=VARCHAR},
+		#{volumn,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{playURL,jdbcType=VARCHAR},
+		#{fileURL,jdbcType=VARCHAR},
+		#{dramacode,jdbcType=VARCHAR} )
+	</insert>
+	<update id="updateAlbuminfovideo"
+		parameterType="com.pbtd.playclick.guoguang.domain.GgAlbumsinfovideo">
+		update gg_vod_albuminfovideo
+		<set>
+			<if test="playURL!=null">
+				playURL=#{playURL,jdbcType=VARCHAR},
+			</if>
+			<if test="fileURL!=null">
+				fileURL=#{fileURL,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where code=#{code,jdbcType=INTEGER}
+		and name=#{name,jdbcType=VARCHAR}
+		and volumn=#{volumn,jdbcType=VARCHAR}
+	</update>
+	<select id="countAlbuminfovideo" parameterType="com.pbtd.playclick.guoguang.domain.GgAlbums"
+		resultType="java.lang.Integer">
+		select count(1)
+		from gg_vod_albuminfovideo
+		where
+		code=#{code,jdbcType=INTEGER}
+		and name=#{name,jdbcType=VARCHAR}
+		and
+		volumn=#{volumn,jdbcType=VARCHAR}
+	</select>
+	<!-- 专辑明细 end -->
+
+	<!-- 频道 start -->
+	<insert id="insertGgChannel" parameterType="com.pbtd.playclick.guoguang.domain.GgChannel">
+		insert into
+		gg_vod_channel
+		(
+		chnName
+		)
+		values
+		(
+		#{chnName,jdbcType=VARCHAR}
+		)
+	</insert>
+	<select id="getGgChannel" parameterType="com.pbtd.playclick.guoguang.domain.GgChannel"
+		resultType="Map">
+		select chnid,chnName from gg_vod_channel
+		where 1=1
+		<if test="chnId!=null">
+			chnId=#{chnId,jdbcType=INTEGER}
+		</if>
+		<if test="chnName!=null">
+			and chnName=#{chnName,jdbcType=VARCHAR}
+		</if>
+	</select>
+	<!-- 频道end -->
+
+	<!-- 标签 start -->
+	<insert id="insertLabel" parameterType="com.pbtd.playclick.guoguang.domain.GgLabel">
+		insert into gg_vod_label
+		( tagName,chnId,bz )
+		select #{tagName,jdbcType=VARCHAR},chnId,chnName
+		from gg_vod_channel
+		where chnName= #{bz,jdbcType=VARCHAR}
+	</insert>
+	<select id="getLabel" parameterType="com.pbtd.playclick.guoguang.domain.GgLabel"
+		resultType="Map">
+		select tagId,tagName,typeId,typeName,chnId,bz from gg_vod_label
+		where
+		1=1
+		<if test="tagName!=null">
+			and tagName=#{tagName,jdbcType=VARCHAR}
+		</if>
+		<if test="bz!=null">
+			and bz=#{bz,jdbcType=VARCHAR}
+		</if>
+	</select>
+	<!-- 标签end -->
+
+	<!-- 更新 dramacode -->
+	<update id="updateDramacode">
+		UPDATE gg_vod_albuminfovideo
+		SET dramacode =
+		CONCAT(unix_timestamp(now()),cast( floor(rand()*100000) as SIGNED) )
+		WHERE
+		dramacode IS NULL
+	</update>
+
+	<!-- 国广剧集排序增量sequence -->
+	<update id="updateSequence">
+		UPDATE gg_vod_albuminfovideo c,
+		(
+		SELECT
+		a.CODE,
+		a.volumn,
+		a.dramacode,
+		a.updatetime,
+		CASE
+		WHEN @mid = a.CODE THEN
+		@ROW :=@ROW + 1
+		ELSE
+		@ROW := 1
+		END rownum,
+		@mid := a.CODE
+		FROM
+		gg_vod_albuminfovideo a,
+		(SELECT @ROW := 0 ,@mid := '') r
+		WHERE a.dramasequence is NULL
+		ORDER BY
+		a.CODE,
+		CAST(
+		REPLACE (a.volumn, '-', '') AS signed
+		),
+		a.updatetime,
+		CAST(a.dramacode AS signed) ASC
+		) b,
+		(
+		SELECT
+		v.dramacode,
+		v.volumn,
+		v.CODE,
+		IF (
+		MAX(v.dramasequence) IS NULL,
+		0,
+		MAX(v.dramasequence)
+		) AS maxsequence
+		FROM
+		gg_vod_albuminfovideo v
+		WHERE
+		v.CODE IN (
+		SELECT
+		x.CODE
+		FROM
+		gg_vod_albuminfovideo x
+		WHERE
+		x.dramasequence IS NULL
+		GROUP BY
+		x.CODE
+		)
+		GROUP BY
+		v.CODE
+		) z
+		SET c.dramasequence = z.maxsequence + b.rownum
+		WHERE
+		c.dramacode = b.dramacode
+		AND c.CODE = z.CODE
+	</update>
+
+</mapper>

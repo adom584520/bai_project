@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.launcher.mapper.LauncherUIMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.launcher.domain.LauncherUI" >
+        <id column="id" property="id"/>
+        <result column="group_id" property="groupId"/>
+        <result column="group_name" property="groupName"/>
+        <result column="logo" property="logo"/>
+        <result column="poster_background" property="posterBackground"/>
+        <result column="picker_view" property="pickerView"/>
+        <result column="watch_background" property="watchBackground"/>
+        <result column="status" property="status"/>
+        <result column="loginInfo_name" property="loginInfoName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+    
+    <sql id="queryAndLimit">
+    	<where>
+    		<if test="groupId!=null">
+    			and d.group_id = #{groupId}
+    		</if>
+    	</where>
+    </sql>
+    
+    <sql id="multilistColumns">
+    	d.id,d.group_id,g.group_name group_name,d.logo,d.poster_background,d.picker_view,d.watch_background,d.status,d.loginInfo_name,
+    	d.create_time,d.modify_time
+    </sql>
+    <sql id="columns">
+    	id,group_id,logo,poster_background,picker_view,watch_background,status,loginInfo_name,create_time,modify_time
+    </sql>
+    <select id="queryCount" resultType="long">
+    	select count(*)
+    	from launcher_ui d join launcher_group g
+    	on(d.group_id=g.id)
+    	<include refid="queryAndLimit"/>
+    </select>
+    
+    <select id="queryList" resultMap="baseResultMap">
+    	select <include refid="multilistColumns"/>
+    	from launcher_ui d join launcher_group g
+    	on(d.group_id=g.id)
+    	<include refid="queryAndLimit"/>
+    	order by modify_time desc,id asc
+    	limit #{start},#{pageSize}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    	insert into launcher_ui
+    	(group_id,logo,poster_background,picker_view,watch_background,status,loginInfo_name,create_time,modify_time)
+    	values(#{groupId},#{logo},#{posterBackground},#{pickerView},#{watchBackground},#{status},#{loginInfoName},
+    	#{createTime},#{modifyTime})
+    </insert>
+    
+    <update id="update">
+    	update launcher_ui
+    	set logo = #{logo},poster_background = #{posterBackground},picker_view=#{pickerView},
+    	watch_background=#{watchBackground},modify_time=#{modifyTime}
+    	where id = #{id}
+    </update>
+    
+    <delete id="delete">
+    	delete from launcher_ui
+    	where id = #{id}
+    </delete>
+    
+    <select id="queryGroupDetailByStatus" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from launcher_ui
+    	where status = #{status} and group_id = #{groupId}
+    </select>
+    
+    <update id="uplineOrDownline">
+    	update launcher_ui
+    	set status = #{status},modify_time=#{modifyTime}
+    	where id = #{id}
+    </update>
+    
+    <select id="queryLauncherUI" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from launcher_ui
+    	where id = #{id}
+    </select>
+    
+    <delete id="deleteBatch">
+    	delete from launcher_ui
+    	where id in 
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+</mapper>

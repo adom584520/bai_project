@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.user.mapper.UserBaseInfoMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.user.domain.UserBaseInfo">
+		<id column="userId" property="userid" jdbcType="CHAR" />
+		<result column="userMobile" property="usermobile" jdbcType="CHAR" />
+		<result column="userName" property="username" jdbcType="VARCHAR" />
+		<result column="userNickName" property="usernickname" jdbcType="VARCHAR" />
+		<result column="userIcon" property="usericon" jdbcType="VARCHAR" />
+		<result column="vipStat" property="vipstat" jdbcType="INTEGER" />
+		<result column="vipType" property="viptype" jdbcType="VARCHAR" />
+		<result column="vipCreateTime" property="vipcreatetime"
+			jdbcType="TIMESTAMP" />
+		<result column="vipEndTime" property="vipendtime" jdbcType="TIMESTAMP" />
+		<result column="shareNum" property="sharenum" jdbcType="INTEGER" />
+		<result column="commendNun" property="commendnun" jdbcType="INTEGER" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		userId, userMobile, userName, userNickName, userIcon, vipStat, vipType,
+		vipCreateTime,
+		vipEndTime, shareNum, commendNun, code, createTime, updateTime
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from user_base_info
+		where userId = #{userid,jdbcType=CHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from user_base_info
+		where userId = #{userid,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.pbtd.manager.user.domain.UserBaseInfo">
+		insert into user_base_info (userId, userMobile, userName,
+		userNickName, userIcon, vipStat,
+		vipType, vipCreateTime, vipEndTime,
+		shareNum, commendNun, code,
+		createTime, updateTime)
+		values (#{userid,jdbcType=CHAR}, #{usermobile,jdbcType=CHAR},
+		#{username,jdbcType=VARCHAR},
+		#{usernickname,jdbcType=VARCHAR}, #{usericon,jdbcType=VARCHAR}, #{vipstat,jdbcType=INTEGER},
+		#{viptype,jdbcType=VARCHAR}, #{vipcreatetime,jdbcType=TIMESTAMP},
+		#{vipendtime,jdbcType=TIMESTAMP},
+		#{sharenum,jdbcType=INTEGER}, #{commendnun,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR},
+		#{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.pbtd.manager.user.domain.UserBaseInfo">
+		insert into user_base_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				userId,
+			</if>
+			<if test="usermobile != null">
+				userMobile,
+			</if>
+			<if test="username != null">
+				userName,
+			</if>
+			<if test="usernickname != null">
+				userNickName,
+			</if>
+			<if test="usericon != null">
+				userIcon,
+			</if>
+			<if test="vipstat != null">
+				vipStat,
+			</if>
+			<if test="viptype != null">
+				vipType,
+			</if>
+			<if test="vipcreatetime != null">
+				vipCreateTime,
+			</if>
+			<if test="vipendtime != null">
+				vipEndTime,
+			</if>
+			<if test="sharenum != null">
+				shareNum,
+			</if>
+			<if test="commendnun != null">
+				commendNun,
+			</if>
+			<if test="code != null">
+				code,
+			</if>
+			<if test="createtime != null">
+				createTime,
+			</if>
+			<if test="updatetime != null">
+				updateTime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				#{userid,jdbcType=CHAR},
+			</if>
+			<if test="usermobile != null">
+				#{usermobile,jdbcType=CHAR},
+			</if>
+			<if test="username != null">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="usernickname != null">
+				#{usernickname,jdbcType=VARCHAR},
+			</if>
+			<if test="usericon != null">
+				#{usericon,jdbcType=VARCHAR},
+			</if>
+			<if test="vipstat != null">
+				#{vipstat,jdbcType=INTEGER},
+			</if>
+			<if test="viptype != null">
+				#{viptype,jdbcType=VARCHAR},
+			</if>
+			<if test="vipcreatetime != null">
+				#{vipcreatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="vipendtime != null">
+				#{vipendtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="sharenum != null">
+				#{sharenum,jdbcType=INTEGER},
+			</if>
+			<if test="commendnun != null">
+				#{commendnun,jdbcType=INTEGER},
+			</if>
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatetime != null">
+				#{updatetime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.pbtd.manager.user.domain.UserBaseInfo">
+		update user_base_info
+		<set>
+			<if test="usermobile != null">
+				userMobile = #{usermobile,jdbcType=CHAR},
+			</if>
+			<if test="username != null">
+				userName = #{username,jdbcType=VARCHAR},
+			</if>
+			<if test="usernickname != null">
+				userNickName = #{usernickname,jdbcType=VARCHAR},
+			</if>
+			<if test="usericon != null">
+				userIcon = #{usericon,jdbcType=VARCHAR},
+			</if>
+			<if test="vipstat != null">
+				vipStat = #{vipstat,jdbcType=INTEGER},
+			</if>
+			<if test="viptype != null">
+				vipType = #{viptype,jdbcType=VARCHAR},
+			</if>
+			<if test="vipcreatetime != null">
+				vipCreateTime = #{vipcreatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="vipendtime != null">
+				vipEndTime = #{vipendtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="sharenum != null">
+				shareNum = #{sharenum,jdbcType=INTEGER},
+			</if>
+			<if test="commendnun != null">
+				commendNun = #{commendnun,jdbcType=INTEGER},
+			</if>
+			<if test="code != null">
+				code = #{code,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				createTime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatetime != null">
+				updateTime = #{updatetime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where userId = #{userid,jdbcType=CHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.pbtd.manager.user.domain.UserBaseInfo">
+		update user_base_info
+		set userMobile = #{usermobile,jdbcType=CHAR},
+		userName = #{username,jdbcType=VARCHAR},
+		userNickName = #{usernickname,jdbcType=VARCHAR},
+		userIcon = #{usericon,jdbcType=VARCHAR},
+		vipStat = #{vipstat,jdbcType=INTEGER},
+		vipType = #{viptype,jdbcType=VARCHAR},
+		vipCreateTime = #{vipcreatetime,jdbcType=TIMESTAMP},
+		vipEndTime = #{vipendtime,jdbcType=TIMESTAMP},
+		shareNum = #{sharenum,jdbcType=INTEGER},
+		commendNun = #{commendnun,jdbcType=INTEGER},
+		code = #{code,jdbcType=VARCHAR},
+		createTime = #{createtime,jdbcType=TIMESTAMP},
+		updateTime = #{updatetime,jdbcType=TIMESTAMP}
+		where userId = #{userid,jdbcType=CHAR}
+	</update>
+
+
+	<select id="usercount" parameterType="Map" resultType="INTEGER">
+		select
+		count(1)
+		from user_base_info
+		<where>
+			<if test="starttime != null">
+				and createTime &gt;= #{starttime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endtime != null">
+				and createTime &lt; #{endtime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+
+	<select id="getUserCount" resultType="INTEGER" parameterType="Map">
+		SELECT count(1) FROM
+		(SELECT count(1) FROM
+		user_base_info
+		WHERE createTime like concat('%',#{baseStartTime},'%')
+		GROUP BY userMobile) a
+	</select>
+</mapper>

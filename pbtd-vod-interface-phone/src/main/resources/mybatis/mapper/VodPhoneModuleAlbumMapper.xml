@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.vodinterface.web.mapper.VodPhoneModuleAlbumMapper">
+	<select id="select"  parameterType="Map" resultType="Map">
+		select
+		b.seriesCode,
+		b.seriesName,
+		b.pictureurl1,
+		b.pictureurl2,
+		b.pictureurl3,
+		b.pictureurl4,
+		b.score,
+		b.description,
+		b.viewPoint,
+		b.duration,
+		b.corner,
+		b.cornerimg,
+		b.isvip,
+		b.epis,
+		b.volumncount,
+		b.currentnum,
+		a.imgStatus,
+		a.imgurl1,
+		a.imgurl2,
+		a.imgurl3,
+		a.imgurl4
+		from vod_phone_module_album a	left join vod_phone_albuminfo b 
+		on a.seriesCode = b.seriesCode	where
+		a.moduleId = #{moduleId}	
+		and a.masterplateNum = #{masterplateNum}
+		and b.status = 1
+		and a.seriesCode = b.seriesCode
+		ORDER BY a.sequence
+ 		limit  #{pageStart},#{size}
+	</select>
+	<select id="selectitemdata"  parameterType="Map" resultType="Map">
+		select
+		b.seriesCode,
+		b.seriesName,
+		b.pictureurl1,
+		b.pictureurl2,
+		b.pictureurl3,
+		b.pictureurl4,
+		b.score,
+		b.description,
+		b.viewPoint,
+		b.duration,
+		b.corner,
+		b.cornerimg,
+		b.isvip,
+		b.epis,
+		b.volumncount,
+		b.currentnum,
+		a.imgStatus,
+		a.imgurl1,
+		a.imgurl2,
+		a.imgurl3,
+		a.imgurl4
+		from vod_phone_module_album a	left join vod_phone_albuminfo b 
+		on a.seriesCode = b.seriesCode	where
+		a.moduleId = #{moduleId}	
+		and b.status = 1
+		and a.seriesCode = b.seriesCode
+		ORDER BY a.sequence
+ 		limit  #{pageStart},#{size}
+	</select>
+	<select id="selectlastitemdata"  parameterType="Map" resultType="Map">
+		select
+		b.seriesCode,
+		b.seriesName,
+		b.pictureurl1,
+		b.pictureurl2,
+		b.pictureurl3,
+		b.pictureurl4,
+		b.score,
+		b.description,
+		b.viewPoint,
+		b.duration,
+		b.corner,
+		b.cornerimg,
+		b.isvip,
+		b.epis,
+		b.volumncount,
+		b.currentnum,
+		a.imgStatus,
+		a.imgurl1,
+		a.imgurl2,
+		a.imgurl3,
+		a.imgurl4
+		from vod_phone_module_album a	left join vod_phone_albuminfo b 
+		on a.seriesCode = b.seriesCode	where
+		a.moduleId = #{moduleId}	
+		and b.status = 1
+		and a.seriesCode = b.seriesCode
+		ORDER BY a.sequence
+ 		limit  #{pageStart},#{size}
+	</select>
+	<select id="count"  parameterType="Map" resultType="java.lang.Integer">
+		select
+		count(1)
+		from vod_phone_module_album a	left join vod_phone_albuminfo b 
+		on a.seriesCode = b.seriesCode	where
+		a.moduleId = #{moduleId}	
+		and b.status = 1
+		and a.seriesCode = b.seriesCode
+	</select>
+
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.page.mapper.BussChannelMapper">
+<insert id="insert" parameterType="Map">
+ insert into vod_buss_channel
+ (bussId,channelCode,status)
+ values
+ (#{bussId,jdbcType=INTEGER},#{channelCode,jdbcType=INTEGER},#{status,jdbcType=INTEGER})
+</insert>
+<delete id="del">
+ delete from vod_buss_channel
+</delete>
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.CpChannelMapper">
+	<resultMap id="baseResultMap" type="com.pbtd.manager.domain.CpChannel">
+		<id column="id" property="id" />
+		<result column="cpChnCode" property="cpChnCode" />
+		<result column="cpChnName" property="cpChnName" />
+		<result column="chnCode" property="chnCode" />
+		<result column="chnName" property="chnName" />
+		<result column="cpCode" property="cpCode" />
+		<result column="status" property="status" />
+		<result column="joinStatus" property="joinStatus" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+	</resultMap>
+
+	<sql id="column">
+		id,cpChnCode,cpChnName,chnCode,chnName,cpCode,status,joinStatus,createTime,updateTime
+	</sql>
+	
+	<sql id="queryLimit">
+    	<where>
+    		<if test="cpChnName!=null">
+    			and cpChnName like concat("%",#{cpChnName},"%")
+    		</if>
+    		<if test="cpChnCode!=null">
+    			and cpChnCode = #{cpChnCode}
+    		</if>
+    		<if test="cpCode!=null">
+    			and cpCode = #{cpCode}
+    		</if>
+    		<if test="status!=null and status>=0">
+    			and status = #{status}
+    		</if>
+    		<if test="joinStatus!=null and joinStatus>=0">
+    			and joinStatus = #{joinStatus}
+    		</if>
+    	</where>
+    </sql>
+	
+	<select id="queryCount" resultType="long">
+		select count(*)
+		from cp_channel
+		<include refid="queryLimit"/>
+	</select>
+	
+	<select id="queryList" resultMap="baseResultMap">
+		select <include refid="column"/>
+		from cp_channel
+		<include refid="queryLimit"/>
+	</select>
+	
+	<select id="queryById" resultMap="baseResultMap">
+		select <include refid="column"/>
+		from cp_channel
+		where id=#{id}
+	</select>
+	
+	<update id="bindingChannel">
+		update cp_channel
+		set chnCode = #{chnCode},chnName=#{chnName},joinStatus=#{joinStatus}
+		where id=#{id}
+	</update>
+	
+	<update id="unpinless">
+		update cp_channel
+		set chnCode = #{cc.chnCode},chnName=#{cc.chnName},joinStatus=#{cc.joinStatus}
+		where id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+	</update>
+	
+	<select id="queryByChnCode" resultMap="baseResultMap">
+		select <include refid="column"/>
+		from cp_channel
+		where chnCode = #{chnCode} and cpCode = #{cpCode}
+	</select>
+	
+	<select id="queryByCpChnCode" resultMap="baseResultMap">
+		select <include refid="column"/>
+		from cp_channel
+		where cpChnCode = #{cpChnCode} and cpCode = #{cpCode}
+	</select>
+	
+	<insert id="insert">
+		insert into cp_channel
+		(cpChnCode,cpChnName,chnCode,chnName,cpCode,status,joinStatus,createTime,updateTime)
+		values
+		(#{cpChnCode},#{cpChnName},#{chnCode},#{chnName},#{cpCode},#{status},#{joinStatus},
+		#{createTime},#{updateTime})
+	</insert>
+	
+	<update id="update">
+		update cp_channel
+		set cpChnName=#{cpChnName},status=#{status},updateTime=#{updateTime}
+		where cpChnCode=#{cpChnCode} and cpCode = #{cpCode}
+	</update>
+</mapper>

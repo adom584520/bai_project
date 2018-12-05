@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.CpAlbuminfoJoinMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.domain.CpAlbuminfoJoin" >
+    	<id column="id" property="id"/>
+        <result column="cpSeriesCode" property="cpSeriesCode"/>
+        <result column="seriesCode" property="seriesCode"/>
+        <result column="dramaId" property="dramaId"/>
+        <result column="drama" property="drama"/>
+        <result column="cpDramaId" property="cpDramaId"/>
+        <result column="cpDrama" property="cpDrama"/>
+        <result column="cpCode" property="cpCode"/>
+    </resultMap>
+    
+    <sql id="column">
+    	id,cpSeriesCode,seriesCode,dramaId,drama,cpDramaId,cpDrama,cpCode
+    </sql>
+    
+    <select id="validataDramaNoRepeat" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_albuminfo_join
+    	where dramaId = #{dramaId} and cpCode=#{cpCode}
+    </select>
+    
+    <select id="queryByCpDrama" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_albuminfo_join
+    	where cpDramaId=#{cpDramaId}
+    </select>
+    
+    <insert id="insert">
+    	insert into cp_albuminfo_join
+    	(cpSeriesCode,seriesCode,dramaId,drama,cpDramaId,cpDrama,cpCode)
+    	values
+    	(#{cpSeriesCode},#{seriesCode},#{dramaId},#{drama},#{cpDramaId},#{cpDrama},#{cpCode})
+    </insert>
+    
+    <update id="update">
+    	update cp_albuminfo_join
+    	set seriesCode=#{seriesCode},dramaId=#{dramaId},drama=#{drama}
+    	where cpDramaId=#{cpDramaId}
+    </update>
+    
+   	<delete id="deleteByDramaIdBatch">
+   		delete from cp_albuminfo_join
+   		where cpDramaId in 
+   		<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+   	</delete>
+   	
+   	<select id="queryBySeriesCodeDrama" resultMap="baseResultMap">
+   		select <include refid="column"/>
+   		from cp_albuminfo_join
+   		where seriesCode=#{seriesCode} and drama=#{drama} and cpCode=#{cpCode}
+   		limit 0,1
+   	</select>
+   	<select id="queryByCpSeriesCodeOne" resultMap="baseResultMap">
+   		select <include refid="column"/>
+   		from cp_albuminfo_join
+   		where cpSeriesCode=#{cpSeriesCode} and cpCode=#{cpCode}
+   		limit 0,1
+   	</select>
+</mapper>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.playclick.integrate.mapper.FileUploadMapper">
+
+	<select id="album" parameterType="Map" resultType="Map">
+		SELECT SERIESCODE code,
+		if(locate('?',pictureURL1)>0,left(pictureURL1,		locate('?',pictureURL1)-1),pictureURL1) img1,
+		if(locate('?',pictureURL2)>0,left(pictureURL2,		locate('?',pictureURL2)-1),pictureURL2) img2,
+		if(locate('?',pictureURL3)>0,left(pictureURL3,		locate('?',pictureURL3)-1),pictureURL3) img3,
+		if(locate('?',pictureURL4)>0 ,left(pictureURL4,		locate('?',pictureURL4)-1),pictureURL4) img4,
+		cpcode
+		FROM vod_albuminfo a
+		where
+				<choose>
+					<when test="id!=null and id!=''">
+						SERIESCODE=#{id,jdbcType=VARCHAR}
+						and pictureURL1 not like '/images/%'
+					</when>
+					<otherwise>
+						pictureURL1 not like '/images/%'
+					</otherwise>
+				</choose>
+	</select>
+	<select id="albumvideo" parameterType="Map" resultType="Map">
+		select dramacode code,
+		if(locate('?',pic)>0 ,left(pic, locate('?',pic)-1),pic) pic
+		from vod_albuminfovideo
+		where cpcode=5  and  pic is not null
+		<choose>
+			<when test="id!=null and id!=''">
+				and SERIESCODE=#{id,jdbcType=VARCHAR}
+				and pic not like '/images/%'
+			</when>
+			<otherwise>
+				and pic not like '/images/%'
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insertvodcpimg" parameterType="Map">
+		insert into
+		vod_cpimg
+		(
+		imgurl ,newimgurl,type)
+		values
+		(
+		#{imgurl,jdbcType=VARCHAR},
+		#{newimgurl,jdbcType=VARCHAR},
+		#{type,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<delete id="deletevodcpimg" parameterType="Map">
+		delete from vod_cpimg
+		where 1=1
+		<if test="imgurl!= null">
+			and imgurl =#{imgurl,jdbcType=VARCHAR}
+		</if>
+		<if test="newimgurl != null">
+			and newimgurl =#{newimgurl,jdbcType=VARCHAR}
+		</if>
+	</delete>
+	<update id="updatealbum" parameterType="Map">
+		update vod_albuminfo
+		<set>
+			<if test="pictype==1">
+				pictureurl1=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+			<if test="pictype==2">
+				pictureurl2=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+			<if test="pictype==3">
+				pictureurl3=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+			<if test="pictype==4">
+				pictureurl4=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where seriesCode=#{seriesCode,jdbcType=VARCHAR}
+	</update>
+	<update id="updatealbumvideo" parameterType="Map">
+		update vod_albuminfovideo
+		<set>
+			<if test="newimgurl!='' and newimgurl!=null">
+				pic=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where dramacode=#{dramacode,jdbcType=VARCHAR}
+	</update>
+
+	
+	
+	<!-- 国广银河合一 图片上传下载 .....................start................................. -->
+
+  <select id="album_strategy" parameterType="Map" resultType="Map">
+		SELECT SERIESCODE code,
+		if(locate('?',pictureURL1)>0,left(pictureURL1,		locate('?',pictureURL1)-1),pictureURL1) img1,
+		if(locate('?',pictureURL2)>0,left(pictureURL2,		locate('?',pictureURL2)-1),pictureURL2) img2,
+		if(locate('?',pictureURL3)>0,left(pictureURL3,		locate('?',pictureURL3)-1),pictureURL3) img3,
+		if(locate('?',pictureURL4)>0 ,left(pictureURL4,		locate('?',pictureURL4)-1),pictureURL4) img4
+		FROM vod_albuminfo_strategy a
+		where strategystatus=1
+	    and pictureURL1 not like '/images/%'
+	</select>
+	<select id="albumvideo_strategy" parameterType="Map" resultType="Map">
+		select dramacode code,
+		if(locate('?',pic)>0 ,left(pic, locate('?',pic)-1),pic) pic,cpcode
+		from vod_albuminfovideo_strategy
+		where pic not like '/images/%'
+		and  (seriesCode,cpcode) in (select seriesCode,cpcode from vod_albuminfo_strategy where strategystatus=1 )
+	</select>
+	<update id="updatealbum_strategy" parameterType="Map">
+		update vod_albuminfo_strategy
+		<set>
+			<if test="pictype==1">
+				pictureurl1=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+			<if test="pictype==2">
+				pictureurl2=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+			<if test="pictype==3">
+				pictureurl3=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+			<if test="pictype==4">
+				pictureurl4=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where seriesCode=#{seriesCode,jdbcType=VARCHAR}
+		and cpcode=#{cpcode,jdbcType=VARCHAR}
+	</update>
+ <update id="updatealbumvideo_strategy" parameterType="Map">
+		update vod_albuminfovideo_strategy
+		<set>
+			<if test="newimgurl!='' and newimgurl!=null">
+				pic=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where dramacode=#{dramacode,jdbcType=VARCHAR}
+		and cpcode=#{cpcode,jdbcType=VARCHAR}
+	</update>
+	<!-- 国广银河合一 图片上传下载 .....................end................................. -->
+	 
+	 
+	 
+	 
+	 
+	 <!-- youku 图片上传下载 .....................start................................. -->
+
+  <select id="youku_album_strategy" parameterType="Map" resultType="Map">
+		SELECT SERIESCODE code,
+		if(locate('?',pictureURL1)>0,left(pictureURL1,		locate('?',pictureURL1)-1),pictureURL1) img1,
+		if(locate('?',pictureURL2)>0,left(pictureURL2,		locate('?',pictureURL2)-1),pictureURL2) img2,
+		if(locate('?',pictureURL3)>0,left(pictureURL3,		locate('?',pictureURL3)-1),pictureURL3) img3,
+		if(locate('?',pictureURL4)>0 ,left(pictureURL4,		locate('?',pictureURL4)-1),pictureURL4) img4,
+		'5' cpcode
+		FROM youk_vod_albuminfo_strategy a
+		where updatestatus=1
+	    and pictureURL1 not like '/images/%'
+	</select>
+	<select id="youku_albumvideo_strategy" parameterType="Map" resultType="Map">
+		select dramacode code,
+		if(locate('?',pic)>0 ,left(pic, locate('?',pic)-1),pic) pic,cpcode
+		from youk_vod_albuminfovideo_strategy
+		where pic not like '/images/%'
+	</select>
+	<update id="updateyouku_album_strategy" parameterType="Map">
+		update youk_vod_albuminfo_strategy
+		<set>
+			<if test="pictype==1">
+				pictureurl1=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+			<if test="pictype==2">
+				pictureurl2=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+			<if test="pictype==3">
+				pictureurl3=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+			<if test="pictype==4">
+				pictureurl4=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where seriesCode=#{seriesCode,jdbcType=VARCHAR}
+	</update>
+ <update id="updateyouku_albumvideo_strategy" parameterType="Map">
+		update youk_vod_albuminfovideo_strategy
+		<set>
+			<if test="newimgurl!='' and newimgurl!=null">
+				pic=#{newimgurl,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where dramacode=#{dramacode,jdbcType=VARCHAR}
+	</update>
+	<!-- youku 图片上传下载 .....................end................................. -->
+	 
+</mapper>

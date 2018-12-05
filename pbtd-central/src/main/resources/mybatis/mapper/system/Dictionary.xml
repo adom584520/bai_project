@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.playclick.base.common.mapper.DictionaryMapper">
+    <resultMap id="resultMap" type="com.pbtd.playclick.integrate.domain.Dictionary">
+		<result column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="ISPARENT" property="isParent" jdbcType="VARCHAR" />
+		<result column="PID" property="pid" jdbcType="VARCHAR" />
+		<result column="NOCHECK" property="nocheck" jdbcType="VARCHAR" />
+		<result column="OPEN" property="open" jdbcType="VARCHAR" />
+		<result column="EXTRACT" property="extract" jdbcType="VARCHAR" />
+	</resultMap>
+	
+		<!--cp源信息列表 -->	  <select id="choosecpsource" parameterType="Map"  resultType="Map">
+		select code as  ID,name as NAME  from cp_source 
+	            where status =1
+	        
+	        order by code  
+	 </select>
+        <!-- vod phone频道列表 -->
+  <select id="choosechannelphone" parameterType="Map" resultMap="resultMap">
+        select 
+         CATEGORYCODE AS ID,
+         NAME  AS NAME 
+        from  vod_channel 
+        where 1=1
+		    <if test="parentcode != null and parentcode != ''">
+	            and PARENTCODE = #{parentcode,jdbcType=VARCHAR}
+	        </if>
+	        <if test="levels != null and levels > -1">
+	            and LEVELS = #{levels,jdbcType=INTEGER}
+	        </if>
+	        <if test="categorycode != null and categorycode != ''">
+	            and CATEGORYCODE = #{categorycode,jdbcType=VARCHAR}
+	        </if>
+	        <if test="name != null and name != ''">
+	            and NAME = #{name,jdbcType=VARCHAR}
+	        </if>
+	        <if test="aliasname != null and aliasname != ''">
+	            and ALIASNAME = #{aliasname,jdbcType=VARCHAR}
+	        </if>
+        ORDER BY SEQUENCE
+        </select>
+        
+        
+        <!-- 银河频道 -->
+         <select id="choosechannelyh" parameterType="Map" resultMap="resultMap">
+		        select  chnId AS ID,
+		         chnName  AS NAME 
+		        from  YH_VOD_CHANNEL 
+		        where 1=1
+		        	<if test="chnId != null and chnId >0 ">
+			            and chnId = #{chnId,jdbcType=INTEGER}
+			        </if>
+			        <if test="status != null and status !='' ">
+			            and status = #{status,jdbcType=INTEGER}
+			        </if>
+			         <if test="chnName != null and chnName !=''">
+			            and chnName = #{chnName,jdbcType=INTEGER}
+			        </if>
+        </select>
+        
+         <!-- 银河 标签-->
+         <select id="choosechannellabelyh" parameterType="Map" resultMap="resultMap">
+		       select  tagId as ID,tagName as NAME 
+		        from  yh_vod_label
+		        where 1=1  
+			        <if test="chnId != null and chnId >0 ">
+			            and chnId = #{chnId,jdbcType=INTEGER}
+			        </if>
+			         <if test="tagId != null and tagId >0">
+			            and tagId = #{tagId,jdbcType=INTEGER}
+			        </if>
+			         <if test="tagName != null and tagName !=''">
+			            and tagName = #{ctagNamenName,jdbcType=INTEGER}
+			        </if>
+		        ORDER BY chnId
+        </select>
+         <!-- 国广频道 -->
+         <select id="choosechannelgg" parameterType="Map" resultMap="resultMap">
+		        select  chnId AS ID,
+		         chnName  AS NAME 
+		        from  GG_VOD_CHANNEL 
+		        where 1=1
+		        	<if test="chnId != null and chnId >0 ">
+			            and chnId = #{chnId,jdbcType=INTEGER}
+			        </if>
+			        <if test="status != null and status !='' ">
+			            and status = #{status,jdbcType=INTEGER}
+			        </if>
+			         <if test="chnName != null and chnName !=''">
+			            and chnName = #{chnName,jdbcType=INTEGER}
+			        </if>
+        </select>
+         <!-- 国广 标签-->
+         <select id="choosechannellabelgg" parameterType="Map" resultMap="resultMap">
+		       select  tagId as ID,tagName as NAME 
+		        from  gg_vod_label
+		        where 1=1  
+			        <if test="chnId != null and chnId >0 ">
+			            and chnId = #{chnId,jdbcType=INTEGER}
+			        </if>
+			         <if test="tagId != null and tagId >0">
+			            and tagId = #{tagId,jdbcType=INTEGER}
+			        </if>
+			         <if test="tagName != null and tagName !=''">
+			            and tagName = #{ctagNamenName,jdbcType=INTEGER}
+			        </if>
+		        ORDER BY chnId
+        </select>
+        <select id="choosename" parameterType="Map"  resultType="Map">
+      select COLUMN_NAME as ID ,column_comment as NAME
+    	 from INFORMATION_SCHEMA.Columns where table_name='vod_albuminfo' and table_schema='central'
+        </select>
+        
+        
+         <!-- 合一频道 -->
+         <select id="choosechannelguttv" parameterType="Map" resultMap="resultMap">
+		        select  chnId AS ID,
+		         chnName  AS NAME 
+		        from  heyi_vod_channel 
+		        where 1=1
+		        	<if test="chnId != null and chnId >0 ">
+			            and chnId = #{chnId,jdbcType=INTEGER}
+			        </if>
+			        <if test="status != null and status !='' ">
+			            and status = #{status,jdbcType=INTEGER}
+			        </if>
+			         <if test="chnName != null and chnName !=''">
+			            and chnName = #{chnName,jdbcType=INTEGER}
+			        </if>
+        </select>
+         <!-- 合一 标签-->
+         <select id="choosechannellabelguttv" parameterType="Map" resultMap="resultMap">
+		       select  tagId as ID,tagName as NAME 
+		        from  heyi_vod_label
+		        where 1=1  
+			        <if test="chnId != null and chnId >0 ">
+			            and chnId = #{chnId,jdbcType=INTEGER}
+			        </if>
+			         <if test="tagId != null and tagId >0">
+			            and tagId = #{tagId,jdbcType=INTEGER}
+			        </if>
+			         <if test="tagName != null and tagName !=''">
+			            and tagName = #{ctagNamenName,jdbcType=INTEGER}
+			        </if>
+		        ORDER BY chnId
+        </select>
+         
+          <!-- 优酷频道 -->
+         <select id="choosechannelyk" parameterType="Map" resultMap="resultMap">
+		        select  chnId AS ID,
+		         chnName  AS NAME 
+		        from  youk_vod_channel 
+		        where 1=1
+		        	<if test="chnId != null and chnId >0 ">
+			            and chnId = #{chnId,jdbcType=INTEGER}
+			        </if>
+			        <if test="status != null and status !='' ">
+			            and status = #{status,jdbcType=INTEGER}
+			        </if>
+			         <if test="chnName != null and chnName !=''">
+			            and chnName = #{chnName,jdbcType=INTEGER}
+			        </if>
+        </select>
+         <!-- 优酷 标签-->
+         <select id="choosechannellabelyk" parameterType="Map" resultMap="resultMap">
+		       select  tagId as ID,tagName as NAME 
+		        from  youk_vod_label
+		        where 1=1  
+			        <if test="chnId != null and chnId >0 ">
+			            and chnId = #{chnId,jdbcType=INTEGER}
+			        </if>
+			         <if test="tagId != null and tagId >0">
+			            and tagId = #{tagId,jdbcType=INTEGER}
+			        </if>
+			         <if test="tagName != null and tagName !=''">
+			            and tagName = #{ctagNamenName,jdbcType=INTEGER}
+			        </if>
+		        ORDER BY chnId
+        </select>
+        
+         <!-- 标签分类-->
+         <select id="chooselabeltype" parameterType="Map" resultMap="resultMap">
+		       select  id as ID,name as NAME 
+		        from  vod_labeltype
+		        ORDER BY id
+        </select>
+</mapper>

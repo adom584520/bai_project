@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.UserLoginInfoMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.UserLoginInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="userId" property="userid" jdbcType="VARCHAR" />
+		<result column="userDevice" property="userdevice" jdbcType="VARCHAR" />
+		<result column="userDeviceName" property="userdevicename"
+			jdbcType="VARCHAR" />
+		<result column="tokenCode" property="tokencode" jdbcType="VARCHAR" />
+		<result column="loginStat" property="loginstat" jdbcType="INTEGER" />
+		<result column="createTime" property="createtime" jdbcType="DATE" />
+		<result column="updateTime" property="updatetime" jdbcType="DATE" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, userId, userDevice, userDeviceName, tokenCode,
+		loginStat, createTime,
+		updateTime
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select * from user_login_info where userid = #{userid}
+	</select>
+	<select id="selectusrerdevice" parameterType="java.util.HashMap"
+		resultType="com.pbtd.playuser.domain.UserLoginInfo">
+		select * from user_login_info
+		<where>
+			<if test="userid != null">
+				userId = #{userid}
+			</if>
+			<if test="token != null">
+				and tokenCode = #{token}
+			</if>
+			<if test="device != null">
+				and userDevice = #{device}
+			</if>
+		</where>
+	</select>
+
+	<insert id="insertSelective" parameterType="com.pbtd.playuser.domain.UserLoginInfo">
+		insert into user_login_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				userId,
+			</if>
+			<if test="device != null">
+				userDevice,
+			</if>
+			<if test="tokencode != null">
+				tokenCode,
+			</if>
+			loginStat,
+			createTime,
+			updateTime
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				#{userid,jdbcType=BIGINT},
+			</if>
+			<if test="device != null">
+				#{device},
+			</if>
+			<if test="tokencode != null">
+				#{tokencode,jdbcType=VARCHAR},
+			</if>
+			1,
+			now(),
+			now()
+		</trim>
+	</insert>
+	<update id="updateToken" parameterType="java.util.HashMap">
+		update user_login_info
+		set
+		tokenCode = #{tokencode} ,
+		updateTime = now()
+		where userId = #{userid} and userDevice = #{device}
+	</update>
+</mapper>

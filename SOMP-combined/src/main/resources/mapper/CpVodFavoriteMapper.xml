@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.CpVodFavoriteMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.domain.CpVodFavorite" >
+        <id column="id" property="id"/>
+        <result column="deviceId" property="deviceId"/>
+        <result column="deviceType" property="deviceType"/>
+        <result column="seriesCode" property="seriesCode"/>
+        <result column="seriesName" property="seriesName"/>
+        <result column="drama" property="drama"/>
+        <result column="dramaname" property="dramaname"/>
+        <result column="duration" property="duration"/>
+        <result column="playpos" property="playpos"/>
+        <result column="viewPoint" property="viewPoint"/>
+        <result column="pictureurl1" property="pictureurl1"/>
+        <result column="pictureurl2" property="pictureurl2"/>
+        <result column="cpCode" property="cpCode"/>
+        <result column="createTime" property="createTime"/>
+    </resultMap>
+    
+    <sql id="column">
+    	id,deviceId,deviceType,seriesCode,seriesName,drama,dramaname,duration,playpos,viewPoint,
+    	pictureurl1,pictureurl2,cpCode,createTime
+    </sql>
+    
+    <delete id="deleteByDeviceId">
+    	delete from cp_vod_favorite
+    	where deviceId=#{deviceId}
+    </delete>
+    
+    <insert id="insertBatch">
+    	insert into cp_vod_favorite
+    	(deviceId,deviceType,seriesCode,seriesName,drama,dramaname,duration,playpos,viewPoint,
+    	pictureurl1,pictureurl2,cpCode,createTime)
+    	values
+    	<foreach collection="data" index="index" item="ph" separator=",">
+    		(#{deviceId},#{deviceType},#{ph.seriesCode},#{ph.seriesName},#{ph.drama},
+    		#{ph.dramaname},#{ph.duration},#{ph.playpos},#{ph.viewPoint},#{ph.pictureurl1},
+    		#{ph.pictureurl2},#{cpCode},NOW())
+    	</foreach>
+    </insert>
+    
+    <select id="queryBySeriesCode" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_vod_favorite
+    	where deviceId=#{deviceId} and seriesCode=#{seriesCode}
+    </select>
+    
+    <insert id="insert">
+    	insert into cp_vod_favorite
+    	(deviceId,deviceType,seriesCode,seriesName,drama,dramaname,duration,playpos,viewPoint,
+    	pictureurl1,pictureurl2,cpCode,createTime)
+    	values
+    	(#{deviceId},#{deviceType},#{seriesCode},#{seriesName},#{drama},
+   		#{dramaname},#{duration},#{playpos},#{viewPoint},#{pictureurl1},
+   		#{pictureurl2},#{cpCode},#{createTime})
+    </insert>
+    
+    <update id="update">
+    	update cp_vod_favorite
+    	set seriesName=#{seriesName},drama=#{drama},dramaname=#{dramaname},duration=#{duration},
+    	playpos=#{playpos},viewPoint=#{viewPoint},pictureurl1=#{pictureurl1},pictureurl2=#{pictureurl2}
+    	where deviceId=#{deviceId} and seriesCode=#{seriesCode}
+    </update>
+    
+    <select id="queryContByDeviceId" resultType="long">
+    	select count(id)
+    	from cp_vod_favorite
+    	where deviceId=#{deviceId}
+    </select>
+    
+    <select id="queryExcessList" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_vod_favorite
+    	where deviceId=#{deviceId}
+    	order by createTime desc,id desc
+    	limit #{start},#{pageSize}
+    </select>
+    
+    <delete id="deleteBatch">
+    	delete from cp_vod_favorite
+    	where id in
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    
+    <delete id="deleteBySeriesCode">
+    	delete from cp_vod_favorite
+    	where deviceId=#{deviceId} and seriesCode=#{seriesCode}
+    </delete>
+    
+    <delete id="deleteBatchBySeriesCode">
+    	delete from cp_vod_favorite
+    	where deviceId=#{deviceId} and seriesCode in
+    	<foreach collection="list" open="(" close=")" separator="," item="seriesCode" index="index">
+    		#{seriesCode}
+    	</foreach>
+    </delete>
+    
+    <select id="queryCountByDeviceIdSeriesCode" resultType="long">
+    	select count(*)
+    	from cp_vod_favorite
+    	where deviceId=#{deviceId} and seriesCode=#{seriesCode}
+    </select>
+</mapper>

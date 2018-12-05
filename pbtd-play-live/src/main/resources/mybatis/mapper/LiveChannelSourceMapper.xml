@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playlive.mapper.LiveChannelSourceMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playlive.domain.LiveChannelSource" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cpEpgId" property="cpepgid" jdbcType="INTEGER" />
+    <result column="packageId" property="packageid" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="isSave" property="issave" jdbcType="TINYINT" />
+    <result column="startTime" property="starttime" jdbcType="BIGINT" />
+    <result column="endTime" property="endtime" jdbcType="BIGINT" />
+    <result column="tag" property="tag" jdbcType="VARCHAR" />
+    <result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+    <result column="chnName" property="chnname" jdbcType="VARCHAR" />
+    <result column="isModified" property="ismodified" jdbcType="TINYINT" />
+    <result column="playOrder" property="playorder" jdbcType="INTEGER" />
+    <result column="playUrl" property="playurl" jdbcType="VARCHAR" />
+    <result column="backPlayUrl" property="backplayurl" jdbcType="VARCHAR" />
+    <result column="epgPoster" property="epgposter" jdbcType="VARCHAR" />
+    <result column="backPoster" property="backposter" jdbcType="VARCHAR" />
+    <result column="epgStatus" property="epgstatus" jdbcType="TINYINT" />
+    <result column="createTime" property="createtime" jdbcType="BIGINT" />
+    <result column="updateTime" property="updatetime" jdbcType="BIGINT" />
+    <result column="packageName" property="packagename" jdbcType="VARCHAR" />
+    <result column="packageCode" property="packagecode" jdbcType="VARCHAR" />
+    <result column="packageCover" property="packagecover" jdbcType="VARCHAR" />
+    <result column="chnImage" property="chnimage" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    title, startTime, endTime,chnCode,tag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from live_channel_source
+    where chnCode = #{code}
+  </select>
+  
+</mapper>

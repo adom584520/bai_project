@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.CpDramaMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.domain.CpDrama" >
+    	<id column="id" property="id"/>
+        <result column="cpSeriesCode" property="cpSeriesCode"/>
+        <result column="cpDrama" property="cpDrama"/>
+        <result column="cpDramaname" property="cpDramaname"/>
+        <result column="drama" property="drama"/>
+        <result column="dramaname" property="dramaname"/>
+        <result column="type" property="type"/>
+        <result column="duration" property="duration"/>
+        <result column="description" property="description"/>
+        <result column="cpCode" property="cpCode"/>
+        <result column="joinStatus" property="joinStatus"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+    
+    <sql id="column">
+    	id,cpSeriesCode,cpDrama,cpDramaname,drama,dramaname,type,duration,description,cpCode,
+    	joinStatus,updateTime,createTime
+    </sql>
+    
+    <select id="queryByAlbumId" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_drama
+    	where cpSeriesCode = #{cpSeriesCode} and cpCode = #{cpCode}
+    </select>
+    
+    <select id="queryById" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_drama
+    	where id = #{id}
+    </select>
+    
+    <update id="updateJoinStatus">
+    	update cp_drama
+    	set drama=#{drama},dramaname=#{dramaname},joinStatus=#{joinStatus}
+    	where cpSeriesCode=#{cpSeriesCode} and cpDrama=#{cpDrama} and cpCode=#{cpCode}
+    </update>
+    
+    <update id="unpinlessBatch">
+    	update cp_drama
+    	set drama=#{cd.drama},dramaname=#{cd.dramaname},joinStatus=#{cd.joinStatus}
+    	where id in
+    	<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </update>
+    
+    <select id="queryIdsByAlbumId" resultType="long">
+    	select id
+    	from cp_drama
+    	where cpSeriesCode in 
+    	<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </select>
+    
+    <select id="queryByCpDrama" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from cp_drama
+    	where cpSeriesCode=#{cpSeriesCode} and cpDrama=#{cpDrama} and cpCode=#{cpCode}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    	insert into cp_drama
+    	(cpSeriesCode,cpDrama,cpDramaname,dramaname,type,duration,description,cpCode,
+    	joinStatus,updateTime,createTime)
+    	values
+    	(#{cpSeriesCode},#{cpDrama},#{cpDramaname},#{dramaname},#{type},#{duration},#{description},
+    	#{cpCode},#{joinStatus},#{updateTime},#{createTime})
+    </insert>
+    
+    <update id="update">
+    	update cp_drama
+    	set cpDramaname=#{cpDramaname},type=#{type},duration=#{duration},description=#{description},
+    	updateTime=#{updateTime}
+    	where cpSeriesCode=#{cpSeriesCode} and cpDrama=#{cpDrama} and cpCode=#{cpCode}
+    </update>
+    
+    <update id="confirm">
+    	update cp_drama
+    	set joinStatus=#{joinStatus}
+    	where id in 
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </update>
+    
+   <select id="queryBatchById" resultMap="baseResultMap">
+   		select <include refid="column"/>
+   		from cp_drama
+   		where id in
+   		<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+   </select>
+</mapper>

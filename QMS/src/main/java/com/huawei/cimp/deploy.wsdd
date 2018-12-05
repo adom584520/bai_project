@@ -1,0 +1,38 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from QueryContentService WSDL service -->
+
+  <service name="QueryContentService" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="http://cimp.huawei.com"/>
+      <parameter name="wsdlServiceElement" value="QueryContentService"/>
+      <parameter name="schemaUnqualified" value="http://bean.cimp.huawei.com"/>
+      <parameter name="wsdlServicePort" value="QueryContentService"/>
+      <parameter name="className" value="com.huawei.cimp.QueryContentServiceSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="QueryContentService"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="queryContent" qname="operNS:queryContent" xmlns:operNS="http://cimp.huawei.com" returnQName="Return" returnType="rtns:ResultBean" xmlns:rtns="http://bean.cimp.huawei.com" soapAction="" >
+        <parameter qname="contentName" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="contentType" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="queryContent"/>
+
+      <typeMapping
+        xmlns:ns="http://bean.cimp.huawei.com"
+        qname="ns:ResultBean"
+        type="java:com.huawei.cimp.bean.ResultBean"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

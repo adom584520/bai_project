@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.system.mapper.TextrecommendationMapper">
+
+    <!-- 模糊查询 -->
+    <sql id="whrClauseLike">
+        <if test="id != null and id > -1">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="name != null and name != ''">
+            and name like '%${name}%'
+        </if>
+        <if test="type != null and type != ''">
+            and type=#{type,jdbcType=INTEGER} 
+        </if>
+       <if test="channelCode != null and channelCode != ''">
+            and channelCode=#{channelCode,jdbcType=VARCHAR} 
+        </if>
+         <if test="seriesCode != null and seriesCode != ''">
+            and seriesCode=#{seriesCode,jdbcType=VARCHAR} 
+        </if>
+         <if test="status != null and status != ''">
+            and status=#{status,jdbcType=BOOLEAN}
+        </if> 
+          
+    </sql>
+    <sql id="whrClauseLikeMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <!-- 精确查询 -->
+    <sql id="whrClauseEqual">
+       <if test="id != null and id > -1">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="name != null and name != ''">
+            and name=#{name,jdbcType=VARCHAR}  
+        </if>
+        <if test="type != null and type != ''">
+            and type=#{type,jdbcType=INTEGER} 
+        </if>
+       <if test="channelCode != null and channelCode != ''">
+            and channelCode=#{channelCode,jdbcType=VARCHAR} 
+        </if>
+         <if test="seriesCode != null and seriesCode != ''">
+            and seriesCode=#{seriesCode,jdbcType=VARCHAR} 
+        </if>
+         <if test="status != null and status != ''">
+            and status=#{status,jdbcType=BOOLEAN}
+        </if> 
+    </sql>
+    <sql id="whrClauseEqualMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+ 
+<insert id="insert" parameterType="com.pbtd.manager.vod.system.domain.Textrecommendation" >
+ insert into vod_textrecommendation
+ (channelCode,seriesCode,seriesName,status,text,playurl,
+ weburl,type,create_time,create_user)
+ values
+ (
+ #{channelCode,jdbcType=INTEGER},
+ #{seriesCode,jdbcType=VARCHAR},
+ #{seriesName,jdbcType=VARCHAR},
+ #{status,jdbcType=VARCHAR},
+ #{text,jdbcType=VARCHAR},
+ #{playurl,jdbcType=INTEGER},
+ #{weburl,jdbcType=VARCHAR},
+ #{type,jdbcType=VARCHAR},now(),
+ #{create_user,jdbcType=VARCHAR} 
+ )
+</insert>
+<update id="update" parameterType="com.pbtd.manager.vod.system.domain.Textrecommendation">
+	 update vod_textrecommendation 
+		 <set>
+			 <if test="type!=null">
+			 type=#{type,jdbcType=INTEGER},
+			 </if>
+			 <if test="channelCode ">
+			 channelCode=#{channelCode,jdbcType=VARCHAR},
+			 </if>
+			 <if test="text!=null ">
+			 text=#{text,jdbcType=VARCHAR},
+			 </if>
+			 <if test="seriesCode!=null ">
+			 seriesCode=#{seriesCode,jdbcType=VARCHAR},
+			 </if>
+			  <if test="seriesName!=null ">
+			 seriesName=#{seriesName,jdbcType=VARCHAR},
+			 </if>
+			 <if test="status!=null ">
+				 status=#{status,jdbcType=VARCHAR},update_time=now(),
+			 </if>
+			  <if test="update_user!=null ">
+				 update_user=#{update_user,jdbcType=VARCHAR},
+			 </if>
+			 <if test="playurl!=null ">
+				 playurl=#{playurl,jdbcType=VARCHAR},
+			 </if>
+			 <if test="weburl!=null ">
+				 weburl=#{weburl,jdbcType=VARCHAR},
+			 </if>
+			 
+		 </set>
+	 where id=#{id,jdbcType=INTEGER}
+</update>
+<update id="updateStatus" parameterType="Map">
+		update vod_textrecommendation
+		set status = #{status,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+ <delete id="deletes" parameterType="Map">
+ delete from vod_textrecommendation 
+ where 1=1
+      <include refid="whrClauseLike" />
+      <include refid="whrClauseEqual" />
+	  <include refid="whrClauseLikeMore" />
+ </delete>	
+ 
+    <select id="load" parameterType="java.lang.Integer" resultType="com.pbtd.manager.vod.system.domain.Textrecommendation">
+         select id,channelCode,seriesCode,seriesName,status,text,playurl,weburl,type,create_time,
+		  create_user,update_time,update_user
+           from  vod_textrecommendation  
+        where id= #{id,jdbcType=INTEGER}
+    </select>
+     <select id="count" parameterType="Map" resultType="java.lang.Integer">
+	        select count(1)
+	        from  vod_textrecommendation 
+        where 1=1
+         <if test="channelCode!=null and channelCode!=''">
+        and channelCode=#{channelCode,jdbcType=VARCHAR}
+        </if>
+        <if test="seriesCode!=null and seriesCode!=''">
+        and seriesCode=#{seriesCode,jdbcType=VARCHAR}
+        </if>
+        <if test="status!=null">
+        and status=#{status,jdbcType=VARCHAR}
+        </if>
+        <if test="create_time != null and create_time != '' ">
+			and
+			(date_format(create_time,'%Y-%m-%d') = #{create_time,jdbcType=DATE}
+			or date_format(update_time,'%Y-%m-%d') = #{create_time,jdbcType=DATE}
+		    )
+		 </if>   
+    </select>
+      <select id="find" parameterType="Map" resultType="Map">
+       select id,channelCode,seriesCode,seriesName,status,text,playurl,weburl,type,create_time,
+		  create_user,update_time,update_user,textPic
+       from  vod_textrecommendation
+        where 1=1
+        <if test="channelCode!=null and channelCode!=''">
+        and channelCode=#{channelCode,jdbcType=VARCHAR}
+        </if>
+        <if test="seriesCode!=null and seriesCode!=''">
+        and seriesCode=#{seriesCode,jdbcType=VARCHAR}
+        </if>
+        <if test="status!=null">
+        and status=#{status,jdbcType=VARCHAR}
+        </if>
+         <if test="start!=null and start!=''">
+	       limit #{start},#{pageSize} 	
+         </if>
+    </select>
+     <select id="page" parameterType="Map" resultType="Map">
+       select  id,channelCode,seriesCode,seriesName,status,text,playurl,weburl,type,create_time,
+		  create_user,update_time,update_user 
+       from  vod_textrecommendation
+        where 1=1
+        <if test="channelCode!=null and channelCode!=''">
+        and channelCode=#{channelCode,jdbcType=VARCHAR}
+        </if>
+        <if test="seriesCode!=null and seriesCode!=''">
+        and seriesCode=#{seriesCode,jdbcType=VARCHAR}
+        </if>
+        <if test="status!=null">
+        and status=#{status,jdbcType=VARCHAR}
+        </if>
+        <if test="create_time != null and create_time != '' ">
+			and
+			(date_format(create_time,'%Y-%m-%d') = #{create_time,jdbcType=DATE}
+			or date_format(update_time,'%Y-%m-%d') = #{create_time,jdbcType=DATE}
+		    )
+		 </if>   
+         <if test="start!=null and start!=''">
+	       limit #{start},#{pageSize} 	
+         </if>
+    </select>
+          <select id="findforinterface" parameterType="Map" resultType="Map">
+       select id,channelCode,seriesCode,seriesName,status,text,textPic,playurl,weburl,type,
+	   create_user
+       from  vod_textrecommendation
+        where 1=1
+        <if test="channelCode!=null and channelCode!=''">
+        and channelCode=#{channelCode,jdbcType=VARCHAR}
+        </if>
+        <if test="seriesCode!=null and seriesCode!=''">
+        and seriesCode=#{seriesCode,jdbcType=VARCHAR}
+        </if>
+        <if test="status!=null">
+        and status=#{status,jdbcType=VARCHAR}
+        </if>
+         <if test="create_time != null and create_time != '' ">
+			and date_format(create_time,'%Y-%m-%d') = #{create_time,jdbcType=DATE}
+		 </if>   
+         <if test="start!=null and start!=''">
+	       limit #{start},#{pageSize} 	
+         </if>
+    </select>
+    
+    <update id="updateimg" parameterType="Map">
+		update vod_textrecommendation
+		<set>
+			<if test="imgUrl != null  and imgUrl  !=''">
+				  textPic = #{imgUrl ,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where ID = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.system.mapper.RoleMapper">
+	<resultMap id="baseResultMap" type="com.pbtd.manager.system.domain.Role">
+		<id column="id" property="id" />
+		<result column="role_name" property="name" />
+		<result column="descriptor" property="descriptor" />
+		<result column="createDate" property="createDate" />
+		<collection property="menus" column="id"
+			ofType="com.pbtd.manager.system.domain.Menu" select="com.pbtd.manager.system.mapper.MenuMapper.queryMenuByRoleId">
+		</collection>
+	</resultMap>
+
+	<resultMap type="com.pbtd.manager.system.domain.Role" id="simpResultMap">
+		<id column="id" property="id" />
+		<result column="role_name" property="name" />
+		<result column="descriptor" property="descriptor" />
+		<result column="createDate" property="createDate" />
+	</resultMap>
+
+	<sql id="whereLimit">
+		<if test="ids!=null and ids.size()>0">
+			<where>
+				id in 
+				<foreach collection="ids" index="index" item="role" open="(" separator="," close=")">
+		    		#{role.id}
+		    	</foreach>
+			</where>
+		</if>
+	</sql>
+	<select id="queryCount" resultType="long">
+		select count(id)
+		from sys_role
+		<include refid="whereLimit"/>
+	</select>
+	<select id="queryList" resultMap="baseResultMap">
+		select id,role_name,descriptor,createDate
+		from sys_role
+		<include refid="whereLimit"/>
+		limit #{start},#{pageSize}
+	</select>
+
+	<select id="queryAll" resultMap="baseResultMap">
+		select id,role_name,descriptor,createDate
+		from
+		sys_role
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert
+		into sys_role
+		(role_name,descriptor,createDate)
+		values(#{name},#{descriptor},#{createDate})
+	</insert>
+
+	<update id="update">
+		update sys_role
+		set role_name = #{name},descriptor = #{descriptor}
+		where id = #{id}
+	</update>
+
+	<delete id="delete">
+		delete from sys_role
+		where id = #{id}
+	</delete>
+	
+	<select id="queryAllSimp" resultMap="simpResultMap">
+		select id,role_name,descriptor,createDate
+		from sys_role
+	</select>
+	
+	<select id="queryRoleByLoginInfoId" resultMap="simpResultMap">
+		select r.id id,r.role_name role_name,r.descriptor descriptor,r.createDate createDate
+		from sys_role r left join sys_logininfo_role lr 
+		on(r.id=lr.role_id)
+		where lr.loginInfo_id = #{loginInfoId}
+	</select>
+	
+	<delete id="deleteLogAndRoleByLogId">
+		delete from sys_logininfo_role
+		where loginInfo_id = #{loginInfoId}
+	</delete>
+	
+	<insert id="inserLoginInfoAndRole">
+		insert into sys_logininfo_role
+		(loginInfo_id,role_id)
+		values(#{loginInfoId},#{roleId})
+	</insert>
+	
+	<delete id="deleteBatch">
+		delete from sys_role
+		where id in 
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+	</delete>
+</mapper>

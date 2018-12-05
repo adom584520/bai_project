@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.UserBaseInfoMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.UserBaseInfo">
+		<id column="userId" property="userid" jdbcType="VARCHAR" />
+		<result column="userMobile" property="usermobile" jdbcType="VARCHAR" />
+		<result column="userName" property="username" jdbcType="VARCHAR" />
+		<result column="userNickName" property="usernickname" jdbcType="VARCHAR" />
+		<result column="userIcon" property="usericon" jdbcType="VARCHAR" />
+		<result column="vipStat" property="vipstat" jdbcType="INTEGER" />
+		<result column="vipType" property="viptype" jdbcType="VARCHAR" />
+		<result column="vipCreateTime" property="vipcreatetime" jdbcType="DATE" />
+		<result column="vipEndTime" property="vipendtime" jdbcType="DATE" />
+		<result column="shareNum" property="sharenum" jdbcType="INTEGER" />
+		<result column="commendNun" property="commendnun" jdbcType="INTEGER" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="createTime" property="createtime" jdbcType="DATE" />
+		<result column="updateTime" property="updatetime" jdbcType="DATE" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		userId, userMobile, userName, userNickName, userIcon, vipStat, vipType,
+		vipCreateTime,
+		vipEndTime, shareNum, commendNun, code, createTime, updateTime
+	</sql>
+
+	<select id="select" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+		select * from user_base_info
+		<trim prefix="where " suffixOverrides="and">
+			<if test="userid != null">
+				userId = #{userid} and
+			</if>
+			<if test="mobile != null">
+				userMobile = #{mobile} and
+			</if>
+			<if test="code != null">
+				code = #{code} 
+			</if>
+		</trim>
+	</select>
+	<select id="selectbymobile" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from user_base_info where userMobile = #{mobile}
+	</select>
+	
+	<delete id="delete" parameterType="Map">
+		delete from user_base_info where userMobile = #{usermobile};
+	</delete>
+	
+	<insert id="insert" parameterType="Map">
+		insert into user_base_info    (userId,userMobile,vipCreateTime,vipEndTime,createTime,updateTime)
+		values ( #{userid,jdbcType=VARCHAR},#{usermobile,jdbcType=VARCHAR},
+			     now(),now(),now(),now()) 
+	</insert>
+	<!--  -->
+	<select id="count" resultType="java.lang.Integer">
+		select count(1)  from user_base_info 
+	</select>
+	<select id="countindate"  parameterType="Map" resultType="java.lang.Integer">
+		select count(1)  from user_base_info a
+		<if test="startTime != null">
+		where date(a.createTime) BETWEEN #{startTime} and  #{endTime}
+		</if>
+		<if test="startTime == null">
+		where date(a.createTime) <![CDATA[ <= ]]>  #{endTime}
+		</if>
+	</select>
+	<select id="selectdateaddcount"  parameterType="Map" resultType="java.lang.Integer">
+		select count(1)  from user_base_info a
+		<if test="time != null">
+		where date(a.createTime) = #{time} 
+		</if>
+	</select>
+</mapper>

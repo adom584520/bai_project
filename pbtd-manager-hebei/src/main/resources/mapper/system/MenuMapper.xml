@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.system.mapper.MenuMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.system.domain.Menu" >
+        <id column="id" property="id"/>
+        <result column="text" property="text"/>
+        <result column="url" property="url"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="state" property="state"/>
+        <result column="iconCls" property="iconCls"/>
+        <result column="sort" property="sort"/>
+        <result column="permission" property="permission"/>
+        <collection column="id" ofType="com.pbtd.manager.system.domain.Menu" property="children"
+        select="queryMenuById"></collection>
+    </resultMap>
+    <!-- 通过角色id查询 -->
+    <resultMap id="easyMenu" type="com.pbtd.manager.system.domain.Menu" >
+        <id column="id" property="id"/>
+        <result column="text" property="text"/>
+        <result column="url" property="url"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="state" property="state"/>
+        <result column="iconCls" property="iconCls"/>
+        <result column="sort" property="sort"/>
+        <result column="permission" property="permission"/>
+    </resultMap>
+    
+    <select id="queryRootMenu" resultMap="baseResultMap">
+    	select id,text,url,parent_id,state,iconCls,sort,permission
+    	from sys_menu
+    	where parent_id is null
+    	order by sort
+    </select>
+    
+    <select id="queryMenuById" resultMap="baseResultMap">
+    	select id,text,url,parent_id,state,iconCls,sort,permission
+    	from sys_menu
+    	where parent_id = #{parentId}
+    	order by sort
+    </select>
+    
+    <select id="queryMenuByRoleId" resultMap="easyMenu">
+    	select m.id as id,m.text as text,m.url as url,m.parent_id as parent_id,
+    	m.state as state,m.iconCls as iconCls,m.sort as sort,m.permission as permission
+    	from sys_menu m right join sys_role_menu rm
+    	on(m.id=rm.menu_id)
+    	where rm.role_id = #{id}
+    </select>
+   
+    <select id="queryMenuIdByRoleId" resultType="long">
+    	select menu_id
+    	from sys_role_menu
+    	where role_id = #{roleId}
+    </select>
+    
+   <delete id="deleteRoleAndMenuByRole">
+   		delete from sys_role_menu
+   		where role_id = #{roleId}
+   </delete>
+   
+   <insert id="insertRoleAndMenu">
+   		insert into sys_role_menu
+   		(role_id,menu_id)
+   		values(#{roleId},#{menuId})
+   </insert>
+   
+   <sql id="whereLimit">
+   		<if test="ids != null and ids.size()>0">
+   			<where>
+   				<foreach collection="ids" index="index" item="menu" open="(" separator="," close=")">
+		    		#{menu.id}
+		    	</foreach>
+   			</where>
+   		</if>
+   </sql>
+   <select id="queryCount" resultType="long">
+	   	select count(id) 
+	   	from sys_menu
+   </select>
+   <select id="queryList" resultMap="easyMenu">
+	   	select id,text,url,parent_id,state,iconCls,sort,permission
+	   	from sys_menu
+	   	<if test="ids!=null and ids.size>0">
+		   	<where>
+		   		id in
+		   		<foreach collection="ids" index="index" item="menu" open="(" separator="," close=")">
+		    		#{menu.id}
+		    	</foreach>
+		   	</where>
+	   	</if>
+	   	order by sort
+   </select>
+   
+   <select id="getMenu" resultMap="easyMenu">
+	   	select id,text,url,parent_id,state,iconCls,sort,permission
+	   	from sys_menu
+	   	where id = #{id}
+   </select>
+   
+   <delete id="deleteMenu">
+	   	delete from sys_menu
+	   	where id = #{id}
+   </delete>
+   
+   <select id="menuRoot" resultMap="easyMenu">
+	   	select id,text,url,parent_id,state,iconCls,sort,permission
+	   	from sys_menu
+	   	where parent_id is null
+   </select>
+   
+   <insert id="insertMenu" useGeneratedKeys="true" keyProperty="id">
+   		insert into sys_menu
+   		(text,url,parent_id,state,iconCls,sort,permission)
+   		values(#{text},#{url},#{parentId},#{state},#{iconCls},#{sort},#{permission})
+   </insert>
+   
+   <delete id="deleteRoleAndMenuByMenuId">
+   		delete from sys_role_menu
+   		where menu_id
+   </delete>
+   
+   <update id="updateMenu">
+   		update sys_menu
+   		set text = #{text},url = #{url},parent_id = #{parentId},state = #{state},
+   		iconCls = #{iconCls},sort = #{sort},permission = #{permission}
+   		where id = #{id}
+   </update>
+   
+   <select id="queryMenuByparentIdMenu" resultMap="easyMenu">
+   		select id,text,url,parent_id,state,iconCls,sort,permission
+   		from sys_menu
+	   	where parent_id = #{parentId}
+   </select>
+</mapper>

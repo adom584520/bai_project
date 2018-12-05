@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.launcher.mapper.NavigationMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.launcher.domain.Navigation" >
+        <id column="id" property="id"/>
+        <result column="nav_name" property="navName"/>
+        <result column="group_id" property="groupId"/>
+        <result column="show_type" property="showType"/>
+        <result column="text" property="text"/>
+        <result column="normal_icon" property="normalIcon"/>
+        <result column="press_icon" property="pressIcon"/>
+        <result column="selected_icon" property="selectedIcon"/>
+        <result column="sortpos" property="sortpos"/>
+        <result column="package_name" property="packageName"/>
+        <result column="class_name" property="className"/>
+        <result column="param_key" property="paramKey"/>
+        <result column="param_value" property="paramValue"/>
+        <result column="status" property="status"/>
+        <result column="loginInfo_name" property="loginInfoName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+    
+    <sql id="columns">
+    	id,nav_name,group_id,show_type,text,normal_icon,press_icon,selected_icon,sortpos,status,
+    	loginInfo_name,create_time,modify_time,package_name,class_name,param_key,param_value
+    </sql>
+    
+    <sql id="easyColumns">
+    	id,nav_name,group_id,show_type,status
+    </sql>
+    <sql id="queryAndlimit">
+    	<where>
+    		and data_status=#{dataStatus}
+    		<if test="groupId!=null">
+    			and group_id = #{groupId}
+    		</if>
+    	</where>
+    </sql>
+    <sql id="queryAndlimitOrder">
+    	<choose>
+		    <when test="groupId!=null">
+		    	order by sortpos asc,id asc
+		    </when>
+		    <otherwise>
+		        order by modify_time desc,id asc
+		    </otherwise>
+		</choose>
+    </sql>
+    <select id="queryCount" resultType="long">
+    	select count(*)
+    	from launcher_navigation
+    	<include refid="queryAndlimit"/>
+    </select>
+    <select id="queryList" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from launcher_navigation
+    	<include refid="queryAndlimit"/>
+    	<include refid="queryAndlimitOrder"/>
+    	limit #{start},#{pageSize}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    	insert into launcher_navigation
+    	(nav_name,group_id,show_type,text,normal_icon,press_icon,selected_icon,sortpos,
+    	status,loginInfo_name,create_time,modify_time,package_name,class_name,param_key,
+    	param_value,data_status)
+    	values(#{navName},#{groupId},#{showType},#{text},#{normalIcon},#{pressIcon},
+    	#{selectedIcon},#{sortpos},#{status},#{loginInfoName},#{createTime},#{modifyTime},
+    	#{packageName},#{className},#{paramKey},#{paramValue},#{dataStatus})
+    </insert>
+    
+    <update id="update">
+    	update launcher_navigation
+    	set nav_name=#{navName},show_type=#{showType},text=#{text},normal_icon=#{normalIcon},
+    	press_icon=#{pressIcon},selected_icon=#{selectedIcon},sortpos=#{sortpos},
+    	modify_time=#{modifyTime},package_name=#{packageName},class_name=#{className},
+    	param_key=#{paramKey},param_value=#{paramValue}
+    	where id = #{id}
+    </update>
+    
+    <delete id="delete">
+    	delete from launcher_navigation
+    	where id = #{id} and status = #{status}
+    </delete>
+    
+    <update id="uplineOrDownLine">
+    	update launcher_navigation
+    	set status = #{status},modify_time=#{modifyTime}
+    	where id = #{id}
+    </update>
+    
+    <select id="queryByGroupIdSortpos" resultMap="baseResultMap">
+    	select <include refid="easyColumns"/>
+    	from launcher_navigation
+    	where group_id = #{groupId} and  sortpos = #{sortpos} and status = #{status}
+    </select>
+    
+    <select id="queryById" resultMap="baseResultMap">
+    	select <include refid="easyColumns"/>
+    	from launcher_navigation
+    	where id = #{id}
+    </select>
+    
+    <select id="queryListByGroupId" resultMap="baseResultMap">
+    	select <include refid="easyColumns"/>
+    	from launcher_navigation
+    	where group_id = #{groupId}
+    </select>
+    
+    <delete id="deleteBatch">
+    	delete from launcher_navigation
+    	where id in 
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    
+    <update id="updateDataStatus">
+    	update launcher_navigation
+    	set data_status=#{dataStatus}
+    	where group_id in
+    	<foreach collection="list" index="index" item="groupId" open="(" separator="," close=")">
+    		#{groupId}
+    	</foreach>
+    </update>
+</mapper>

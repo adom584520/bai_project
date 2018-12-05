@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playclick.yinhe.mapper.AlbumsMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playclick.yinhe.domain.Albums">
+		<id column="albumId" property="albumId" jdbcType="VARCHAR" />
+		<result column="albumAttributes" property="albumAttributes" jdbcType="VARCHAR" />
+		<result column="albumName" property="albumName" jdbcType="VARCHAR" />
+		<result column="chnId" property="chnId" jdbcType="VARCHAR" />
+		<result column="chnName" property="chnName" jdbcType="VARCHAR" />
+		<result column="cpId" property="cpId" jdbcType="VARCHAR" />
+		<result column="duration" property="duration" jdbcType="VARCHAR" />
+		<result column="focus" property="focus" jdbcType="VARCHAR" />
+		<result column="is3d" property="is3d" jdbcType="VARCHAR" />
+		<result column="isPurchase" property="isPurchase" jdbcType="VARCHAR" />
+		<result column="isPurchaseOwn" property="isPurchaseOwn" jdbcType="VARCHAR" />
+		<result column="isSeries" property="isSeries" jdbcType="VARCHAR" />
+		<result column="maxSet" property="maxSet" jdbcType="VARCHAR" />
+		<result column="phase" property="phase" jdbcType="VARCHAR" />
+		<result column="pid" property="pid" jdbcType="VARCHAR" />
+		<result column="playCnt" property="playCnt" jdbcType="VARCHAR" />
+		<result column="score" property="score" jdbcType="VARCHAR" />
+		<result column="scoreLabel" property="scoreLabel" jdbcType="VARCHAR" />
+		<result column="season" property="season" jdbcType="VARCHAR" />
+		<result column="sets" property="sets" jdbcType="VARCHAR" />
+		<result column="showDate" property="showDate" jdbcType="VARCHAR" />
+		<result column="timestamp" property="timestamp" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="bz" property="bz" jdbcType="VARCHAR" />
+		<result column="tagsids" property="tagsids" jdbcType="VARCHAR" />
+		<result column="tags" property="tags" jdbcType="VARCHAR" />
+		<result column="currentCount" property="currentCount" jdbcType="VARCHAR" />
+		<result column="actorname" property="actorname" jdbcType="VARCHAR" />
+		<result column="directorname" property="directorname" jdbcType="VARCHAR" />
+		<result column="actorids" property="actorids" jdbcType="VARCHAR" />
+		<result column="directorids" property="directorids" jdbcType="VARCHAR" />
+		<result column="originalCountry" property="originalCountry" jdbcType="VARCHAR" />
+		<result column="originaids" property="originaids" jdbcType="VARCHAR" />
+		<result column="isStorage" property="isStorage" jdbcType="VARCHAR" />
+
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.pbtd.playclick.yinhe.domain.AlbumsWithBLOBs" extends="BaseResultMap">
+		<result column="actors" property="actors" jdbcType="LONGVARCHAR" />
+		<result column="albumDesc" property="albumDesc" jdbcType="LONGVARCHAR" />
+		<result column="cpList" property="cpList" jdbcType="LONGVARCHAR" />
+		<result column="currShowPlayOrder" property="currShowPlayOrder" jdbcType="LONGVARCHAR" />
+		<result column="leafTags" property="leafTags" jdbcType="LONGVARCHAR" />
+		<result column="picUrl" property="picUrl" jdbcType="LONGVARCHAR" />
+		<result column="superScripts" property="superScripts" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		albumId, albumAttributes, albumName, chnId, chnName, cpId,duration, focus,
+		is3d,isPurchase, isPurchaseOwn, isSeries, maxSet,phase, pid, playCnt, score,
+		scoreLabel,season, sets, showDate,timestamp, status, bz, tagsids, tags, currentCount,
+		actorname,directorname, actorids, directorids, originalCountry, originaids,isStorage
+	</sql>
+	<sql id="Blob_Column_List">
+		actors, albumDesc, cpList, currShowPlayOrder, leafTags,
+		picUrl, superScripts
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from yh_vod_albuminfo
+		where albumId = #{albumId,jdbcType=VARCHAR}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		yh_vod_albuminfo
+		where albumId = #{albumId,jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="insert" parameterType="com.pbtd.playclick.yinhe.domain.AlbumsWithBLOBs">
+		insert into yh_vod_albuminfo
+		(updatetime,albumId, albumAttributes, albumName,chnId, chnName, cpId,duration,focus, is3d,
+		isPurchase, isPurchaseOwn, isSeries,maxSet, phase, pid,playCnt, score, scoreLabel,
+		season, sets, showDate,timestamp, status,bz,tagsids, tags, currentCount,
+		actorname, directorname, actorids,directorids, originalCountry, originaids,
+		actors, albumDesc, cpList,currShowPlayOrder, leafTags, picUrl,superScripts)
+		values
+		(now(),#{albumId,jdbcType=VARCHAR}, #{albumAttributes,jdbcType=VARCHAR},
+		#{albumName,jdbcType=VARCHAR},
+		#{chnId,jdbcType=VARCHAR},
+		#{chnName,jdbcType=VARCHAR}, #{cpId,jdbcType=VARCHAR},
+		#{duration,jdbcType=VARCHAR}, #{focus,jdbcType=VARCHAR},
+		#{is3d,jdbcType=VARCHAR},
+		#{isPurchase,jdbcType=VARCHAR},
+		#{isPurchaseOwn,jdbcType=VARCHAR}, #{isSeries,jdbcType=VARCHAR},
+		#{maxSet,jdbcType=VARCHAR}, #{phase,jdbcType=VARCHAR},
+		#{pid,jdbcType=VARCHAR},
+		#{playCnt,jdbcType=VARCHAR},
+		#{score,jdbcType=VARCHAR}, #{scoreLabel,jdbcType=VARCHAR},
+		#{season,jdbcType=VARCHAR}, #{sets,jdbcType=VARCHAR},
+		#{showDate,jdbcType=VARCHAR},
+		#{timestamp,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR},
+		#{tagsids,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR},
+		#{currentCount,jdbcType=VARCHAR},
+		#{actorname,jdbcType=VARCHAR},
+		#{directorname,jdbcType=VARCHAR}, #{actorids,jdbcType=VARCHAR},
+		#{directorids,jdbcType=VARCHAR}, #{originalCountry,jdbcType=VARCHAR},
+		#{originaids,jdbcType=VARCHAR},
+		#{actors,jdbcType=LONGVARCHAR},
+		#{albumDesc,jdbcType=LONGVARCHAR}, #{cpList,jdbcType=LONGVARCHAR},
+		#{currShowPlayOrder,jdbcType=LONGVARCHAR},
+		#{leafTags,jdbcType=LONGVARCHAR}, #{picUrl,jdbcType=LONGVARCHAR},
+		#{superScripts,jdbcType=LONGVARCHAR})
+	</insert>
+
+	<insert id="insertSelective" parameterType="com.pbtd.playclick.yinhe.domain.AlbumsWithBLOBs">
+		insert into yh_vod_albuminfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="albumId != null">
+				albumId,
+			</if>
+			<if test="albumAttributes != null">
+				albumAttributes,
+			</if>
+			<if test="albumName != null">
+				albumName,
+			</if>
+			<if test="chnId != null">
+				chnId,
+			</if>
+			<if test="chnName != null">
+				chnName,
+			</if>
+			<if test="cpId != null">
+				cpId,
+			</if>
+			<if test="duration != null">
+				duration,
+			</if>
+			<if test="focus != null">
+				focus,
+			</if>
+			<if test="is3d != null">
+				is3d,
+			</if>
+			<if test="isPurchase != null">
+				isPurchase,
+			</if>
+			<if test="isPurchaseOwn != null">
+				isPurchaseOwn,
+			</if>
+			<if test="isSeries != null">
+				isSeries,
+			</if>
+			<if test="maxSet != null">
+				maxSet,
+			</if>
+			<if test="phase != null">
+				phase,
+			</if>
+			<if test="pid != null">
+				pid,
+			</if>
+			<if test="playCnt != null">
+				playCnt,
+			</if>
+			<if test="score != null">
+				score,
+			</if>
+			<if test="scoreLabel != null">
+				scoreLabel,
+			</if>
+			<if test="season != null">
+				season,
+			</if>
+			<if test="sets != null">
+				sets,
+			</if>
+			<if test="showDate != null">
+				showDate,
+			</if>
+			<if test="timestamp != null">
+				timestamp,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="bz != null">
+				bz,
+			</if>
+			<if test="tagsids != null">
+				tagsids,
+			</if>
+			<if test="tags != null">
+				tags,
+			</if>
+			<if test="currentCount != null">
+				currentCount,
+			</if>
+			<if test="actorname != null">
+				actorname,
+			</if>
+			<if test="directorname != null">
+				directorname,
+			</if>
+			<if test="actorids != null">
+				actorids,
+			</if>
+			<if test="directorids != null">
+				directorids,
+			</if>
+			<if test="originalCountry != null">
+				originalCountry,
+			</if>
+			<if test="originaids != null">
+				originaids,
+			</if>
+			<if test="actors != null">
+				actors,
+			</if>
+			<if test="albumDesc != null">
+				albumDesc,
+			</if>
+			<if test="cpList != null">
+				cpList,
+			</if>
+			<if test="currShowPlayOrder != null">
+				currShowPlayOrder,
+			</if>
+			<if test="leafTags != null">
+				leafTags,
+			</if>
+			<if test="picUrl != null">
+				picUrl,
+			</if>
+			<if test="superScripts != null">
+				superScripts,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="albumId != null">
+				#{albumId,jdbcType=VARCHAR},
+			</if>
+			<if test="albumAttributes != null">
+				#{albumAttributes,jdbcType=VARCHAR},
+			</if>
+			<if test="albumName != null">
+				#{albumName,jdbcType=VARCHAR},
+			</if>
+			<if test="chnId != null">
+				#{chnId,jdbcType=VARCHAR},
+			</if>
+			<if test="chnName != null">
+				#{chnName,jdbcType=VARCHAR},
+			</if>
+			<if test="cpId != null">
+				#{cpId,jdbcType=VARCHAR},
+			</if>
+			<if test="duration != null">
+				#{duration,jdbcType=VARCHAR},
+			</if>
+			<if test="focus != null">
+				#{focus,jdbcType=VARCHAR},
+			</if>
+			<if test="is3d != null">
+				#{is3d,jdbcType=VARCHAR},
+			</if>
+			<if test="isPurchase != null">
+				#{isPurchase,jdbcType=VARCHAR},
+			</if>
+			<if test="isPurchaseOwn != null">
+				#{isPurchaseOwn,jdbcType=VARCHAR},
+			</if>
+			<if test="isSeries != null">
+				#{isSeries,jdbcType=VARCHAR},
+			</if>
+			<if test="maxSet != null">
+				#{maxSet,jdbcType=VARCHAR},
+			</if>
+			<if test="phase != null">
+				#{phase,jdbcType=VARCHAR},
+			</if>
+			<if test="pid != null">
+				#{pid,jdbcType=VARCHAR},
+			</if>
+			<if test="playCnt != null">
+				#{playCnt,jdbcType=VARCHAR},
+			</if>
+			<if test="score != null">
+				#{score,jdbcType=VARCHAR},
+			</if>
+			<if test="scoreLabel != null">
+				#{scoreLabel,jdbcType=VARCHAR},
+			</if>
+			<if test="season != null">
+				#{season,jdbcType=VARCHAR},
+			</if>
+			<if test="sets != null">
+				#{sets,jdbcType=VARCHAR},
+			</if>
+			<if test="showDate != null">
+				#{showDate,jdbcType=VARCHAR},
+			</if>
+			<if test="timestamp != null">
+				#{timestamp,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="bz != null">
+				#{bz,jdbcType=VARCHAR},
+			</if>
+			<if test="tagsids != null">
+				#{tagsids,jdbcType=VARCHAR},
+			</if>
+			<if test="tags != null">
+				#{tags,jdbcType=VARCHAR},
+			</if>
+			<if test="currentCount != null">
+				#{currentCount,jdbcType=VARCHAR},
+			</if>
+			<if test="actorname != null">
+				#{actorname,jdbcType=VARCHAR},
+			</if>
+			<if test="directorname != null">
+				#{directorname,jdbcType=VARCHAR},
+			</if>
+			<if test="actorids != null">
+				#{actorids,jdbcType=VARCHAR},
+			</if>
+			<if test="directorids != null">
+				#{directorids,jdbcType=VARCHAR},
+			</if>
+			<if test="originalCountry != null">
+				#{originalCountry,jdbcType=VARCHAR},
+			</if>
+			<if test="originaids != null">
+				#{originaids,jdbcType=VARCHAR},
+			</if>
+			<if test="actors != null">
+				#{actors,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="albumDesc != null">
+				#{albumDesc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="cpList != null">
+				#{cpList,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="currShowPlayOrder != null">
+				#{currShowPlayOrder,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="leafTags != null">
+				#{leafTags,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="picUrl != null">
+				#{picUrl,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="superScripts != null">
+				#{superScripts,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playclick.yinhe.domain.AlbumsWithBLOBs">
+		update yh_vod_albuminfo
+		<set>
+		updatestatus=0,
+			<if test="albumAttributes != null">
+				albumAttributes = #{albumAttributes,jdbcType=VARCHAR},
+			</if>
+			<if test="albumName != null">
+				albumName = #{albumName,jdbcType=VARCHAR},
+			</if>
+			<if test="chnId != null">
+				chnId = #{chnId,jdbcType=VARCHAR},
+			</if>
+			<if test="chnName != null">
+				chnName = #{chnName,jdbcType=VARCHAR},
+			</if>
+			<if test="cpId != null">
+				cpId = #{cpId,jdbcType=VARCHAR},
+			</if>
+			<if test="duration != null">
+				duration = #{duration,jdbcType=VARCHAR},
+			</if>
+			<if test="focus != null">
+				focus = #{focus,jdbcType=VARCHAR},
+			</if>
+			<if test="is3d != null">
+				is3d = #{is3d,jdbcType=VARCHAR},
+			</if>
+			<if test="isPurchase != null">
+				isPurchase = #{isPurchase,jdbcType=VARCHAR},
+			</if>
+			<if test="isPurchaseOwn != null">
+				isPurchaseOwn = #{isPurchaseOwn,jdbcType=VARCHAR},
+			</if>
+			<if test="isSeries != null">
+				isSeries = #{isSeries,jdbcType=VARCHAR},
+			</if>
+			<if test="maxSet != null">
+				maxSet = #{maxSet,jdbcType=VARCHAR},
+			</if>
+			<if test="phase != null">
+				phase = #{phase,jdbcType=VARCHAR},
+			</if>
+			<if test="pid != null">
+				pid = #{pid,jdbcType=VARCHAR},
+			</if>
+			<if test="playCnt != null">
+				playCnt = #{playCnt,jdbcType=VARCHAR},
+			</if>
+			<if test="score != null">
+				score = #{score,jdbcType=VARCHAR},
+			</if>
+			<if test="scoreLabel != null">
+				scoreLabel = #{scoreLabel,jdbcType=VARCHAR},
+			</if>
+			<if test="season != null">
+				season = #{season,jdbcType=VARCHAR},
+			</if>
+			<if test="sets != null">
+				sets = #{sets,jdbcType=VARCHAR},
+			</if>
+			<if test="showDate != null">
+				showDate = #{showDate,jdbcType=VARCHAR},
+			</if>
+			<if test="timestamp != null">
+				timestamp = #{timestamp,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="bz != null">
+				bz = #{bz,jdbcType=VARCHAR},
+			</if>
+			<if test="tagsids != null">
+				tagsids = #{tagsids,jdbcType=VARCHAR},
+			</if>
+			<if test="tags != null">
+				tags = #{tags,jdbcType=VARCHAR},
+			</if>
+			<if test="currentCount != null">
+				currentCount = #{currentCount,jdbcType=VARCHAR},
+			</if>
+			<if test="actorname != null">
+				actorname = #{actorname,jdbcType=VARCHAR},
+			</if>
+			<if test="directorname != null">
+				directorname = #{directorname,jdbcType=VARCHAR},
+			</if>
+			<if test="actorids != null">
+				actorids = #{actorids,jdbcType=VARCHAR},
+			</if>
+			<if test="directorids != null">
+				directorids = #{directorids,jdbcType=VARCHAR},
+			</if>
+			<if test="originalCountry != null">
+				originalCountry = #{originalCountry,jdbcType=VARCHAR},
+			</if>
+			<if test="originaids != null">
+				originaids = #{originaids,jdbcType=VARCHAR},
+			</if>
+			<if test="actors != null">
+				actors = #{actors,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="albumDesc != null">
+				albumDesc = #{albumDesc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="cpList != null">
+				cpList = #{cpList,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="currShowPlayOrder != null">
+				currShowPlayOrder =
+				#{currShowPlayOrder,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="leafTags != null">
+				leafTags = #{leafTags,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="picUrl != null">
+				picUrl = #{picUrl,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="superScripts != null">
+				superScripts = #{superScripts,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where albumId = #{albumId,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pbtd.playclick.yinhe.domain.AlbumsWithBLOBs">
+		update yh_vod_albuminfo
+		set updatestatus=0,updatetime=now(),albumAttributes = #{albumAttributes,jdbcType=VARCHAR},
+		albumName = #{albumName,jdbcType=VARCHAR},
+		chnId = #{chnId,jdbcType=VARCHAR},
+		chnName = #{chnName,jdbcType=VARCHAR},
+		cpId = #{cpId,jdbcType=VARCHAR},
+		duration = #{duration,jdbcType=VARCHAR},
+		focus = #{focus,jdbcType=VARCHAR},
+		is3d = #{is3d,jdbcType=VARCHAR},
+		isPurchase = #{isPurchase,jdbcType=VARCHAR},
+		isPurchaseOwn = #{isPurchaseOwn,jdbcType=VARCHAR},
+		isSeries = #{isSeries,jdbcType=VARCHAR},
+		maxSet = #{maxSet,jdbcType=VARCHAR},
+		phase = #{phase,jdbcType=VARCHAR},
+		pid = #{pid,jdbcType=VARCHAR},
+		playCnt = #{playCnt,jdbcType=VARCHAR},
+		score = #{score,jdbcType=VARCHAR},
+		scoreLabel = #{scoreLabel,jdbcType=VARCHAR},
+		season = #{season,jdbcType=VARCHAR},
+		sets = #{sets,jdbcType=VARCHAR},
+		showDate = #{showDate,jdbcType=VARCHAR},
+		timestamp = #{timestamp,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR},
+		bz = #{bz,jdbcType=VARCHAR},
+		tagsids = #{tagsids,jdbcType=VARCHAR},
+		tags = #{tags,jdbcType=VARCHAR},
+		currentCount = #{currentCount,jdbcType=VARCHAR},
+		actorname = #{actorname,jdbcType=VARCHAR},
+		directorname = #{directorname,jdbcType=VARCHAR},
+		actorids = #{actorids,jdbcType=VARCHAR},
+		directorids = #{directorids,jdbcType=VARCHAR},
+		originalCountry = #{originalCountry,jdbcType=VARCHAR},
+		originaids = #{originaids,jdbcType=VARCHAR},
+		actors = #{actors,jdbcType=LONGVARCHAR},
+		albumDesc = #{albumDesc,jdbcType=LONGVARCHAR},
+		cpList = #{cpList,jdbcType=LONGVARCHAR},
+		currShowPlayOrder = #{currShowPlayOrder,jdbcType=LONGVARCHAR},
+		leafTags = #{leafTags,jdbcType=LONGVARCHAR},
+		picUrl = #{picUrl,jdbcType=LONGVARCHAR},
+		superScripts = #{superScripts,jdbcType=LONGVARCHAR}
+		where albumId = #{albumId,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.pbtd.playclick.yinhe.domain.Albums">
+		update
+		yh_vod_albuminfo
+		set 	updatetime=now(),albumAttributes = #{albumAttributes,jdbcType=VARCHAR},
+		albumName = #{albumName,jdbcType=VARCHAR},
+		chnId = #{chnId,jdbcType=VARCHAR},
+		chnName = #{chnName,jdbcType=VARCHAR},
+		cpId = #{cpId,jdbcType=VARCHAR},
+		duration = #{duration,jdbcType=VARCHAR},
+		focus = #{focus,jdbcType=VARCHAR},
+		is3d = #{is3d,jdbcType=VARCHAR},
+		isPurchase = #{isPurchase,jdbcType=VARCHAR},
+		isPurchaseOwn = #{isPurchaseOwn,jdbcType=VARCHAR},
+		isSeries = #{isSeries,jdbcType=VARCHAR},
+		maxSet = #{maxSet,jdbcType=VARCHAR},
+		phase = #{phase,jdbcType=VARCHAR},
+		pid = #{pid,jdbcType=VARCHAR},
+		playCnt = #{playCnt,jdbcType=VARCHAR},
+		score = #{score,jdbcType=VARCHAR},
+		scoreLabel = #{scoreLabel,jdbcType=VARCHAR},
+		season = #{season,jdbcType=VARCHAR},
+		sets = #{sets,jdbcType=VARCHAR},
+		showDate = #{showDate,jdbcType=VARCHAR},
+		timestamp = #{timestamp,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR},
+		bz = #{bz,jdbcType=VARCHAR},
+		tagsids = #{tagsids,jdbcType=VARCHAR},
+		tags = #{tags,jdbcType=VARCHAR},
+		currentCount = #{currentCount,jdbcType=VARCHAR},
+		actorname = #{actorname,jdbcType=VARCHAR},
+		directorname = #{directorname,jdbcType=VARCHAR},
+		actorids = #{actorids,jdbcType=VARCHAR},
+		directorids = #{directorids,jdbcType=VARCHAR},
+		originalCountry = #{originalCountry,jdbcType=VARCHAR},
+		originaids = #{originaids,jdbcType=VARCHAR}
+		where albumId = #{albumId,jdbcType=VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LiveProgramMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.live.domain.LiveProgram">
+		<id column="programId" property="programid" jdbcType="INTEGER" />
+		<result column="startTime" property="starttime" jdbcType="BIGINT" />
+		<result column="endTime" property="endtime" jdbcType="BIGINT" />
+		<result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+		<result column="source" property="source" jdbcType="INTEGER" />
+		<result column="realTime" property="realtime" jdbcType="VARCHAR" />
+		<result column="programName" property="programname" jdbcType="VARCHAR" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		programId, startTime, endTime, chnCode, programName,
+		realTime, createTime,source
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from live_program
+		<if test="programid != null">
+			where programId = #{programid,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(*) from live_program
+		<trim prefix="WHERE" suffixOverrides="AND">
+			<if test="chncode != null">
+				chnCode like '%${chncode}%' AND
+			</if>
+			<if test="starttime != null">
+				startTime > ${starttime} AND
+			</if>
+		</trim>
+	</select>
+
+	<select id="find" parameterType="Map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from live_program
+		<trim prefix="WHERE" suffixOverrides="AND">
+			<if test="starttime != null">
+				startTime > ${starttime} AND
+			</if>
+			<if test="endtime != null">
+				endTime = #{endtime,jdbcType=BIGINT} and
+			</if>
+			<if test="chncode != null">
+				chnCode like '%${chncode}%' AND
+			</if>
+			<if test="programname != null">
+				programName = #{programname,jdbcType=VARCHAR} and
+			</if>
+			<if test="realtime != null">
+				realTime = #{realtime,jdbcType=VARCHAR} and
+			</if>
+			<if test="versionid != null">
+				versionid = #{versionid,jdbcType=INTEGER} and
+			</if>
+			<if test="versionname != null">
+				versionname like #{versionname,jdbcType=VARCHAR} and
+			</if>
+			<if test="isplaycontinue != null">
+				isplaycontinue = #{isplaycontinue,jdbcType=INTEGER} and
+			</if>
+			<if test="showtype != null">
+				showtype = #{showtype,jdbcType=INTEGER} and
+			</if>
+			<if test="issupportseqnum != null">
+				issupportseqnum = #{issupportseqnum,jdbcType=INTEGER} and
+			</if>
+			<if test="isshowlivelist != null">
+				isshowlivelist = #{isshowlivelist,jdbcType=INTEGER} and
+			</if>
+			<if test="delaytime != null">
+				delaytime = #{delaytime,jdbcType=VARCHAR} and
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=INTEGER} and
+			</if>
+		</trim>
+		limit #{start},#{pageSize}
+	</select>
+
+	<insert id="insert" parameterType="com.pbtd.manager.live.domain.LiveProgram">
+		insert into live_program (
+		programId,
+		startTime,
+		endTime,
+		chnCode,
+		source,
+		realTime,
+		programName,
+		createTime
+		)
+		values (
+		#{programid},
+		#{starttime,jdbcType=BIGINT},
+		#{endtime,jdbcType=BIGINT},
+		#{chncode,jdbcType=VARCHAR},
+		#{source,jdbcType=INTEGER},
+		#{realtime,jdbcType=VARCHAR},
+		#{programname,jdbcType=VARCHAR},
+		now()
+		)
+	</insert>
+
+	<select id="load" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_program
+		where programId =
+		#{programid,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteTimeOut" parameterType="java.lang.Integer">
+	
+	<![CDATA[ delete from live_program  where  startTime <  (unix_timestamp()-3600*24*7) ]]>
+
+	</delete>
+
+	<select id="getprogram" resultMap="BaseResultMap">
+		select * from live_program
+	</select>
+</mapper>

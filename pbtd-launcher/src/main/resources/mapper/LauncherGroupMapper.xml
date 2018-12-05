@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.launcher.mapper.LauncherGroupMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.launcher.dto.LauncherGroupDTO" >
+        <id column="id" property="groupId"/>
+        <result column="group_name" property="groupName"/>
+    </resultMap>
+  	<select id="queryAllGroupIdAndName" resultMap="baseResultMap">
+  		select id,group_name
+  		from launcher_group
+  	</select>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playlive.mapper.LiveSysParamMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playlive.domain.LiveSysParam" >
+    <id column="paramId" property="paramid" jdbcType="INTEGER" />
+    <result column="paramName" property="paramname" jdbcType="VARCHAR" />
+    <result column="paramCnName" property="paramcnname" jdbcType="VARCHAR" />
+    <result column="paramValue" property="paramvalue" jdbcType="VARCHAR" />
+    <result column="paramValueadd" property="paramvalueadd" jdbcType="VARCHAR" />
+    <result column="paramStatus" property="paramstatus" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    paramId, paramName, paramCnName, paramValue, paramValueadd, paramStatus, createTime, 
+    updateTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from live_sys_param
+    where paramId = #{paramid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select *
+    from live_sys_param
+ </select>
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.ZhuanpanPlayseriescodeMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.ZhuanpanPlayseriescode" >
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="activeCode" property="activecode"/>
+    <result column="dramaname" property="dramaname"/>
+    <result column="seriesName" property="seriesname"/>
+    <result column="seriesCode" property="seriescode"/>
+    <result column="createTime" property="createtime"/>
+    <result column="updateTime" property="updatetime"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, activeCode, dramaname, seriesName, seriesCode, createTime, updateTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from zhuanpan_playseriescode
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from zhuanpan_playseriescode
+  </select>
+</mapper>

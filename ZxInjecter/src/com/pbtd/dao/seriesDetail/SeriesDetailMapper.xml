@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.dao.seriesDetail.SeriesDetailMapper">
+	
+	<!--## Query ##-->
+	<!--需要注入数据库的媒资数量 -->
+	<select id="getInjectionNum" resultType="int">
+		select count(1) from ij_seriesdetail a
+		where (a.isInsert is null or a.isInsert=0)
+		<![CDATA[  or (a.isInsert=-1 and ifnull(a.injectTimes,0)<4)	]]>
+		order by 
+		(case when a.priority is null then 1 else a.priority end) desc,
+		a.createtime,
+		(case when a.injectTimes is null then 0 else a.injectTimes end),
+		a.seriesId,a.movieCode
+	</select>
+	
+	<!-- 查询100条需要注入的媒资信息 -->
+	<select id="getInjectionList" resultType="com.pbtd.entity.SeriesDetail">
+		select * from ij_seriesdetail a
+		where (a.isInsert is null or a.isInsert=0) 
+		<![CDATA[  or (a.isInsert=-1 and ifnull(a.injectTimes,0)<4)	]]>
+		order by 
+		(case when a.priority is null then 1 else a.priority end) desc,
+		a.createtime,
+		(case when a.injectTimes is null then 0 else a.injectTimes end),
+		a.seriesId,a.movieCode
+		limit 0,100
+	</select>
+	
+	<!--  需要数据库Db注入的数量 -->
+	<select id="getTop100ReInjectList" resultType="com.pbtd.entity.SeriesDetail">
+		select * from ij_seriesdetail a 
+		where 1=1 
+		and (a.programId is not null and length(a.programId)>20) 
+		and INSTR(a.movieUrl,'111.63.145.13')=0 
+		and isInsert!=1 
+		limit 0,100 
+	</select>
+	
+	
+	
+	<!--  -->
+	<select id="getInjectWithoutUrlNum" resultType="int">
+		select count(*) from db_jmmdmx a  
+		where 1=1 
+		and a.programId is not null 
+		and a.isInsert in('1','-1') 
+		ORDER BY a.isInsert desc 
+	</select>
+	
+	<!-- 需要重新注入的数量 -->
+	<select id="getReInjectNum" resultType="int">
+		select count(*) from db_jmmdmx a  
+		where 1=1 
+		and (a.programId is not null and length(a.programId)>20 ) 
+		and INSTR(a.movieUrl,'111.63.145.13')=0 
+	</select>
+	
+	<!--  获取已经注入，还没有获取播放地址的数据 -->
+	<select id="getTop1000InjectWithoutUrlList" resultType="com.pbtd.entity.SeriesDetail">
+		select * from db_jmmdmx a  
+		where 1=1 
+		and (a.programId is not null and LENGTH(a.programId)>20) 
+		and INSTR(a.movieUrl,'111.63.145.13')=0 
+		and DATE_FORMAT(SYSDATE(),'%Y%c%d')>substr(a.injecttime,1,8)
+		ORDER BY a.isInsert desc 
+		limit 0,1000
+	</select>
+	
+	<!-- 根据programId获取该条记录 -->
+	<select id="getInfoByProgramId" parameterType="com.pbtd.entity.SeriesDetail" resultType="com.pbtd.entity.SeriesDetail">
+		SELECT * from ij_seriesdetail a
+		where a.programId=#{programId}
+	</select>
+	
+	<!-- 根据Id获取单条记录 -->
+	<select id="getInfoById" parameterType="com.pbtd.entity.SeriesDetail" resultType="com.pbtd.entity.SeriesDetail">
+		SELECT * from ij_seriesdetail a
+		where a.id=#{id}
+	</select>
+	
+	<!-- 根据cpSeriesCode和movieCode,码率，termin查找-->
+	<select id="getInfoNumBySeriesAndCodeAndVersionAndTerminal" parameterType="com.pbtd.entity.SeriesDetail" resultType="Integer">
+		SELECT count(1) from ij_seriesdetail a
+		where a.seriesId=#{seriesId}
+		and a.movieCode=#{movieCode}
+		and a.version=#{version}
+		and a.terminalType=#{terminalType}
+	</select>
+	
+	
+	
+	
+	<!--## Update ##-->
+	<!-- 根据cpSeriesCode，movieCode更新数据
+		 注入中，注入失败的不予更新 
+	-->
+	<update id="updateInfoBySeriesAndCodeAndVersion">
+		update ij_seriesdetail t 
+		set t.subWebId=#{subWebId},
+		t.seriesId=#{seriesId},
+		t.programName=#{programName},
+		t.terminalType=#{terminalType},
+		t.sourceUrl=#{sourceUrl},
+		t.movieUrl=#{movieUrl},
+		t.isInsert=#{isInsert},
+		t.receiveTime=#{receiveTime},
+		t.injectTimes=#{injectTimes},
+		t.bunchcode=#{bunchcode},
+		t.programId=#{programId},
+		t.injectTime=#{injectTime},
+		t.priority=#{priority}
+		where t.seriesId=#{seriesId}
+		and t.movieCode=#{movieCode}
+		and t.version=#{version}
+		and t.terminalType=#{terminalType}
+		and t.isInsert in (0,-1)
+	</update>
+	
+	<!-- 更改注入状态 -->
+	<update id="updateStateById" parameterType="com.pbtd.entity.SeriesDetail">
+		update ij_seriesdetail 
+		set isInsert=#{isInsert},
+		bunchcode=#{bunchcode},
+		programId=#{programId},
+		sendTime=#{sendTime},
+		xmlLocation=#{xmlLocation}
+		where id=#{id}
+	</update>
+	
+	<!-- 根据Id修改isInsert状态 -->
+	<update id="updateIsInsertById" parameterType="com.pbtd.entity.SeriesDetail">
+		update ij_seriesdetail t 
+		set t.isInsert=#{isInsert}
+		where t.id=#{id}
+	</update>
+	
+	<update id="updateStateForUrl" parameterType="com.pbtd.entity.SeriesDetail">
+		update ij_seriesdetail t 
+		set t.isInsert=#{isInsert},t.movieUrl=#{movieUrl}
+		where t.id=#{id}
+	</update>
+	
+	<update id="updateMovieUrlByProgramId" parameterType="com.pbtd.entity.SeriesDetail">
+		update ij_seriesdetail t
+		set t.movieUrl=#{movieUrl}
+		where t.programId=#{programId}	
+	</update>
+	
+	<update id="updateStateForCdnReturn" parameterType="com.pbtd.entity.SeriesDetail">
+		update ij_seriesdetail t 
+		set t.isInsert=#{isInsert},
+		t.callBackTime=#{callBackTime}
+		where t.programId=#{programId}
+	</update>
+	
+	
+	
+	
+	<!-- ##Save ## -->
+	<!-- 保存媒资信息 -->
+	<insert id="saveInfo" parameterType="com.pbtd.entity.SeriesDetail">
+		insert into ij_seriesdetail(subWebId,cpSeriesId,seriesId,programName,movieCode,version,terminalType,sourceUrl,movieUrl,isInsert,injectTimes,bunchcode,programId,createTime,receiveTime,priority)
+		VALUES(#{subWebId},#{cpSeriesId},#{seriesId},#{programName},#{movieCode},#{version},#{terminalType},#{sourceUrl},#{movieUrl},#{isInsert},#{injectTimes},#{bunchcode},#{programId},#{createTime},#{receiveTime},#{priority})
+	</insert>
+	
+	
+
+</mapper>

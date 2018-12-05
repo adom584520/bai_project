@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LiveChannelMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.live.domain.LiveChannel">
+		<id column="channelId" property="channelid" jdbcType="INTEGER" />
+		<result column="sournece" property="sournece" jdbcType="INTEGER" />
+		<result column="oldChnCode" property="oldchncode" jdbcType="VARCHAR" />
+		<result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+		<result column="chnName" property="chnname" jdbcType="VARCHAR" />
+		<result column="playUrl" property="playurl" jdbcType="VARCHAR" />
+		<result column="packageCover" property="packagecover" jdbcType="VARCHAR" />
+		<result column="channelCoverTv" property="channelcovertv" jdbcType="VARCHAR" />
+		<result column="groupId" property="groupid" jdbcType="INTEGER" />
+		<result column="tagId" property="tagid" jdbcType="INTEGER" />
+		<result column="defaultNum" property="defaultnum" jdbcType="INTEGER" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+		<result column="epgStatus" property="epgstatus" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		channelid, sournece, oldChnCode, chnCode, chnName, playUrl,
+		packageCover,channelCoverTv,
+		groupId,tagId, createTime,
+		updateTime,
+		epgStatus,defaultNum
+	</sql>
+	<select id="select" resultMap="BaseResultMap"
+		parameterType="com.pbtd.manager.live.domain.LiveChannel">
+		select
+		<include refid="Base_Column_List" />
+		from live_channel
+		<trim prefix="where " suffixOverrides="and">
+			<if test="chncode != null">
+				chnCode = #{chncode,jdbcType=VARCHAR} and
+			</if>
+		</trim>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.pbtd.manager.live.domain.LiveChannel">
+		select
+		<include refid="Base_Column_List" />
+		from live_channel
+		<trim prefix="where " suffixOverrides="and">
+			<if test="channelid != null">
+				channelid = #{channelid,jdbcType=INTEGER} and
+			</if>
+			<if test="sournece != null">
+				sournece = #{sournece,jdbcType=INTEGER} and
+			</if>
+			<if test="oldchncode != null">
+				oldChnCode = #{oldchncode,jdbcType=VARCHAR} and
+			</if>
+			<if test="chncode != null">
+				chnCode = #{chncode,jdbcType=VARCHAR} and
+			</if>
+			<if test="chnname != null">
+				chnName = #{chnname,jdbcType=VARCHAR} and
+			</if>
+			<if test="playurl != null">
+				playUrl = #{playurl,jdbcType=VARCHAR} and
+			</if>
+			<if test="packagecover != null">
+				packageCover = #{packagecover,jdbcType=VARCHAR} and
+			</if>
+			<if test="groupid != null">
+				groupId = #{groupid,jdbcType=INTEGER} and
+			</if>
+			<if test="epgstatus != null">
+				epgStatus = #{epgstatus,jdbcType=INTEGER} and
+			</if>
+		</trim>
+	</select>
+
+	<update id="update" parameterType="com.pbtd.manager.live.domain.LiveChannel">
+		update live_channel
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="sournece != null">
+				sournece = #{sournece,jdbcType=INTEGER},
+			</if>
+			<if test="oldchncode != null">
+				oldChnCode = #{oldchncode,jdbcType=VARCHAR},
+			</if>
+			<if test="chncode != null">
+				chnCode = #{chncode,jdbcType=VARCHAR},
+			</if>
+			<if test="chnname != null">
+				chnName = #{chnname,jdbcType=VARCHAR},
+			</if>
+			<if test="playurl != null">
+				playUrl = #{playurl,jdbcType=VARCHAR},
+			</if>
+			<if test="packagecover != null">
+				packageCover = #{packagecover,jdbcType=VARCHAR},
+			</if>
+			<if test="groupid != null">
+				groupId = #{groupid,jdbcType=INTEGER},
+			</if>
+			<if test="tagid != null">
+				tagId = #{tagid,jdbcType=INTEGER},
+			</if>
+			<if test="epgstatus != null">
+				epgStatus = #{epgstatus,jdbcType=INTEGER},
+			</if>
+			<if test="defaultnum != null">
+				defaultNum = #{defaultnum,jdbcType=INTEGER},
+			</if>
+		</trim>
+		where channelid = #{channelid,jdbcType=INTEGER}
+	</update>
+
+	<update id="updatesequce" parameterType="Map">
+		update live_channel set
+		<choose>
+			<when test=" plus !=null and plus !=''">
+				defaultNum = defaultNum+1
+			</when>
+			<otherwise>
+				defaultNum = defaultNum-1
+			</otherwise>
+		</choose>
+		where 1=1
+		<if test="id != null  and id !='' ">
+			and channelid !=#{id,jdbcType=INTEGER}
+		</if>
+    		 <![CDATA[
+    		  and defaultNum>=#{minnum,jdbcType=INTEGER}
+    		  and defaultNum<=#{maxnum,jdbcType=INTEGER}
+    		]]>
+	</update>
+
+	<insert id="insert" parameterType="com.pbtd.manager.live.domain.LiveChannel">
+		insert into live_channel (
+		sournece,
+		oldChnCode,
+		chnCode,
+		chnName,
+		playUrl,
+		packageCover,
+		channelCoverTv,
+		groupId,
+		tagId,
+		defaultNum,
+		createTime,
+		updateTime,
+		epgStatus,
+		videoId
+		)
+		values (
+		#{sournece,jdbcType=INTEGER},
+		#{oldchncode,jdbcType=VARCHAR},
+		#{chncode,jdbcType=VARCHAR},
+		#{chnname,jdbcType=VARCHAR},
+		#{playurl,jdbcType=VARCHAR},
+		#{packagecover,jdbcType=VARCHAR},
+		#{channelcovertv,jdbcType=VARCHAR},
+		#{groupid,jdbcType=INTEGER},
+		#{tagid,jdbcType=INTEGER},
+		#{defaultnum,jdbcType=INTEGER},
+		now(),
+		now(),
+		#{epgstatus,jdbcType=INTEGER},
+		#{videoid,jdbcType=INTEGER})
+	</insert>
+
+
+	<update id="truncateTable">
+		truncate table live_channel ;
+	</update>
+
+	<delete id="delete" parameterType="com.pbtd.manager.live.domain.LiveChannel">
+		delete from live_channel
+		<where>
+			<if test="chncode != null">
+				chnCode = #{chncode}
+			</if>
+		</where>
+	</delete>
+
+	<delete id="deletes" parameterType="Map">
+		delete from live_channel
+		<where>
+			<if test="id_ != null">
+				and channelid in
+				<foreach collection="id_" index="index" item="item" open="("
+					separator="," close=")">
+					#{item,jdbcType=INTEGER}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+
+	<select id="load" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_channel
+		where channelid =
+		#{channelid,jdbcType=INTEGER}
+	</select>
+
+	<select id="find" parameterType="Map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from live_channel
+		<trim prefix="WHERE" suffixOverrides="AND">
+			<if test="channelid != null">
+				channelid = #{channelid,jdbcType=INTEGER} AND
+			</if>
+			<if test="sournece != null">
+				sournece = #{sournece,jdbcType=INTEGER}
+			</if>
+			<if test="oldchncode != null">
+				oldChnCode = #{oldchncode,jdbcType=VARCHAR} AND
+			</if>
+			<if test="chncode != null">
+				chnCode = #{chncode,jdbcType=VARCHAR} AND
+			</if>
+			<if test="chnname != null">
+				chnName like #{chnname,jdbcType=VARCHAR} AND
+			</if>
+			<if test="playurl != null">
+				playUrl = #{playurl,jdbcType=VARCHAR} AND
+			</if>
+			<if test="packagecover != null">
+				packageCover = #{packagecover,jdbcType=VARCHAR} AND
+			</if>
+			<if test="groupid != null">
+				groupId = #{groupid,jdbcType=INTEGER} AND
+			</if>
+			<if test="epgstatus != null">
+				epgStatus = #{epgstatus,jdbcType=INTEGER} AND
+			</if>
+		</trim>
+		limit #{start},#{pageSize}
+	</select>
+
+
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(*) from live_channel
+		<where>
+			<if test="chnName != null">
+				chnName = #{chnName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="getchannel" resultMap="BaseResultMap">
+		select * from live_channel
+	</select>
+</mapper>

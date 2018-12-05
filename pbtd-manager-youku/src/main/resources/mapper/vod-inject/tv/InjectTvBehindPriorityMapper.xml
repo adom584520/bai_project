@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.inject.tv.mapper.InjectTvBehindPriorityMapper">
+
+	<!-- 保存新增专辑
+		默认普优 1
+	 -->
+	<insert id="saveNewAlbum">
+		insert into inject_tv_albuminfo(seriesCode,channel,zxPriority,hwPriority)
+		SELECT a.seriesCode,a.Channel,1,1
+		from vod_tv_albuminfo a 
+		where not EXISTS (SELECT 1 from inject_tv_albuminfo b where a.seriesCode=b.seriesCode)
+		and a.seriesCode is not null 
+	</insert>
+	 
+	<!-- 保存新增剧集
+		 默认普优 1 
+	-->
+	<insert id="saveNewVideo">
+		insert into inject_tv_albuminfovideo(seriesCode,drama,zxPriority,hwPriority)
+		SELECT a.seriesCode,a.drama,1,1 from vod_tv_albuminfovideo a 
+		where not EXISTS (SELECT 1 from inject_tv_albuminfovideo b where a.seriesCode=b.seriesCode and a.drama=b.drama)
+		and a.seriesCode is not null and a.drama is not null
+	</insert> 
+	
+	<!-- 更新新增专辑-优先级  从频道优先级 -->
+	<update id="updateNewAlbumPriority">
+		update inject_tv_albuminfo t join inject_tv_priority b on b.channelCode=t.channel
+		set t.zxPriority=b.priority,t.hwPriority=b.priority
+		where t.zxInjectState=0
+		or t.hwInjectState=0 
+	</update>
+	 
+	 <!-- 更新新增剧集-优先级 从专辑优先级 -->
+	 <update id="updateNewVideoPriority">
+		update inject_tv_albuminfovideo t join inject_tv_albuminfo b on b.seriesCode=t.seriesCode
+		set t.zxPriority=b.zxPriority,t.hwPriority=b.hwPriority
+		where t.zxInjectState=0
+		or t.hwInjectState=0
+	 </update>
+	 
+	 <!-- 更新新增剧集-优先级  跟播剧 
+	 	  中优  2
+	 -->
+	 <update id="updateNewFollowVideoPriority">
+	 	update inject_tv_albuminfovideo t 
+		set t.zxPriority=2,t.hwPriority=2
+		where t.seriesCode in(
+			select b.seriesCode from inject_tv_albuminfo b
+			where ifnull(b.zxInjectState,0)!=0 or ifnull(b.hwInjectState,0)!=0
+		)
+	 </update>
+	 
+	 <!-- 更新专辑注入状态 全部 -->
+	 <update id="updateAllAlbumInjectState">
+		update inject_tv_albuminfo tt join (select 
+		t1.seriesCode,
+		if(t1.totalNum=t1.zxSuccessNum,1,if(t1.totalNum=t1.zxFailNum,0,2)) zxIsSuccess,
+		if(t1.totalNum=t1.hwSuccessNum,1,if(t1.totalNum=t1.hwFailNum,0,2)) hwIsSuccess
+		from (
+			SELECT b.seriesCode,
+			count(1) totalNum,
+			sum(b.zxInjectState=1) zxSuccessNum,
+			sum(b.zxInjectState=0) zxFailNum,
+			sum(b.hwInjectState=1) hwSuccessNum,
+			sum(b.hwInjectState=0) hwFailNum
+			from inject_tv_albuminfovideo b
+			group by b.seriesCode
+		) t1
+		) t2 on t2.seriesCode=tt.seriesCode
+		set tt.zxInjectState=t2.zxIsSuccess,tt.hwInjectState=t2.hwIsSuccess
+	 </update>
+	 
+	 
+	 <!-- 查询全部待住入剧集数量 -->
+	 <select id="findNewVideoNum" resultType="Integer">
+	 	select count(1) from inject_tv_albuminfovideo a 
+		left join vod_tv_albuminfovideo b
+		on a.seriesCode=b.seriesCode 
+		and a.drama=b.drama
+		where a.zxInjectState=0 
+		or a.hwInjectState=0
+	 </select>
+	 
+	 
+	 <!-- 查询待住入剧集 500条-->
+	 <select id="">
+	 	
+	 </select>
+</mapper>

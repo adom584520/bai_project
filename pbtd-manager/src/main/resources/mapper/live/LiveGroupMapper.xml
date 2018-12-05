@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LiveGroupMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.live.domain.LiveGroup">
+		<id column="groupId" property="groupid" jdbcType="INTEGER" />
+		<result column="groupName" property="groupname" jdbcType="VARCHAR" />
+		<result column="groupOrder" property="grouporder" jdbcType="INTEGER" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+		<result column="isDelete" property="isdelete" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		groupId, groupName, groupOrder, createTime, updateTime, isDelete
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.pbtd.manager.live.domain.LiveGroup">
+		select
+		<include refid="Base_Column_List" />
+		from live_Group
+		<where>
+			<trim  suffixOverrides=",">
+				<if test="groupname != null">
+					groupName = #{groupname,jdbcType=VARCHAR},
+				</if>
+				<if test="grouporder != null">
+					groupOrder = #{grouporder,jdbcType=INTEGER},
+				</if>
+				<if test="createtime != null">
+					createTime = #{createtime,jdbcType=TIMESTAMP},
+				</if>
+				<if test="updatetime != null">
+					updateTime = #{updatetime,jdbcType=TIMESTAMP},
+				</if>
+				<if test="isdelete != null">
+					isDelete = #{isdelete,jdbcType=INTEGER},
+				</if>
+			</trim>
+		</where>
+	</select>
+
+	<update id="update" parameterType="com.pbtd.manager.live.domain.LiveGroup">
+		update live_Group
+		<trim prefix="SET" suffixOverrides=",">
+			   <if test="groupname != null">
+					groupName = #{groupname,jdbcType=VARCHAR},
+				</if>
+				<if test="grouporder != null">
+					groupOrder = #{grouporder,jdbcType=INTEGER},
+				</if>
+				<if test="createtime != null">
+					createTime = #{createtime,jdbcType=TIMESTAMP},
+				</if>
+					updateTime = now(),
+				<if test="isdelete != null">
+					isDelete = #{isdelete,jdbcType=INTEGER},
+				</if>
+		</trim>
+		where groupId = #{groupid,jdbcType=INTEGER}
+	</update>
+
+	<insert id="insert" parameterType="com.pbtd.manager.live.domain.LiveGroup">
+		insert into live_group (
+		groupName, 
+		groupOrder,
+		createTime, 
+		updateTime)
+		values (
+		#{groupname,jdbcType=VARCHAR},
+		#{grouporder,jdbcType=INTEGER},
+		now(),
+		now())
+	</insert>
+
+
+	<delete id="deletes" parameterType="Map">
+		delete from live_Group
+		<where>
+			<if test="id_ != null">
+				and groupId in
+				<foreach collection="id_" index="index" item="item" open="("
+					separator="," close=")">
+					#{item,jdbcType=INTEGER}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+
+
+	<select id="load" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_Group
+		where groupId = #{groupid,jdbcType=INTEGER}
+	</select>
+
+
+	<select id="find" parameterType="Map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from live_Group
+		<trim prefix="WHERE" suffixOverrides="AND">
+				<if test="groupid != null">
+					groupId = #{groupid,jdbcType=VARCHAR} AND
+				</if>
+				<if test="groupname != null">
+					groupName like #{groupname,jdbcType=VARCHAR} AND
+				</if>
+				<if test="grouporder != null">
+					groupOrder = #{grouporder,jdbcType=INTEGER} AND
+				</if>
+				<if test="createtime != null">
+					createTime = #{createtime,jdbcType=TIMESTAMP} AND
+				</if>
+				<if test="updatetime != null">
+					updateTime = #{updatetime,jdbcType=TIMESTAMP} AND
+				</if>
+				<if test="isdelete != null">
+					isDelete = #{isdelete,jdbcType=INTEGER} AND
+				</if>
+		</trim>
+		limit #{start},#{pageSize}
+	</select>
+
+
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(*) from live_Group
+		<where>
+			<if test="chnName != null">
+				groupName like #{chnName,jdbcType=VARCHAR}
+			</if>
+		</where>
+		limit #{start},#{pageSize}
+	</select>
+	
+	<select id="getgroup" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from live_Group
+	</select>
+</mapper>

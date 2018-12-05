@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.buss.mapper.VodbussinfoMapper">
+    <resultMap id="resultMap" type="com.pbtd.manager.vod.buss.domain.Vodbussinfo">
+        <result column="bussId" property="bussId" jdbcType="INTEGER" />      
+        <result column="groupId" property="groupId" jdbcType="INTEGER" /> 
+        <result column="name" property="name" jdbcType="VARCHAR" /> 
+        <result column="address" property="address" jdbcType="VARCHAR" />         
+        <result column="bussUser" property="bussUser" jdbcType="VARCHAR" /> 
+        <result column="bussPhone" property="bussPhone" jdbcType="VARCHAR" /> 
+        <result column="create_time" property="create_time" jdbcType="DATE" /> 
+        <result column="create_user" property="create_user" jdbcType="VARCHAR" /> 
+        <result column="update_time" property="update_time" jdbcType="DATE" /> 
+         <result column="update_user" property="update_user" jdbcType="VARCHAR" />
+         <result column="Column_11" property="Column_11" jdbcType="VARCHAR" />
+         <result column="Column_12" property="Column_12" jdbcType="VARCHAR" /> 
+         <result column="Column_13" property="Column_13" jdbcType="VARCHAR" /> 
+      
+    </resultMap>
+    <sql id="columns" >
+     bussId	,groupId, name, address,
+	  bussUser,bussPhone, create_time	, create_user,update_time	, update_user,
+	 Column_11,Column_12,Column_13 
+    </sql>
+    <!-- 模糊查询 -->
+    <sql id="whrClauseLike">
+         
+        <if test="name != null and name != ''">
+            and name like '%${name}%'  
+        </if>
+        <if test="address != null and address != ''">
+            and address like '%${address}%'  
+        </if>
+        <if test="bussUser != null and bussUser != ''">
+            and bussUser like '%${bussUser}%'  
+        </if>
+        <if test="create_user != null and create_user != ''">
+            and create_user like '%${create_user}%'  
+        </if>
+       <if test="update_user != null and update_user != ''">
+            and update_user like '%${update_user}%'  
+        </if>
+         <if test="bussPhone != null and bussPhone != ''">
+            and bussPhone like '%${bussPhone}%'  
+        </if>  
+        
+    </sql>
+    <sql id="whrClauseLikeMore">
+        <if test="bussId_ != null">
+        	and bussId in
+        	<foreach collection="bussId_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <!-- 精确查询 -->
+    <sql id="whrClauseEqual">
+        <if test="bussId != null and bussId > -1">
+            and bussId = #{bussId,jdbcType=INTEGER}
+        </if>
+        <if test="groupId != null and groupId > -1">
+            and groupId = #{groupId,jdbcType=INTEGER}
+        </if>
+        <if test="create_time != null and create_time != '' ">
+            and date_format(create_time,'%Y-%m-%d') = #{create_time,jdbcType=DATE}
+        </if>
+          <if test="update_time != null and update_time != '' ">
+            and date_format(update_time,'%Y-%m-%d') = #{update_time,jdbcType=DATE}
+        </if>
+    </sql>
+    <sql id="whrClauseEqualMore">
+        <if test="bussId_ != null">
+        	and bussId in
+        	<foreach collection="bussId_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <sql id="orderByClause">
+    	<choose>
+        	<when test="sort != null and sort != ''">
+        		order by ${sort} <if test="order != null and order != ''">${order}</if>
+        	</when>
+        	<otherwise>
+        		order by update_time,create_time
+        	</otherwise>
+        </choose>
+    </sql>
+    <!--SElECT查询语句-->
+    <select id="count" parameterType="Map" resultType="java.lang.Integer">
+        select count(1)
+        from  vod_buss_info  
+        where 1=1
+        <include refid="whrClauseLike" />
+         <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+    </select>
+    <select id="page" parameterType="Map" resultMap="resultMap">
+         select 
+      	 <include refid="columns" />
+        from  vod_buss_info a
+        where 1=1
+       <include refid="whrClauseLike" />
+         <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+		 <if test="start != null   ">
+            limit #{start},#{pageSize}
+        </if>
+            	
+    </select>
+    <select id="find" parameterType="Map" resultMap="resultMap">
+      select 
+      	 <include refid="columns" />
+        from  vod_buss_info a
+        where 1=1
+       <include refid="whrClauseLike" />
+         <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+		 <if test="start != null   ">
+            limit #{start},#{pageSize}
+        </if>
+            	
+    </select>
+    <select id="generatePosition" parameterType="Map" resultType="java.lang.Integer">
+        select case when max(bussId) is not null then max(bussId) + 1 else 10 end as POSITION
+        from  vod_buss_info  
+        where 1=1
+        <include refid="whrClauseLike" />
+        <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+    </select>
+    <select id="load" parameterType="java.lang.Integer" resultMap="resultMap">
+        select 
+        <include refid="columns" />
+        from  vod_buss_info  
+        where bussId = #{bussId,jdbcType=INTEGER}
+    </select>
+    <!--INSERT/UPDATE/DELETE 执行语句-->
+    <insert id="insert" parameterType="com.pbtd.manager.vod.buss.domain.Vodbussinfo">
+        insert into 
+        vod_buss_info 
+        (
+       groupId, name, address,
+	  bussUser,bussPhone, create_time	, create_user 
+        )
+        values 
+        (
+        #{groupId,jdbcType=VARCHAR},
+        #{name,jdbcType=INTEGER},
+        #{address,jdbcType=INTEGER},
+        #{bussUser,jdbcType=INTEGER},
+        #{bussPhone,jdbcType=INTEGER},
+        now(),
+        #{create_user,jdbcType=VARCHAR}
+        )
+    </insert>
+    <update id="update" parameterType="com.pbtd.manager.vod.buss.domain.Vodbussinfo">
+        update vod_buss_info
+        <set>
+        update_time=now(),
+	    <if test="name != null ">
+              name = #{name,jdbcType=VARCHAR},
+        </if>
+        <if test="address != null">
+              address = #{address,jdbcType=INTEGER},
+        </if>
+        <if test="bussUser != null">
+              bussUser = #{bussUser,jdbcType=INTEGER},
+        </if>
+        <if test="bussPhone != null ">
+              bussPhone = #{bussPhone,jdbcType=INTEGER},
+        </if>
+          <if test="update_user != null">
+           update_user = #{update_user,jdbcType=VARCHAR},
+        </if>
+        </set>
+        where bussId = #{bussId,jdbcType=INTEGER}
+    </update>
+    <delete id="deletes" parameterType="Map" >
+        delete from vod_buss_info
+        where 1=1
+        <include refid="whrClauseLike" />
+        <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+    </delete>
+</mapper>

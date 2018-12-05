@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playclick.yinhe.mapper.GitvvideoMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playclick.yinhe.domain.Gitvvideo" >
+    <id column="tvId" property="tvId" jdbcType="VARCHAR" />
+    <result column="parentId" property="parentId" jdbcType="VARCHAR" />
+    <result column="albumId" property="albumId" jdbcType="VARCHAR" />
+    <result column="albumName" property="albumName" jdbcType="VARCHAR" />
+    <result column="beginTime" property="beginTime" jdbcType="VARCHAR" />
+    <result column="cpAlbumIdOld" property="cpAlbumIdOld" jdbcType="VARCHAR" />
+    <result column="cpId" property="cpId" jdbcType="VARCHAR" />
+    <result column="duration" property="duration" jdbcType="VARCHAR" />
+    <result column="endTime" property="endTime" jdbcType="VARCHAR" />
+    <result column="isEffective" property="isEffective" jdbcType="VARCHAR" />
+    <result column="isOnline" property="isOnline" jdbcType="VARCHAR" />
+    <result column="isPurchaseYinheTv" property="isPurchaseYinheTv" jdbcType="VARCHAR" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="playOrder" property="playOrder" jdbcType="VARCHAR" />
+    <result column="positiveId" property="positiveId" jdbcType="VARCHAR" />
+    <result column="showDate" property="showDate" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="sourceChnId" property="sourceChnId" jdbcType="VARCHAR" />
+    <result column="sourceId" property="sourceId" jdbcType="VARCHAR" />
+    <result column="subTitle" property="subTitle" jdbcType="VARCHAR" />
+    <result column="trySeeTimeTv" property="trySeeTimeTv" jdbcType="VARCHAR" />
+    <result column="tvDesc" property="tvDesc" jdbcType="VARCHAR" />
+    <result column="tvFocus" property="tvFocus" jdbcType="VARCHAR" />
+    <result column="tvName" property="tvName" jdbcType="VARCHAR" />
+    <result column="tvPhase" property="tvPhase" jdbcType="VARCHAR" />
+    <result column="tvSeason" property="tvSeason" jdbcType="VARCHAR" />
+    <result column="tvStatus" property="tvStatus" jdbcType="VARCHAR" />
+    <result column="timestamp" property="timestamp" jdbcType="VARCHAR" />
+    <result column="bz" property="bz" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="palyurl" property="palyurl" jdbcType="VARCHAR" />
+    <result column="versionId" property="versionId" jdbcType="VARCHAR" />
+    <result column="tvurl" property="tvurl" jdbcType="VARCHAR" />
+    <result column="pid" property="pid" jdbcType="VARCHAR" />
+     <result column="storagetime" property="storagetime" jdbcType="VARCHAR" />
+    <result column="updatetime" property="updatetime" jdbcType="VARCHAR" />
+    <result column="dramacode" property="dramacode" jdbcType="VARCHAR" />
+     
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.pbtd.playclick.yinhe.domain.GitvvideoWithBLOBs" extends="BaseResultMap" >
+    <result column="indexM3u8" property="indexM3u8" jdbcType="LONGVARCHAR" />
+    <result column="m3u8" property="m3u8" jdbcType="LONGVARCHAR" />
+    <result column="superScripts" property="superScripts" jdbcType="LONGVARCHAR" />
+    <result column="videoUrl" property="videoUrl" jdbcType="LONGVARCHAR" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    tvId, parentId, albumId, albumName, beginTime, cpAlbumIdOld, cpId, duration, endTime, 
+    isEffective, isOnline, isPurchaseYinheTv, pic, playOrder, positiveId, showDate, source, 
+    sourceChnId, sourceId, subTitle, trySeeTimeTv, tvDesc, tvFocus, tvName, tvPhase, 
+    tvSeason, tvStatus, timestamp, bz, status,  palyurl, versionId,tvurl,pid,
+     DATE_FORMAT(storagetime, '%Y.%m.%d %H:%i:%s') storagetime,
+    DATE_FORMAT(updatetime, '%Y.%m.%d %H:%i:%s') updatetime
+  </sql>
+  <sql id="Blob_Column_List" >
+    indexM3u8, m3u8, superScripts, videoUrl
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_vod_gitvvideo
+    where parentId = #{parentId} 
+    and tvId = #{tvId} 
+    and playOrder = #{playOrder}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from yh_vod_gitvvideo
+    where tvId = #{tvId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.pbtd.playclick.yinhe.domain.GitvvideoWithBLOBs" >
+    insert into yh_vod_gitvvideo (tvId, parentId, albumId, 
+      albumName, beginTime, cpAlbumIdOld, 
+      cpId, duration, endTime, 
+      isEffective, isOnline, isPurchaseYinheTv, 
+      pic, playOrder, positiveId, 
+      showDate, source, sourceChnId, 
+      sourceId, subTitle, trySeeTimeTv, 
+      tvDesc, tvFocus, tvName, 
+      tvPhase, tvSeason, tvStatus, 
+      timestamp, bz, status, 
+      indexM3u8, m3u8, superScripts, 
+      videoUrl,  palyurl, versionId,tvurl,pid,dramacode)
+    values (#{tvId,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{albumId,jdbcType=VARCHAR}, 
+      #{albumName,jdbcType=VARCHAR}, #{beginTime,jdbcType=VARCHAR}, #{cpAlbumIdOld,jdbcType=VARCHAR}, 
+      #{cpId,jdbcType=VARCHAR}, #{duration,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, 
+      #{isEffective,jdbcType=VARCHAR}, #{isOnline,jdbcType=VARCHAR}, #{isPurchaseYinheTv,jdbcType=VARCHAR}, 
+      #{pic,jdbcType=VARCHAR}, #{playOrder,jdbcType=VARCHAR}, #{positiveId,jdbcType=VARCHAR}, 
+      #{showDate,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, #{sourceChnId,jdbcType=VARCHAR}, 
+      #{sourceId,jdbcType=VARCHAR}, #{subTitle,jdbcType=VARCHAR}, #{trySeeTimeTv,jdbcType=VARCHAR}, 
+      #{tvDesc,jdbcType=VARCHAR}, #{tvFocus,jdbcType=VARCHAR}, #{tvName,jdbcType=VARCHAR}, 
+      #{tvPhase,jdbcType=VARCHAR}, #{tvSeason,jdbcType=VARCHAR}, #{tvStatus,jdbcType=VARCHAR}, 
+      #{timestamp,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{indexM3u8,jdbcType=LONGVARCHAR}, #{m3u8,jdbcType=LONGVARCHAR}, #{superScripts,jdbcType=LONGVARCHAR}, 
+      #{videoUrl,jdbcType=LONGVARCHAR},
+      #{palyurl,jdbcType=VARCHAR},
+      #{versionId,jdbcType=VARCHAR},
+      #{tvurl,jdbcType=VARCHAR},
+      #{pid,jdbcType=VARCHAR},
+      #{dramacode,jdbcType=VARCHAR} )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.pbtd.playclick.yinhe.domain.GitvvideoWithBLOBs" >
+    insert into yh_vod_gitvvideo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tvId != null" >
+        tvId,
+      </if>
+      <if test="parentId != null" >
+        parentId,
+      </if>
+      <if test="albumId != null" >
+        albumId,
+      </if>
+      <if test="albumName != null" >
+        albumName,
+      </if>
+      <if test="beginTime != null" >
+        beginTime,
+      </if>
+      <if test="cpAlbumIdOld != null" >
+        cpAlbumIdOld,
+      </if>
+      <if test="cpId != null" >
+        cpId,
+      </if>
+      <if test="duration != null" >
+        duration,
+      </if>
+      <if test="endTime != null" >
+        endTime,
+      </if>
+      <if test="isEffective != null" >
+        isEffective,
+      </if>
+      <if test="isOnline != null" >
+        isOnline,
+      </if>
+      <if test="isPurchaseYinheTv != null" >
+        isPurchaseYinheTv,
+      </if>
+      <if test="pic != null" >
+        pic,
+      </if>
+      <if test="playOrder != null" >
+        playOrder,
+      </if>
+      <if test="positiveId != null" >
+        positiveId,
+      </if>
+      <if test="showDate != null" >
+        showDate,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="sourceChnId != null" >
+        sourceChnId,
+      </if>
+      <if test="sourceId != null" >
+        sourceId,
+      </if>
+      <if test="subTitle != null" >
+        subTitle,
+      </if>
+      <if test="trySeeTimeTv != null" >
+        trySeeTimeTv,
+      </if>
+      <if test="tvDesc != null" >
+        tvDesc,
+      </if>
+      <if test="tvFocus != null" >
+        tvFocus,
+      </if>
+      <if test="tvName != null" >
+        tvName,
+      </if>
+      <if test="tvPhase != null" >
+        tvPhase,
+      </if>
+      <if test="tvSeason != null" >
+        tvSeason,
+      </if>
+      <if test="tvStatus != null" >
+        tvStatus,
+      </if>
+      <if test="timestamp != null" >
+        timestamp,
+      </if>
+      <if test="bz != null" >
+        bz,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="indexM3u8 != null" >
+        indexM3u8,
+      </if>
+      <if test="m3u8 != null" >
+        m3u8,
+      </if>
+      <if test="superScripts != null" >
+        superScripts,
+      </if>
+      <if test="videoUrl != null" >
+        videoUrl,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tvId != null" >
+        #{tvId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="albumId != null" >
+        #{albumId,jdbcType=VARCHAR},
+      </if>
+      <if test="albumName != null" >
+        #{albumName,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null" >
+        #{beginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="cpAlbumIdOld != null" >
+        #{cpAlbumIdOld,jdbcType=VARCHAR},
+      </if>
+      <if test="cpId != null" >
+        #{cpId,jdbcType=VARCHAR},
+      </if>
+      <if test="duration != null" >
+        #{duration,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isEffective != null" >
+        #{isEffective,jdbcType=VARCHAR},
+      </if>
+      <if test="isOnline != null" >
+        #{isOnline,jdbcType=VARCHAR},
+      </if>
+      <if test="isPurchaseYinheTv != null" >
+        #{isPurchaseYinheTv,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null" >
+        #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="playOrder != null" >
+        #{playOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="positiveId != null" >
+        #{positiveId,jdbcType=VARCHAR},
+      </if>
+      <if test="showDate != null" >
+        #{showDate,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceChnId != null" >
+        #{sourceChnId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceId != null" >
+        #{sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="subTitle != null" >
+        #{subTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="trySeeTimeTv != null" >
+        #{trySeeTimeTv,jdbcType=VARCHAR},
+      </if>
+      <if test="tvDesc != null" >
+        #{tvDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="tvFocus != null" >
+        #{tvFocus,jdbcType=VARCHAR},
+      </if>
+      <if test="tvName != null" >
+        #{tvName,jdbcType=VARCHAR},
+      </if>
+      <if test="tvPhase != null" >
+        #{tvPhase,jdbcType=VARCHAR},
+      </if>
+      <if test="tvSeason != null" >
+        #{tvSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="tvStatus != null" >
+        #{tvStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="timestamp != null" >
+        #{timestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null" >
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="indexM3u8 != null" >
+        #{indexM3u8,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="m3u8 != null" >
+        #{m3u8,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="superScripts != null" >
+        #{superScripts,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="videoUrl != null" >
+        #{videoUrl,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+   
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playclick.yinhe.domain.GitvvideoWithBLOBs" >
+    update yh_vod_gitvvideo
+    <set >
+      <if test="parentId != null" >
+        parentId = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="albumId != null" >
+        albumId = #{albumId,jdbcType=VARCHAR},
+      </if>
+      <if test="albumName != null" >
+        albumName = #{albumName,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null" >
+        beginTime = #{beginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="cpAlbumIdOld != null" >
+        cpAlbumIdOld = #{cpAlbumIdOld,jdbcType=VARCHAR},
+      </if>
+      <if test="cpId != null" >
+        cpId = #{cpId,jdbcType=VARCHAR},
+      </if>
+      <if test="duration != null" >
+        duration = #{duration,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        endTime = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isEffective != null" >
+        isEffective = #{isEffective,jdbcType=VARCHAR},
+      </if>
+      <if test="isOnline != null" >
+        isOnline = #{isOnline,jdbcType=VARCHAR},
+      </if>
+      <if test="isPurchaseYinheTv != null" >
+        isPurchaseYinheTv = #{isPurchaseYinheTv,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null" >
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="playOrder != null" >
+        playOrder = #{playOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="positiveId != null" >
+        positiveId = #{positiveId,jdbcType=VARCHAR},
+      </if>
+      <if test="showDate != null" >
+        showDate = #{showDate,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceChnId != null" >
+        sourceChnId = #{sourceChnId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceId != null" >
+        sourceId = #{sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="subTitle != null" >
+        subTitle = #{subTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="trySeeTimeTv != null" >
+        trySeeTimeTv = #{trySeeTimeTv,jdbcType=VARCHAR},
+      </if>
+      <if test="tvDesc != null" >
+        tvDesc = #{tvDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="tvFocus != null" >
+        tvFocus = #{tvFocus,jdbcType=VARCHAR},
+      </if>
+      <if test="tvName != null" >
+        tvName = #{tvName,jdbcType=VARCHAR},
+      </if>
+      <if test="tvPhase != null" >
+        tvPhase = #{tvPhase,jdbcType=VARCHAR},
+      </if>
+      <if test="tvSeason != null" >
+        tvSeason = #{tvSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="tvStatus != null" >
+        tvStatus = #{tvStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="timestamp != null" >
+        timestamp = #{timestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null" >
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="indexM3u8 != null" >
+        indexM3u8 = #{indexM3u8,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="m3u8 != null" >
+        m3u8 = #{m3u8,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="superScripts != null" >
+        superScripts = #{superScripts,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="videoUrl != null" >
+        videoUrl = #{videoUrl,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where tvId = #{tvId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pbtd.playclick.yinhe.domain.GitvvideoWithBLOBs" >
+    update yh_vod_gitvvideo
+    set updatetime=now(),parentId = #{parentId,jdbcType=VARCHAR},
+      albumId = #{albumId,jdbcType=VARCHAR},
+      albumName = #{albumName,jdbcType=VARCHAR},
+      beginTime = #{beginTime,jdbcType=VARCHAR},
+      cpAlbumIdOld = #{cpAlbumIdOld,jdbcType=VARCHAR},
+      cpId = #{cpId,jdbcType=VARCHAR},
+      duration = #{duration,jdbcType=VARCHAR},
+      endTime = #{endTime,jdbcType=VARCHAR},
+      isEffective = #{isEffective,jdbcType=VARCHAR},
+      isOnline = #{isOnline,jdbcType=VARCHAR},
+      isPurchaseYinheTv = #{isPurchaseYinheTv,jdbcType=VARCHAR},
+      pic = #{pic,jdbcType=VARCHAR},
+      playOrder = #{playOrder,jdbcType=VARCHAR},
+      positiveId = #{positiveId,jdbcType=VARCHAR},
+      showDate = #{showDate,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      sourceChnId = #{sourceChnId,jdbcType=VARCHAR},
+      sourceId = #{sourceId,jdbcType=VARCHAR},
+      subTitle = #{subTitle,jdbcType=VARCHAR},
+      trySeeTimeTv = #{trySeeTimeTv,jdbcType=VARCHAR},
+      tvDesc = #{tvDesc,jdbcType=VARCHAR},
+      tvFocus = #{tvFocus,jdbcType=VARCHAR},
+      tvName = #{tvName,jdbcType=VARCHAR},
+      tvPhase = #{tvPhase,jdbcType=VARCHAR},
+      tvSeason = #{tvSeason,jdbcType=VARCHAR},
+      tvStatus = #{tvStatus,jdbcType=VARCHAR},
+      timestamp = #{timestamp,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      indexM3u8 = #{indexM3u8,jdbcType=LONGVARCHAR},
+      m3u8 = #{m3u8,jdbcType=LONGVARCHAR},
+      superScripts = #{superScripts,jdbcType=LONGVARCHAR},
+      videoUrl = #{videoUrl,jdbcType=LONGVARCHAR}
+    where tvId = #{tvId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playclick.yinhe.domain.Gitvvideo" >
+    update yh_vod_gitvvideo
+    set parentId = #{parentId,jdbcType=VARCHAR},
+      albumId = #{albumId,jdbcType=VARCHAR},
+      albumName = #{albumName,jdbcType=VARCHAR},
+      beginTime = #{beginTime,jdbcType=VARCHAR},
+      cpAlbumIdOld = #{cpAlbumIdOld,jdbcType=VARCHAR},
+      cpId = #{cpId,jdbcType=VARCHAR},
+      duration = #{duration,jdbcType=VARCHAR},
+      endTime = #{endTime,jdbcType=VARCHAR},
+      isEffective = #{isEffective,jdbcType=VARCHAR},
+      isOnline = #{isOnline,jdbcType=VARCHAR},
+      isPurchaseYinheTv = #{isPurchaseYinheTv,jdbcType=VARCHAR},
+      pic = #{pic,jdbcType=VARCHAR},
+      playOrder = #{playOrder,jdbcType=VARCHAR},
+      positiveId = #{positiveId,jdbcType=VARCHAR},
+      showDate = #{showDate,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      sourceChnId = #{sourceChnId,jdbcType=VARCHAR},
+      sourceId = #{sourceId,jdbcType=VARCHAR},
+      subTitle = #{subTitle,jdbcType=VARCHAR},
+      trySeeTimeTv = #{trySeeTimeTv,jdbcType=VARCHAR},
+      tvDesc = #{tvDesc,jdbcType=VARCHAR},
+      tvFocus = #{tvFocus,jdbcType=VARCHAR},
+      tvName = #{tvName,jdbcType=VARCHAR},
+      tvPhase = #{tvPhase,jdbcType=VARCHAR},
+      tvSeason = #{tvSeason,jdbcType=VARCHAR},
+      tvStatus = #{tvStatus,jdbcType=VARCHAR},
+      timestamp = #{timestamp,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where tvId = #{tvId,jdbcType=VARCHAR}
+  </update>
+  
+  	<!-- 更新 dramacode-->
+	<update id="updateDramacode">
+		UPDATE yh_vod_gitvvideo
+		SET dramacode =  CONCAT(unix_timestamp(now()),cast( floor(rand()*100000) as SIGNED) )
+		WHERE
+		dramacode IS NULL
+	</update>
+	
+  <!-- 删除重复的剧集 -->
+	<delete id="delDrama">
+		DELETE
+		FROM
+		yh_vod_gitvvideo
+		WHERE
+		dramacode IN (
+		SELECT
+		a.id
+		FROM
+		(
+		SELECT
+		max(CAST(b.dramacode AS signed)) AS id,
+		playOrder,
+		tvName,
+		tvId,
+		parentId,
+		count(*) AS count
+		FROM
+		yh_vod_gitvvideo b
+		GROUP BY
+		b.playOrder,
+		b.tvId,
+		b.parentId
+		HAVING
+		count > 1
+		) a
+		)
+	</delete>
+
+	<!-- 银河剧集排序增量sequence -->
+	<update id="updateSequence">
+		UPDATE yh_vod_gitvvideo c,
+		(
+		SELECT
+		a.parentId,
+		a.playOrder,
+		a.dramacode,
+		a.UPDATETIME,
+		CASE
+		WHEN @mid = a.parentId THEN
+		@ROW :=@ROW + 1
+		ELSE
+		@ROW := 1
+		END rownum,
+		@mid := a.parentId
+		FROM
+		yh_vod_gitvvideo a,
+		(SELECT @ROW := 0 ,@mid := '') r
+		WHERE
+		a.dramasequence IS NULL
+		ORDER BY
+		a.parentId,
+		CAST(a.playOrder AS signed),
+		a.UPDATETIME,
+		CAST(a.dramacode AS signed) ASC
+		) b,
+		(
+		SELECT
+		v.parentId,
+		v.playOrder,
+		v.dramacode,
+		IF (
+		MAX(v.dramasequence) IS NULL,
+		0,
+		MAX(v.dramasequence)
+		) AS maxsequence
+		FROM
+		yh_vod_gitvvideo v
+		WHERE
+		parentId IN (
+		SELECT
+		x.parentId
+		FROM
+		yh_vod_gitvvideo x
+		WHERE
+		x.dramasequence IS NULL
+		GROUP BY
+		x.parentId
+		)
+		GROUP BY
+		parentId
+		) z
+		SET c.dramasequence = z.maxsequence + b.rownum
+		WHERE
+		c.dramacode = b.dramacode
+		AND z.parentId = c.parentId;
+	</update>
+</mapper>

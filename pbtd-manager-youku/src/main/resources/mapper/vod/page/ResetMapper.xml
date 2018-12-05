@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.page.mapper.ResetMapper">
+
+	<select id="pfindbottomnavigation" parameterType="Map"
+		resultType="Map">
+		select id,type,name,CONCAT(#{imgtitle},imgNor) imgNor,
+		CONCAT(#{imgtitle},imgSelect)
+		imgSelect
+		from vod_bottomnavigation where status=1
+	</select>
+	<select id="pfindtextrecommendation" parameterType="Map">
+		select
+		id,channelCode,seriesCode,seriesName,status,text,playurl,weburl,type,create_time,
+		create_user,update_time,update_user
+		from vod_textrecommendation
+		where
+		status=1
+	</select>
+	<select id="pfindrecommandpic" parameterType="Map" resultType="Map">
+		select
+		type,channel_id,name,
+		CONCAT(#{imgtitle},imageUrl)
+		imageUrl,
+		target_code,id,status,update_user,update_time,playurl,weburl,sequence,viewPoint
+		from vod_recommandpic  where status=1
+	</select>
+
+	<select id="findactors" parameterType="Map" resultType="Map">
+		select code,name,pinyin,pinyinsuoxie,status,actor,director,
+		CONCAT(#{imgtitle},imgportrait) imgportrait,
+		CONCAT(#{imgtitle},backgroundimg)
+		backgroundimg,id,updatetime,birthDay,birthPlace,description
+		from
+		vod_actors
+		where 1=1
+		<if test="updatetime!=null and updatetime!='' ">
+			and date_format(updatetime, '%Y-%m-%d') =
+			#{updatetime,jdbcType=VARCHAR}
+		</if>
+		<if test="ids!=null and ids!='' ">
+			and code in (${ids})
+		</if>
+	</select>
+	<select id="findcorner" parameterType="Map" resultType="Map">
+		select
+		id,name,
+		CONCAT(#{imgtitle},imgurl)
+		imgurl,create_time,create_user,update_time,update_user,status,bz,pos
+		from vod_corner
+		where status=1
+	</select>
+	<select id="findcollectfeesbag" parameterType="Map" resultType="Map">
+		select id,code,name,starttime,endtime,type,discountrate,price,status
+		from vod_collectfeesbag
+		where status=1
+	</select>
+	<select id="findmovieurl" parameterType="Map" resultType="Map">
+		select
+		id,name,title,status,levels from vod_movieurl
+		where status=1 ORDER BY
+		levels
+	</select>
+
+	<select id="pfindalbum" parameterType="Map" resultType="Map">
+		select
+		b.seriesCode,b.seriesName,b.code,b.volumncount,b.currentnum,b.pinyin,b.pinyinsuoxie,b.cpCode,b.cpName,b.orderCode,b.isCollectfees,b.Collectfeesbag,b.originalName,b.
+		actor,b.actorName,b.writer,b.writerName,b.orgairDate,b.price,b.description,b.contentProvider,b.keyWord,b.tag,b.viewPoint,b.starLevel,b.
+		rating,b.awards,b.originalCountry,b.language,b.releaseYear,
+		if(b.duration='', 0,b.duration)as
+		duration,b.Channel,b.ChannelName,b.Channel2,b.ChannelName2,b.Label,b.
+		LabelName,b.Label2,b.LabelName2,b.enName,b.vName,b.definition,b.copyRightProperty,b.crBeginDate,b.crEndDate,b.copyright,b.cpContentID,b.score,
+		b.Sequence,
+		CONCAT(#{imgtitle},pictureurl1) pictureurl1,
+		CONCAT(#{imgtitle},pictureurl2)		pictureurl2,
+		CONCAT(#{imgtitle},pictureurl3)		pictureurl3,
+		CONCAT(#{imgtitle},pictureurl4)		pictureurl4,b.isvip,b.corner,
+<![CDATA[ (select  group_concat(pos,'|',CONCAT(#{imgtitle},imgurl) Separator ';')
+		  from vod_corner where status=1 and id   in( 
+		select  substring_index(substring_index(a.corner,',',b.help_topic_id+1),',',-1) 
+		from vod_phone_albuminfo a
+	    join mysql.help_topic b on b.help_topic_id < (length(a.corner) - length(replace(a.corner,',',''))+1)
+		where  seriesCode= b.seriesCode
+		)) cornerimg
+		]]>
+		,b.status,b.cpseriescode,b.pictureurl5,b.create_time,b.
+		create_user,b.update_time,b.update_user,b.cpCodelist
+		,
+		if(b.ChannelName='电影',0,1) as epis
+		from vod_phone_albuminfo b
+		where 1=1
+		<if test="updatetime!=null and updatetime!='' ">
+			and (date_format(b.update_time, '%Y-%m-%d') =
+			#{updatetime,jdbcType=VARCHAR}
+			or
+			date_format(b.create_time,
+			'%Y-%m-%d') =
+			#{updatetime,jdbcType=VARCHAR}
+			)
+		</if>
+		<if test="ids!=null and ids!='' ">
+			and b.seriesCode in (${ids})
+		</if>
+	</select>
+	<select id="pfindvideo" parameterType="Map" resultType="Map">
+		select
+		isShow,id,seriesCode,drama,dramaname,dramaviewPoint,Resolution,Definition,SourceType,Type,duration,priority,Injectiontime,
+		CONCAT(#{imgtitle},pic)
+		pic,title,description,zxdispatchurl,zxversionlist,zxfileurl,
+		zxmovieUrl,zxversion,hwversionlist,hwversion,hwmovieUrl,hwfileurl,isShow,create_time,create_user,
+		update_time,update_user,hwdispatchurl,dramasequence,isCollectfees,collectfeesbag,cpvideoId,isPositive
+		from vod_phone_albuminfovideo
+		where 1=1
+		<!-- and zxdispatchurl is not null -->
+		and seriesCode=#{seriesCode,jdbcType=INTEGER}
+	</select>
+	<select id="pfindalbumrecommend" parameterType="Map" resultType="Map">
+		select a.id,b.status,a.sequence,
+		b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,b.score,b.description,b.viewPoint,
+		if(b.duration='', 0,b.duration)as duration
+		,b.corner,
+<![CDATA[ (select  group_concat(pos,'|',imgurl Separator ';')
+		  from vod_corner where status=1 and id   in( 
+		select  substring_index(substring_index(a.corner,',',b.help_topic_id+1),',',-1) 
+		from vod_phone_albuminfo a
+	    join mysql.help_topic b on b.help_topic_id < (length(a.corner) - length(replace(a.corner,',',''))+1)
+		where  seriesCode= b.seriesCode
+		)) cornerimg
+		]]>
+		,b.isvip, if(b.ChannelName='电影',0,1) as epis
+		from
+		vod_phone_albuminfo_recommend a
+		left join vod_phone_albuminfo b on
+		a.seriesCode=b.seriesCode
+		where a.id=#{seriesCode,jdbcType=VARCHAR}
+	</select>
+
+	<select id="pfindchannel" parameterType="Map" resultType="Map">
+		select
+		id,channelCode,channelName,levels,sequence,parentCode,status,navigationtype,
+		count,type,labels,CONCAT(#{imgtitle},img) img,isshow_img,isshow_right,isshow_left 
+		from vod_phone_channel where 1=1
+		<if test="updatetime!=null and updatetime!='' ">
+			and (date_format(update_time, '%Y-%m-%d') =
+			#{updatetime,jdbcType=VARCHAR}
+			or
+			date_format(create_time, '%Y-%m-%d')
+			= #{updatetime,jdbcType=VARCHAR}
+			)
+		</if>
+		<if test="ids!=null and ids!='' ">
+			and id in (${ids})
+		</if>
+	</select>
+	<select id="pfindchannelalbum" parameterType="Map" resultType="Map">
+		select a.id,a.sequence, d1.channelCode,d1.channelName,
+		d1.parentCode,d.channelName parentName,
+		b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,b.score,b.description,b.viewPoint,
+		if(b.duration='', 0,b.duration)as duration
+		,b.corner,volumncount,currentnum,
+<![CDATA[ (select  group_concat(pos,'|',imgurl Separator ';')
+		  from vod_corner where status=1 and id   in( 
+		select  substring_index(substring_index(a.corner,',',b.help_topic_id+1),',',-1) 
+		from vod_phone_albuminfo a
+	    join mysql.help_topic b on b.help_topic_id < (length(a.corner) - length(replace(a.corner,',',''))+1)
+		where  seriesCode= b.seriesCode
+		)) cornerimg
+		]]>
+		,b.isvip,
+		if(b.ChannelName='电影',0,1) as epis,b.status
+		from
+		vod_phone_albuminfo b
+		left join vod_phone_channel_albuminfo a on
+		a.seriesCode=b.seriesCode
+		left join vod_phone_channel d1 on
+		a.channelCode=d1.channelCode
+		left join vod_phone_channel d on
+		d1.parentCode=d.channelCode and
+		d.levels=1
+		where
+		a.seriesCode=b.seriesCode and b.status=1
+		and
+		a.channelCode=#{channelCode,jdbcType=VARCHAR}
+
+	</select>
+
+	<select id="pfindlabel" parameterType="Map" resultType="Map">
+		select id,name,type,level,sequence,status,bz
+		from vod_phone_label where
+		1=1
+		<if test="updatetime!=null and updatetime!='' ">
+			and (date_format(update_time, '%Y-%m-%d') =
+			#{updatetime,jdbcType=VARCHAR}
+			or
+			date_format(create_time, '%Y-%m-%d')
+			= #{updatetime,jdbcType=VARCHAR}
+			)
+		</if>
+		<if test="ids!=null and ids!='' ">
+			and id in (${ids})
+		</if>
+	</select>
+
+	<select id="pfindlabelchannel" parameterType="Map" resultType="Map">
+		SELECT id,label,channel,type FROM vod_labelchannel
+		where
+		label =
+		#{id,jdbcType=VARCHAR}
+	</select>
+	<select id="pfindspecial" parameterType="Map" resultType="Map">
+		select
+		id,name,
+		CONCAT(#{imgtitle},imgurl) imgurl,
+		CONCAT(#{imgtitle},backgroundimg)
+		backgroundimg,viewPoint,describes,create_time,create_user,
+		update_time,update_user,status,sequence,web_url,type,template,textcolor
+		from vod_phone_special
+		where 1=1
+		<if test="updatetime!=null and updatetime!='' ">
+			and (date_format( update_time, '%Y-%m-%d') =
+			#{updatetime,jdbcType=VARCHAR}
+			or
+			date_format( create_time, '%Y-%m-%d')
+			= #{updatetime,jdbcType=VARCHAR}
+			)
+		</if>
+		<if test="ids!=null and ids!='' ">
+			and id in(${ids})
+		</if>
+	</select>
+
+	<select id="pfindspecialalbum" parameterType="Map" resultType="Map">
+		select a.special_id,a.sequence,
+		b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,
+		b.score,b.description,b.viewPoint, if(b.duration='', 0,b.duration)as
+		duration
+		,b.corner,
+<![CDATA[ (select  group_concat(pos,'|',imgurl Separator ';')
+		  from vod_corner where status=1 and id   in( 
+		select  substring_index(substring_index(a.corner,',',b.help_topic_id+1),',',-1) 
+		from vod_phone_albuminfo a
+	    join mysql.help_topic b on b.help_topic_id < (length(a.corner) - length(replace(a.corner,',',''))+1)
+		where  seriesCode= b.seriesCode
+		)) cornerimg
+		]]>
+		,b.isvip,b.isCollectfees,b.status
+		from vod_phone_special_albuminfo a
+		left join vod_phone_albuminfo b on
+		a.seriesCode=b.seriesCode
+		where
+		a.seriesCode=b.seriesCode and a.special_id=#{id,jdbcType=VARCHAR} and
+		b.status=1
+	</select>
+	<select id="pfindhotsearch" parameterType="Map" resultType="Map">
+		select a.id,b.status,a.sequence,
+		b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,b.score,b.description,b.viewPoint,
+		if(b.duration='', 0,b.duration)as duration
+		,b.corner,
+<![CDATA[ (select  group_concat(pos,'|',imgurl Separator ';')
+		  from vod_corner where status=1 and id   in( 
+		select  substring_index(substring_index(a.corner,',',b.help_topic_id+1),',',-1) 
+		from vod_phone_albuminfo a
+	    join mysql.help_topic b on b.help_topic_id < (length(a.corner) - length(replace(a.corner,',',''))+1)
+		where  seriesCode= b.seriesCode
+		)) cornerimg
+		]]>
+		,b.isvip
+		from vod_phone_hotsearch a
+		left join vod_phone_albuminfo b on
+		a.seriesCode=b.seriesCode
+		where a.seriesCode=b.seriesCode and
+		b.status=1
+	</select>
+
+
+	<select id="pfindlogo" parameterType="Map" resultType="Map">
+		select
+		id,name,CONCAT(#{imgtitle},logo) logo,instruction from vod_phone_logo
+	</select>
+	<select id="pfindhotseries" parameterType="Map" resultType="Map">
+		select id,name,channelCode,count,status,type from vod_phone_hotseries
+		where status=1
+	</select>
+	<select id="pfindhotseriesalbum" parameterType="Map" resultType="Map">
+		select b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,b.score,
+		b.description,b.viewPoint, if(b.duration='', 0,b.duration)as duration
+		,b.corner,c.imgurl
+		cornerimg,b.isvip,
+		if(b.ChannelName='电影',0,1) as
+		epis,b.volumncount,b.currentnum
+		,a.sequence,b.status
+		from
+		vod_phone_hotseriesvideo a
+		left join vod_phone_albuminfo b on
+		a.seriesCode=b.seriesCode
+		left join
+		vod_corner c on c.id=b.corner
+		left
+		join vod_phone_hotseries aa on a.hot_id=aa.id
+		where b.status=1 and
+		a.hot_id=aa.id and aa.`status`=1
+		order by a.sequence asc
+	</select>
+
+	<select id="pfindstartslideshow" parameterType="Map" resultType="Map">
+		select
+		id,name,type,
+		CONCAT(#{imgtitle},image_url)
+		image_url,
+		target_code,playurl,weburl,status,update_user,skip_time,show_type
+		from
+		vod_phone_start_slideshow where status=1
+
+	</select>
+	<select id="pfindslideshow" parameterType="Map" resultType="Map">
+		select
+		id,name,type,
+		CONCAT(#{imgtitle},image_url)
+		image_url,target_code,playurl,weburl,status,update_user,content_point,sequence
+		from vod_phone_slideshow where status=1
+		<!-- where date_format(update_time, '%Y-%m-%d') = #{updatetime,jdbcType=VARCHAR} -->
+	</select>
+
+	<select id="findlabeltype" parameterType="Map" resultType="Map">
+		SELECT id,name,sequence FROM vod_labeltype
+		<!-- where date_format(update_time, '%Y-%m-%d') = #{updatetime,jdbcType=VARCHAR} -->
+	</select>
+
+
+
+	<!-- #TV 分割线 一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一 -->
+
+	<select id="tfindalbum" parameterType="Map" resultType="Map">
+		select
+		b.seriesCode,b.seriesName,b.code,b.volumncount,b.currentnum,b.pinyin,b.pinyinsuoxie,b.cpCode,b.cpName,b.orderCode,b.isCollectfees,b.Collectfeesbag,b.originalName,b.
+		actor,b.actorName,b.writer,b.writerName,b.orgairDate,b.price,b.description,b.contentProvider,b.keyWord,b.tag,b.viewPoint,b.starLevel,b.
+		rating,b.awards,b.originalCountry,b.language,b.releaseYear,
+		if(b.duration='', 0,b.duration)as
+		duration,b.Channel,b.ChannelName,b.Channel2,b.ChannelName2,b.Label,b.
+		LabelName,b.Label2,b.LabelName2,b.enName,b.vName,b.definition,b.copyRightProperty,b.crBeginDate,
+		b.crEndDate,b.copyright,b.cpContentID,b.score,b.Sequence,
+		CONCAT(#{imgtitle},pictureurl1) pictureurl1,
+		CONCAT(#{imgtitle},pictureurl2)		pictureurl2,
+		CONCAT(#{imgtitle},pictureurl3)		pictureurl3,
+		CONCAT(#{imgtitle},pictureurl4)		pictureurl4,b.isvip,b.corner,
+<![CDATA[ (select  group_concat(pos,'|',CONCAT(#{imgtitle},imgurl) Separator ';')
+		  from vod_corner where status=1 and id   in( 
+		select  substring_index(substring_index(a.corner,',',b.help_topic_id+1),',',-1) 
+		from vod_phone_albuminfo a
+	    join mysql.help_topic b on b.help_topic_id < (length(a.corner) - length(replace(a.corner,',',''))+1)
+		where  seriesCode= b.seriesCode
+		)) cornerimg
+		]]>
+		,if((select count(1) from vod_tv_channel where channelCode=b.Channel
+		and status=1 and levels=1)>0,b.tvstatus,'0')
+		status,b.cpseriescode,b.pictureurl5,b.create_time,b.
+		create_user,b.update_time,b.update_user,b.cpCodelist
+		,
+		if(b.ChannelName='电影',0,1) as epis
+		from vod_phone_albuminfo b
+		where 1=1
+		<if test="updatetime!=null and updatetime!='' ">
+			and (date_format(b.update_time, '%Y-%m-%d') =
+			#{updatetime,jdbcType=VARCHAR}
+			or
+			date_format(b.create_time,
+			'%Y-%m-%d') =#{updatetime,jdbcType=VARCHAR}
+			)
+		</if>
+		<if test="ids!=null and ids!='' ">
+			and b.seriesCode in (${ids})
+		</if>
+	</select>
+	<select id="tfindvideo" parameterType="Map" resultType="Map">
+		select
+		isShow,id,seriesCode,drama,dramaname,dramaviewPoint,Resolution,Definition,SourceType,Type,duration,priority,Injectiontime,
+CONCAT(#{imgtitle},pic) pic,title,description,zxdispatchurl,zxversionlist,zxfileurl,
+		zxmovieUrl,zxversion,hwversionlist,hwversion,hwmovieUrl,hwfileurl,isShow,create_time,create_user,
+		update_time,update_user,hwdispatchurl,dramasequence,isCollectfees,collectfeesbag,cpvideoId,isPositive
+		from vod_phone_albuminfovideo
+		where 1=1
+		<!-- and zxdispatchurl is not null -->
+		and seriesCode=#{seriesCode,jdbcType=INTEGER}
+	</select>
+	<select id="tfindalbumrecommend" parameterType="Map" resultType="Map">
+		select a.id,if((select count(1) from vod_tv_channel where
+		channelCode=b.Channel and status=1 and levels=1)>0,b.status,'0')
+		status
+		,a.sequence,
+		b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,b.score,b.description,b.viewPoint,
+		if(b.duration='', 0,b.duration)as duration
+		,b.corner,
+<![CDATA[ (select  group_concat(pos,'|',imgurl Separator ';')
+		  from vod_corner where status=1 and id   in( 
+		select  substring_index(substring_index(a.corner,',',b.help_topic_id+1),',',-1) 
+		from vod_phone_albuminfo a
+	    join mysql.help_topic b on b.help_topic_id < (length(a.corner) - length(replace(a.corner,',',''))+1)
+		where  seriesCode= b.seriesCode
+		)) cornerimg
+		]]>
+		,b.isvip, if(b.ChannelName='电影',0,1) as epis
+		from
+		vod_phone_albuminfo_recommend a
+		left join vod_phone_albuminfo b on
+		a.seriesCode=b.seriesCode
+		where a.id=#{seriesCode,jdbcType=VARCHAR} and
+		b.status=1
+	</select>
+
+	<select id="tfindchannel" parameterType="Map" resultType="Map">
+		select
+		id,channelCode,channelName,levels,sequence,parentCode,status,navigationtype,
+		count,type,CONCAT(#{imgtitle},img)  img,isshow_img,isshow_right,isshow_left 
+		from vod_tv_channel where 1=1
+		<!-- parentCode in(select channelCode from vod_tv_channel where status=1 
+			and levels=1 ) and ( -->
+		<if test="updatetime!=null and updatetime!='' ">
+			and (date_format(update_time, '%Y-%m-%d') =
+			#{updatetime,jdbcType=VARCHAR}
+			or
+			date_format(create_time, '%Y-%m-%d')
+			= #{updatetime,jdbcType=VARCHAR}
+			)
+		</if>
+		<if test="ids!=null and ids!='' ">
+			and id in (${ids})
+		</if>
+		<!-- ) -->
+	</select>
+	<select id="tfindchannelalbum" parameterType="Map" resultType="Map">
+		select a.id,a.sequence, d1.channelCode,d1.channelName,
+		d1.parentCode,d.channelName parentName,
+		b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,b.score,b.description,b.viewPoint,
+		if(b.duration='', 0,b.duration)as duration
+		,b.corner,volumncount,currentnum,
+<![CDATA[ (select  group_concat(pos,'|',imgurl Separator ';')
+		  from vod_corner where status=1 and id   in( 
+		select  substring_index(substring_index(a.corner,',',b.help_topic_id+1),',',-1) 
+		from vod_phone_albuminfo a
+	    join mysql.help_topic b on b.help_topic_id < (length(a.corner) - length(replace(a.corner,',',''))+1)
+		where  seriesCode= b.seriesCode
+		)) cornerimg
+		]]>
+		,b.isvip,
+		if(b.ChannelName='电影',0,1) as epis,
+		if((select count(1) from
+		vod_tv_channel where channelCode=b.Channel and status=1 and
+		levels=1)>0,b.status,'0') status
+		from vod_phone_albuminfo b
+		left join
+		vod_tv_channel_albuminfo a on
+		a.seriesCode=b.seriesCode
+		left join
+		vod_tv_channel d1 on a.channelCode=d1.channelCode
+		left join
+		vod_tv_channel d on d1.parentCode=d.channelCode and d.levels=1
+		where
+		a.seriesCode=b.seriesCode and b.status=1
+		and
+		a.channelCode=#{channelCode,jdbcType=VARCHAR}
+
+
+	</select>
+
+	<select id="tfindlabel" parameterType="Map" resultType="Map">
+		select id,name,channelCode,level,sequence,status,bz
+		from
+		vod_phone_label
+		where
+		channelcode in (select channelCode from
+		vod_tv_channel where status=1 and
+		levels=1)
+		<if test="updatetime!=null and updatetime!='' ">
+			and
+			(
+			date_format(update_time, '%Y-%m-%d') =
+			#{updatetime,jdbcType=VARCHAR}
+			or
+			date_format(create_time, '%Y-%m-%d')
+			= #{updatetime,jdbcType=VARCHAR}
+			)
+		</if>
+		<if test="ids!=null and ids!='' ">
+			id in (${ids})
+		</if>
+	</select>
+
+	<select id="tfindspecial" parameterType="Map" resultType="Map">
+		select
+		id,name,
+CONCAT(#{imgtitle},imgurl) imgurl,
+CONCAT(#{imgtitle},backgroundimg) backgroundimg,
+viewPoint,describes,create_time,create_user,
+		update_time,update_user,status,sequence,web_url,type,template,textcolor
+		from vod_tv_special
+		where 1=1
+		<if test="updatetime!=null and updatetime!='' ">
+			and (date_format( update_time, '%Y-%m-%d') =
+			#{updatetime,jdbcType=VARCHAR}
+			or
+			date_format( create_time, '%Y-%m-%d')
+			= #{updatetime,jdbcType=VARCHAR}
+			)
+		</if>
+		<if test="ids!=null and ids!='' ">
+			and id in (${ids})
+		</if>
+	</select>
+
+	<select id="tfindspecialalbum" parameterType="Map" resultType="Map">
+		select a.special_id,a.sequence,
+		b.seriesCode,b.seriesName,b.pictureurl1,b.pictureurl2,
+		b.score,b.description,b.viewPoint, if(b.duration='', 0,b.duration)as
+		duration
+		,b.corner,
+<![CDATA[ (select  group_concat(pos,'|',imgurl Separator ';')
+		  from vod_corner where status=1 and id   in( 
+		select  substring_index(substring_index(a.corner,',',b.help_topic_id+1),',',-1) 
+		from vod_phone_albuminfo a
+	    join mysql.help_topic b on b.help_topic_id < (length(a.corner) - length(replace(a.corner,',',''))+1)
+		where  seriesCode= b.seriesCode
+		)) cornerimg
+		]]>
+		,b.isvip,b.isCollectfees,
+		if((select count(1) from vod_tv_channel where
+		channelCode=b.Channel and status=1 and levels=1)>0,b.status,'0')
+		status
+		from vod_tv_special_albuminfo a
+		left join vod_phone_albuminfo b
+		on
+		a.seriesCode=b.seriesCode
+		where a.special_id=#{id,jdbcType=VARCHAR}
+		and b.status=1
+	</select>
+</mapper>

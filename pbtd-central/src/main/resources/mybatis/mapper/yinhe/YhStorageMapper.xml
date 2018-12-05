@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playclick.yinhe.mapper.YhStorageMapper">
+	
+	<!--查询更新数据 并添加进临时表 start -->
+	<insert id="inseralbumStorage" parameterType="Map">
+		insert into
+		vod_albuminfo_strategy(
+		SERIESNAME , SERIESCODE ,
+		VOLUMNCOUNT,CURRENTNUM,
+		PINYIN, PINYINSUOXIE, CPCODE, CPNAME,
+		ORDERCODE, ISCOLLECTFEES, ORIGINALNAME , ACTOR, WRITER, ACTORNAME,
+		WRITERNAME, ORGAIRDATE, PRICE, DESCRIPTION, CONTENTPROVIDER, KEYWORD,
+		TAG,VIEWPOINT, STARLEVEL, RATING, AWARDS, ORIGINALCOUNTRY,
+		LANGUAGE,RELEASEYEAR, DURATION, CHANNEL, CHANNELNAME, LABEL,
+		LABELNAME, ENNAME,VNAME, DEFINITION, COPYRIGHTPROPERTY, CRBEGINDATE,
+		CRENDDATE, COPYRIGHT, CPCONTENTID, SCORE, PICTUREURL1, PICTUREURL2,
+		PICTUREURL3, PICTUREURL4,PICTUREURL5,updatestatus,oldlabel,oldlabelname
+		)
+		select albumName as
+		SERIESNAME , albumId as SERIESCODE ,sets as VOLUMNCOUNT,
+		currentCount
+		as CURRENTNUM,'' PINYIN,'' PINYINSUOXIE, '1' CPCODE, '银河'
+		CPNAME,
+		''
+		ORDERCODE, 0 ISCOLLECTFEES,
+		albumName as ORIGINALNAME , actorids as
+		ACTOR, directorids as WRITER, actorname
+		as ACTORNAME,
+		directorname as
+		WRITERNAME, showDate as ORGAIRDATE, '' PRICE, albumDesc as
+		DESCRIPTION,
+		'' CONTENTPROVIDER, '' KEYWORD,
+		tags as TAG, focus as
+		VIEWPOINT, '' STARLEVEL, '' RATING, '' AWARDS,
+		originalCountry as
+		ORIGINALCOUNTRY,
+		'' LANGUAGE, showDate as RELEASEYEAR,duration as
+		DURATION, chnId as
+		CHANNEL,
+		chnName as CHANNELNAME, '' as LABEL,
+		'' as LABELNAME,'' ENNAME, ''
+		VNAME,
+		'' DEFINITION,0
+		COPYRIGHTPROPERTY,'' CRBEGINDATE, '' CRENDDATE,''
+		COPYRIGHT,''
+		CPCONTENTID,
+		score as SCORE, picUrl as PICTUREURL1, '' PICTUREURL2, ''
+		PICTUREURL3,''
+		PICTUREURL4,
+		'' PICTUREURL5, updatestatus,tagsids as oldlabel,
+		tags as oldlabelname
+		from
+		yh_vod_albuminfo
+		where (isStorage=0 or updatestatus=0)
+	</insert>
+
+	<insert id="inseralbumvideoStorage" parameterType="Map">
+		insert into
+		vod_albuminfovideo_strategy(
+		version, resolution, definition,
+		SourceType, type, movieUrl,
+		seriesCode, drama, dramaname,
+		dramaviewPoint,
+		fileurl, pic, title, duration,
+		dramacode,dramasequence,cpcode
+		)
+		SELECT
+		versionId AS version,''
+		resolution,0 definition,
+		source SourceType,'' type,
+		palyurl AS movieUrl,parentId AS seriesCode,
+		REPLACE(playOrder,'-','') AS drama,
+		tvname AS dramaname,tvdesc dramaviewPoint,
+		tvurl AS fileurl,pic AS pic,
+		subTitle AS title,duration,
+		dramacode as dramacode,dramasequence,1 cpcode
+		FROM
+		yh_vod_gitvvideo where isStorage=0
+	</insert>
+	
+	<delete id="deletealbumStorage" parameterType="Map">
+		delete from
+		vod_albuminfo_strategy where cpcode=1
+	</delete>
+	<delete id="deletealbumvideoStorage" parameterType="Map">
+		delete from
+		vod_albuminfovideo_strategy where cpcode=1
+	</delete>
+
+	<update id="updatealbumStorage" parameterType="Map">
+		update
+		yh_vod_albuminfo    set  isStorage=1,storagetime=now(),updatestatus=1  where isStorage=0  or updatestatus=0
+	</update>
+	<update id="updatealbumvideoStorage" parameterType="Map">
+		update
+		yh_vod_gitvvideo  set  isStorage=1,storagetime=now() where isStorage=0
+	</update>
+	
+	
+	<!-- 根据id入库 start -->
+	<insert id="inservodalbumid" parameterType="Map">
+			insert into
+		vod_albuminfo(
+		SERIESNAME , SERIESCODE ,
+		VOLUMNCOUNT,CURRENTNUM,
+		PINYIN, PINYINSUOXIE, CPCODE, CPNAME,
+		ORDERCODE, ISCOLLECTFEES, ORIGINALNAME , ACTOR, WRITER, ACTORNAME,
+		WRITERNAME, ORGAIRDATE, PRICE, DESCRIPTION, CONTENTPROVIDER, KEYWORD,
+		TAG,VIEWPOINT, STARLEVEL, RATING, AWARDS, ORIGINALCOUNTRY,
+		LANGUAGE,RELEASEYEAR, DURATION, CHANNEL, CHANNELNAME, LABEL,
+		LABELNAME, ENNAME,VNAME, DEFINITION, COPYRIGHTPROPERTY, CRBEGINDATE,
+		CRENDDATE, COPYRIGHT, CPCONTENTID, SCORE, PICTUREURL1, PICTUREURL2,
+		PICTUREURL3, PICTUREURL4,PICTUREURL5 ,offset
+		,  oldlabel,  oldlabelname
+		)
+		select albumName as
+		SERIESNAME , albumId as SERIESCODE ,sets as VOLUMNCOUNT,
+		currentCount
+		as CURRENTNUM,'' PINYIN,'' PINYINSUOXIE, '1' CPCODE, '银河'
+		CPNAME,
+		''
+		ORDERCODE, 0 ISCOLLECTFEES,
+		albumName as ORIGINALNAME , actorids as
+		ACTOR, directorids as WRITER, actorname
+		as ACTORNAME,
+		directorname as
+		WRITERNAME, showDate as ORGAIRDATE, '' PRICE, albumDesc as
+		DESCRIPTION,
+		'' CONTENTPROVIDER, '' KEYWORD,
+		tags as TAG, focus as
+		VIEWPOINT, '' STARLEVEL, '' RATING, '' AWARDS,
+		originalCountry as
+		ORIGINALCOUNTRY,
+		'' LANGUAGE, showDate as RELEASEYEAR,duration as
+		DURATION, chnId as
+		CHANNEL,
+		chnName as CHANNELNAME, '' as LABEL,
+		'' as LABELNAME,'' ENNAME, ''
+		VNAME,
+		'' DEFINITION,0
+		COPYRIGHTPROPERTY,'' CRBEGINDATE, '' CRENDDATE,''
+		COPYRIGHT,''
+		CPCONTENTID,
+		score as SCORE, picUrl as PICTUREURL1, '' PICTUREURL2, ''
+		PICTUREURL3,''
+		PICTUREURL4,
+		'' PICTUREURL5 ,nextval('seq_vod_album')
+		,tagsids as oldlabel,
+		tags as oldlabelname
+		from
+		yh_vod_albuminfo
+		  where albumId=#{seriescode,jdbcType=VARCHAR}
+	</insert>
+	<update id="updatevodalbumid" parameterType="Map">
+		update vod_albuminfo
+		set
+		CURRENTNUM=
+		(select currentCount from yh_vod_albuminfo where
+		albumId=#{seriescode,jdbcType=VARCHAR})
+		,updatetime=now(),offset=nextval('seq_vod_album')
+		where seriescode=#{seriescode,jdbcType=VARCHAR} and cpcode=1
+	</update>
+
+	<!-- 更新剧集 专辑唯一标识 -->
+	<update id="updatevideobycentralid" parameterType="Map">
+		update
+		vod_albuminfovideo b set
+		centralcode =
+		(select centralcode from
+		vod_albuminfo a where a.seriescode=b.seriescode and
+		a.cpcode=b.cpcode )
+		where centralcode is null and
+		seriescode=#{seriescode,jdbcType=VARCHAR} and cpcode=1
+	</update>
+	<insert id="insertvideoid" parameterType="Map">
+			insert into
+		vod_albuminfovideo(
+		version, resolution, definition,
+		SourceType, type, movieUrl,
+		seriesCode, drama, dramaname,
+		dramaviewPoint,
+		fileurl, pic, title, duration,
+		dramacode,dramasequence,cpcode,offset
+		)
+		SELECT
+		versionId AS version,''
+		resolution,0 definition,
+		source SourceType,'' type,
+		palyurl AS movieUrl,parentId AS seriesCode,
+		REPLACE(playOrder,'-','') AS drama,
+		tvname AS dramaname,tvdesc dramaviewPoint,
+		tvurl AS fileurl,pic AS pic,
+		subTitle AS title,duration,
+		dramacode as dramacode,dramasequence,1 cpcode,nextval('seq_vod_albumvideo')
+		FROM
+		yh_vod_gitvvideo
+		where parentId=#{seriescode,jdbcType=VARCHAR} and
+		dramacode not in(
+		select dramacode from vod_albuminfovideo where
+		cpcode=1
+		)
+	</insert>
+	<!-- 更新映射关系 -->
+	<update id="updatevodmapping" parameterType="Map">
+		update vod_albuminfo
+		<set>
+			<if test="phone_chnId != null and phone_chnId!=''">
+				channel= #{phone_chnId},
+				channelname= #{phone_chnname},
+			</if>
+			<if test="phone_tagId != null and phone_tagId!=''">
+			label=CONCAT(label,',','${phone_tagId}'),
+				labelname=CONCAT(labelname,',','${phone_tagname}'),
+			</if>
+		</set>
+		where seriescode =#{seriescode,jdbcType=VARCHAR}
+		and cpcode =#{cpcode,jdbcType=INTEGER}
+		<if
+			test="(cp_chnId != null and cp_chnId!='' ) and (cp_tagId == null or cp_tagId=='')">
+			and channel =#{cp_chnId,jdbcType=VARCHAR}
+		</if>
+		<if test="cp_tagId != null and cp_tagId!=''">
+			and oldlabel like '%${cp_tagId}%'
+				and label not like '%${phone_tagId}%'
+		</if>
+	</update>
+
+	<!-- 更新演员导演 -->
+	<update id="updateactors" parameterType="Map">
+		update
+		vod_albuminfo  set
+		writer=(
+		select GROUP_CONCAT(code) from
+		vod_actors
+		where
+		FIND_IN_SET(name,REPLACE(vod_albuminfo.writerName,'|',',')))
+		,actor=(
+		select GROUP_CONCAT(code) from vod_actors
+		where
+		FIND_IN_SET(name,REPLACE(vod_albuminfo.actorName,'|',',')))
+		where seriescode =#{seriescode,jdbcType=VARCHAR}
+		and cpcode =#{cpcode,jdbcType=INTEGER}
+	</update>
+	<update id="updatevodalbumstotageid" parameterType="Map">
+		update
+		yh_vod_albuminfo set isStorage=1,storagetime=now() 
+		where albumId=#{seriescode,jdbcType=VARCHAR}
+	</update>
+	<update id="updatevodalbumvideostotageid" parameterType="Map">
+		update
+		yh_vod_gitvvideo set isStorage=1,storagetime=now() 
+		where parentId=#{seriescode,jdbcType=VARCHAR}
+	</update>
+	<!-- 根据id入库 end -->
+</mapper>

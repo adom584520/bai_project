@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.dao.version.VideoVersionMapper">
+	
+	<!-- 根据versionCode查询720P -->	
+	<select id="findNameByCode" parameterType="com.pbtd.entity.VideoVersion" resultType="com.pbtd.entity.VideoVersion">
+		SELECT a.code,a.codeName from ij_version a
+		where a.code=#{code}
+	</select>
+	
+
+</mapper>

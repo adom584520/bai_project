@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pbtd.manager.vod.phone.hotsearch.mapper.VodHotSearchMapper">
+	
+	<resultMap id="resultMap"
+		type="com.pbtd.manager.vod.phone.hotsearch.domain.VodHotSearchInfo">
+		<result column="id" property="id" jdbcType="INTEGER"/>
+		<result column="seriesCode" property="seriesCode" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>  
+		<result column="sequence" property="sequence" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="count" parameterType="Map" resultType="Integer">
+		select count(1) from vod_phone_hotsearch a
+		left join vod_phone_albuminfo b 
+		on a.seriesCode=b.seriesCode
+		where 1=1
+		<if test="seriesName!=null and seriesName!=''">
+			and b.seriesName like '%${seriesName}%'
+		</if>
+			<if test="status!=null and status!=''">
+			and a.status=#{status,jdbcType=INTEGER}
+			and b.status=#{status,jdbcType=INTEGER}
+		</if>
+		<if test="albumid!=null and albumid!=''">
+		 and a.seriesCode=#{albumid,jdbcType=INTEGER}
+		</if>
+	</select>
+	
+	<select id="page" parameterType="Map" resultType="Map">
+		select a.id,a.seriesCode,b.seriesName,b.volumncount,b.currentnum,a.status,a.sequence,b.writerName,b.actorName,b.orgairDate,
+		b.price,b.starLevel
+		from vod_phone_hotsearch a
+		left join vod_phone_albuminfo b 
+		on a.seriesCode=b.seriesCode
+		where 1=1
+		<if test="seriesName!=null and seriesName!=''">
+			and b.seriesName like '%${seriesName}%'
+		</if>
+		<if test="status!=null and status!=''">
+			and a.status=#{status,jdbcType=INTEGER}
+			and b.status=#{status,jdbcType=INTEGER}
+		</if>
+		
+		order by a.sequence
+		<if test="start != null   ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+		<select id="find" parameterType="Map" resultType="Map">
+		select a.id,a.seriesCode,b.seriesName,b.volumncount,b.currentnum,a.status,a.sequence,b.writerName,b.actorName,
+		b.price,b.starLevel
+		from vod_phone_hotsearch a
+		left join vod_phone_albuminfo b 
+		on a.seriesCode=b.seriesCode
+		where 1=1
+		<if test="seriesName!=null and seriesName!=''">
+			and b.seriesName like '%${seriesName}%'
+		</if>
+		order by a.sequence
+		<if test="start != null  ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.pbtd.manager.vod.phone.hotsearch.domain.VodHotSearchInfo">
+		<if test="seriesCode!=null and seriesCode!=''">
+			insert into vod_phone_hotsearch(seriesCode,status,sequence)
+			values(#{seriesCode,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{sequence,jdbcType=INTEGER})
+		</if>
+	</insert>
+
+	  <update id="update" parameterType="com.pbtd.manager.vod.phone.hotsearch.domain.VodHotSearchInfo">
+        update vod_phone_hotsearch set
+        sequence=#{sequence,jdbcType=INTEGER}
+         where  seriesCode =#{seriesCode,jdbcType=VARCHAR}
+        </update>
+        
+        
+         <delete id="deletes"  parameterType="com.pbtd.manager.vod.phone.hotsearch.domain.VodHotSearchInfo">
+        delete from vod_phone_hotsearch
+         where 1=1 
+		 <if test="seriesCode != null and seriesCode !='' ">
+			     and seriesCode=#{seriesCode,jdbcType=INTEGER}
+		 </if>
+		  <if test="id != null and id !='' ">
+			     and id=#{id,jdbcType=INTEGER}
+		 </if>
+         
+    </delete>
+    <select id="findalbummaxVSminsequence" parameterType="Map" resultType="Map">
+		select max(sequence) max, min(sequence) min
+		from vod_phone_hotsearch a
+		<where>
+			<if test="id!=null ">
+				and id=#{id,jdbcType=INTEGER}
+			</if>
+			<if test="albumid!=null ">
+				and a.seriesCode   in (${albumid})
+			</if>
+		</where>
+	</select>
+	<select id="findalbumsequencesum" parameterType="Map" resultType="Map">
+		select  sequence 
+		from vod_phone_hotsearch a
+		<where>
+			<if test="id!=null ">
+				and a.id=#{id,jdbcType=INTEGER}
+			</if>
+			<if test="albumid!=null ">
+				and a.seriesCode   in (${albumid})
+			</if>
+		</where>
+			order by a.sequence
+	</select>
+	<select id="findalbumsequence" parameterType="Map" resultType="Map">
+		select a.seriesCode,a.sequence
+		from vod_phone_hotsearch a
+		<where>
+			<if test="id!=null ">
+				and a.id=#{id,jdbcType=INTEGER}
+			</if>
+			<if test="albumid!=null ">
+				and a.seriesCode not in (${albumid})
+			</if>
+			<if test="max!=null and max!='' ">
+			       	<![CDATA[    and sequence<= #{max,jdbcType=INTEGER}]]>
+			</if>
+			<if test="min!=null and min!='' ">
+			        <![CDATA[    and sequence>= #{min,jdbcType=INTEGER}]]>
+			</if>
+		</where>
+		order by a.sequence
+	</select>
+        
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.AlbuminfoMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.domain.Albuminfo" >
+        <result column="seriesName" property="seriesName"/>
+        <result column="seriesCode" property="seriesCode"/>
+        <result column="volumnCount" property="volumnCount"/>
+        <result column="currentNum" property="currentNum"/>
+        <result column="originalName" property="originalName"/>
+        <result column="actorName" property="actorName"/>
+        <result column="writerName" property="writerName"/>
+        <result column="orgairDate" property="orgairDate"/>
+        <result column="description" property="description"/>
+        <result column="tag" property="tag"/>
+        <result column="viewPoint" property="viewPoint"/>
+        <result column="originalCountry" property="originalCountry"/>
+        <result column="releaseYear" property="releaseYear"/>
+        <result column="duration" property="duration"/>
+        <result column="deviceType" property="deviceType"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="createTime" property="createTime"/>
+    </resultMap>
+    
+    <sql id="column">
+    	seriesName,seriesCode,volumnCount,currentNum,originalName,actorName,writerName,
+    	orgairDate,description,tag,viewPoint,originalCountry,releaseYear,duration,
+    	deviceType,updateTime,createTime
+    </sql>
+    
+    <sql id="queryLimit">
+    	<where>
+    		<if test="seriesName!=null">
+    			and seriesName like concat("%",#{seriesName},"%")
+    		</if>
+    		<if test="seriesCode!=null">
+    			and seriesCode = #{seriesCode}
+    		</if>
+    	</where>
+    </sql>
+    
+    <select id="queryCount" resultType="long">
+    	select count(*)
+    	from albuminfo
+    	<include refid="queryLimit"/>
+    </select>
+    
+    <select id="queryList" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from albuminfo
+    	<include refid="queryLimit"/>
+    	limit #{start},#{pageSize}
+    </select>
+    
+    <select id="queryBySeriesCode" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from albuminfo
+    	where seriesCode = #{seriesCode}
+    </select>
+    
+    <insert id="insert">
+    	insert into albuminfo
+    	(seriesCode,seriesName,volumnCount,currentNum,originalName,actorName,writerName,
+    	orgairDate,description,tag,viewPoint,originalCountry,releaseYear,duration,deviceType,updateTime,createTime)
+    	values
+    	(#{seriesCode},#{seriesName},#{volumnCount},#{currentNum},#{originalName},#{actorName},#{writerName},#{orgairDate},
+    	#{description},#{tag},#{viewPoint},#{originalCountry},#{releaseYear},#{duration},#{deviceType},#{updateTime},#{createTime})
+    </insert>
+    
+    <update id="update">
+    	update albuminfo
+    	set seriesName=#{seriesName},volumnCount=#{volumnCount},currentNum=#{currentNum},originalName=#{originalName},
+    	actorName=#{actorName},writerName=#{writerName},orgairDate=#{orgairDate},description=#{description},
+    	tag=#{tag},viewPoint=#{viewPoint},originalCountry=#{originalCountry},releaseYear=#{releaseYear},
+    	duration=#{duration},updateTime=#{updateTime},deviceType=#{deviceType}
+    	where seriesCode=#{seriesCode}
+    </update>
+    
+    <select id="queryBySeriesName" resultMap="baseResultMap">
+    	select <include refid="column"/>
+    	from albuminfo
+    	where seriesName like concat("%",#{seriesName},"%")
+    </select>
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://cimp.huawei.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://cimp.huawei.com" xmlns:intf="http://cimp.huawei.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://bean.cimp.huawei.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+ <wsdl:types>
+  <schema targetNamespace="http://bean.cimp.huawei.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="ResultBean">
+    <sequence>
+     <element name="returnCode" type="xsd:int"/>
+     <element name="returnMessage" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="queryContentRequest">
+	  <!--最长128字节-->       
+      <wsdl:part name="contentName" type="xsd:string"/>
+	  <!--contentType：0 单片 ，1 剧集壳-->	
+      <wsdl:part name="contentType" type="xsd:int"/>
+   </wsdl:message>
+
+   <wsdl:message name="queryContentResponse">
+
+      <wsdl:part name="Return" type="tns1:ResultBean"/>
+
+   </wsdl:message>
+
+      <wsdl:portType name="QueryContentService">
+
+      <wsdl:operation name="queryContent" >
+
+         <wsdl:input message="impl:queryContentRequest" name="queryContentRequest"/>
+
+         <wsdl:output message="impl:queryContentResponse" name="queryContentResponse"/>
+
+      </wsdl:operation>
+
+    
+
+   </wsdl:portType>
+
+   <wsdl:binding name="queryContentServiceSoapBinding" type="impl:QueryContentService">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="queryContent">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="queryContentRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://cimp.huawei.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="queryContentResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://cimp.huawei.com" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+
+   </wsdl:binding>
+
+   <wsdl:service name="QueryContentService">
+
+      <wsdl:port binding="impl:queryContentServiceSoapBinding" name="QueryContentService">
+
+         <wsdlsoap:address location="http://127.0.0.1:8088/services/QueryContentService"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

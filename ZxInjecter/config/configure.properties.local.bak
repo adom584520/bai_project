@@ -1,0 +1,36 @@
+#每次注入后暂停时间 1000*60*20 20分钟
+#threadSleepTime=1200000
+threadSleepTime=30000
+
+#xml文件生成保存的目录
+#xmlLocation=/home/data/xml/
+xmlLocation=D:\\xml\\
+
+#C2接口参数
+CSPID=003
+LSPID=003
+CmdFileURL=ftp\://HBlzl\:lzl123456@111.63.144.250\:21
+#serviceAddress=http://111.63.117.243:4329/ContentSyncReq
+serviceAddress=http://111.63.144.37:35100/cms/services/ctms
+
+
+#对应分平台IP端口 eg: http://127.0.0.1:8080
+subWebHost=http://192.168.0.17:8080
+#数据下发接口
+subWebPhoneVideoUrl=/inject/outputjson/phoneZx/getalbumvideo
+subWebTvVideoUrl=/inject/outputjson/tvZx/getalbumvideo
+#zr接口
+subWebZrPhoneUrl=/inject/outputjson/updatePhoneInject
+subWebZrTvUrl=/inject/outputjson/updateTvInject
+#注入状态接口
+subWebInjectPhoneUrl=/inject/outputjson/updatePhoneInjectState
+subWebInjectTvUrl=/inject/outputjson/updateTvInjectState
+
+#中兴CDN视频地址
+zxCdnVideoUrlPrefix=http://111.63.117.242:6060/030000000002/
+zxCdnVideoUrlSuffix=/index.m3u8
+
+#调度地址
+dispatcherHostUrl=http://vod.dispatcher.cibnhz.com/cibn_vod
+
+

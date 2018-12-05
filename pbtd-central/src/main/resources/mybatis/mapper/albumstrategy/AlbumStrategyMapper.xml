@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.playclick.albumstorage.mapper.AlbumStrategyMapper">
+	<select id="findstrategy" parameterType="Map"
+		resultType="com.pbtd.playclick.integrate.domain.Strategy">
+		select
+		ID , NAME, PRIORITY, FIELD1, FIELDNAME1, FIELD2,
+		FIELDNAME2, FIELD3, FIELDNAME3, FIELD4, FIELDNAME4,
+		cpcode, STATUS from
+		STRATEGY
+		where STATUS=1
+		order by PRIORITY desc
+	</select>
+	<!-- 查询当前临时表中的数据 -->
+	<select id="findalbum" parameterType="Map" resultType="Map">
+		select
+		SERIESNAME ,seriescode ,PINYIN,PINYINSUOXIE,cpcode from
+		vod_albuminfo_strategy
+		<where>
+		 <if test="seriescode != null and seriescode!=''">
+			 seriescode =#{seriescode,jdbcType=VARCHAR}
+		 </if>
+		</where>
+	</select>
+	<!-- 查询上线映射关系 -->
+	<select id="findvodmapping" parameterType="Map" resultType="Map">
+		select DISTINCT
+		CASE cpcode WHEN '1' THEN b1.chnName WHEN '2' THEN
+		b.chnName WHEN '5' THEN b2.chnName end cp_chnname,cp_chnId,
+		CASE cpcode
+		WHEN '1' THEN c1.tagName WHEN '2' THEN c.tagName WHEN '5' THEN
+		c2.tagName end cp_tagname,cp_tagId,
+		e.`Name`
+		phone_chnname,phone_chnId,e1.`Name` phone_tagname,phone_tagId,
+		cpcode
+		from vod_mapping a
+		left join yh_vod_channel b on a.cp_chnId=b.chnId
+		left join gg_vod_channel b1 on a.cp_chnId=b1.chnId
+		left join
+		youk_vod_channel b2 on a.cp_chnId=b2.chnId
+		left join yh_vod_label c on
+		a.cp_tagId=c.tagId
+		left join gg_vod_label c1 on a.cp_tagId=c1.tagId
+		left join youk_vod_label c2 on a.cp_tagId=c2.tagId
+		left join
+		vod_channel e on a.phone_chnId=e.categoryCode and e.levels=1
+		left join vod_channel e1 on a.phone_tagId=e1.categoryCode and
+		e1.levels=2
+		where a.status=1
+			<if test="cpcode!=null and cpcode!=''">
+			and a.cpcode =#{cpcode,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<!--  更改临时表中的拼音 -->
+		<update id="updatealbumpinyin" parameterType="Map">
+		update vod_albuminfo_strategy
+		set pinyin = #{pinyin,jdbcType=VARCHAR},
+		pinyinsuoxie = #{pinyinsuoxie,jdbcType=VARCHAR}
+		where seriescode =	#{seriescode,jdbcType=VARCHAR}
+		and cpcode	=#{cpcode,jdbcType=VARCHAR}
+	</update>
+	<!-- 执行非唯一汇聚数据 添加到汇聚库中 -->
+	<insert id="insertonlyonefalse" parameterType="Map">
+		insert into
+		vod_albuminfo (
+		SERIESNAME ,seriescode
+		,VOLUMNCOUNT,CURRENTNUM,PINYIN,PINYINSUOXIE,cpcode,CPNAME,ORDERCODE,ISCOLLECTFEES,ORIGINALNAME,ACTOR,WRITER,ACTORNAME,WRITERNAME,
+		ORGAIRDATE,PRICE,DESCRIPTION,CONTENTPROVIDER,KEYWORD,TAG,VIEWPOINT,STARLEVEL,RATING,AWARDS,ORIGINALCOUNTRY,LANGUAGE,RELEASEYEAR,DURATION,CHANNEL,
+		CHANNELNAME,LABEL,LABELNAME,ENNAME,VNAME,DEFINITION,COPYRIGHTPROPERTY,CRBEGINDATE,CRENDDATE,COPYRIGHT,CPCONTENTID,SCORE,PICTUREURL1,PICTUREURL2,PICTUREURL3,PICTUREURL4,PICTUREURL5,
+		cpcodelist,updatetime,offset
+		)
+		select
+		SERIESNAME ,seriescode
+		,VOLUMNCOUNT,CURRENTNUM,PINYIN,PINYINSUOXIE,cpcode,CPNAME,ORDERCODE,ISCOLLECTFEES,ORIGINALNAME,ACTOR,WRITER,ACTORNAME,WRITERNAME,
+		ORGAIRDATE,PRICE,DESCRIPTION,CONTENTPROVIDER,KEYWORD,TAG,VIEWPOINT,STARLEVEL,RATING,AWARDS,ORIGINALCOUNTRY,LANGUAGE,RELEASEYEAR,DURATION,CHANNEL,
+		CHANNELNAME,LABEL,LABELNAME,ENNAME,VNAME,DEFINITION,COPYRIGHTPROPERTY,CRBEGINDATE,CRENDDATE,COPYRIGHT,CPCONTENTID,SCORE,PICTUREURL1,PICTUREURL2,PICTUREURL3,PICTUREURL4,PICTUREURL5,
+		cpcode,now(),nextval('seq_vod_album')
+		from vod_albuminfo_strategy
+		where cpcode=#{cpcode} and strategystatus=0 and updatestatus=1
+		and (${name}) 
+		in   ( select * from (SELECT ChannelName,	seriesName
+ 			 from vod_albuminfo_strategy group by  ${name} having count(1) >1) n  )
+	</insert>
+	<update id="updateonlyonefalsestatus1" parameterType="Map">
+		update vod_albuminfo_strategy set strategystatus=1
+		where cpcode=#{cpcode}
+		and (${name}) 
+		in   (select * from (SELECT ChannelName,	seriesName
+ 			 from vod_albuminfo_strategy group by  ${name} having count(1) >1) n)
+	</update>
+	<update id="updateonlyonefalsestatus3" parameterType="Map">
+		update vod_albuminfo_strategy set strategystatus=3
+		where cpcode!=#{cpcode} 
+		and (${name}) 
+		in   ( select * from ( SELECT ChannelName,	seriesName
+ 			 from vod_albuminfo_strategy group by  ${name} having count(1) >1) n)
+	</update>
+	<!-- 执行唯一汇聚数据 添加到汇聚库中 -->
+	<insert id="insertonlyone" parameterType="Map">
+		insert into
+		vod_albuminfo (
+		SERIESNAME ,seriescode
+		,VOLUMNCOUNT,CURRENTNUM,PINYIN,PINYINSUOXIE,cpcode,CPNAME,ORDERCODE,ISCOLLECTFEES,ORIGINALNAME,ACTOR,WRITER,ACTORNAME,WRITERNAME,
+		ORGAIRDATE,PRICE,DESCRIPTION,CONTENTPROVIDER,KEYWORD,TAG,VIEWPOINT,STARLEVEL,RATING,AWARDS,ORIGINALCOUNTRY,LANGUAGE,RELEASEYEAR,DURATION,CHANNEL,
+		CHANNELNAME,LABEL,LABELNAME,ENNAME,VNAME,DEFINITION,COPYRIGHTPROPERTY,CRBEGINDATE,CRENDDATE,COPYRIGHT,CPCONTENTID,SCORE,PICTUREURL1,PICTUREURL2,PICTUREURL3,PICTUREURL4,PICTUREURL5,
+		cpcodelist,updatetime,offset
+		)
+		select
+		SERIESNAME ,seriescode
+		,VOLUMNCOUNT,CURRENTNUM,PINYIN,PINYINSUOXIE,cpcode,CPNAME,ORDERCODE,ISCOLLECTFEES,ORIGINALNAME,ACTOR,WRITER,ACTORNAME,WRITERNAME,
+		ORGAIRDATE,PRICE,DESCRIPTION,CONTENTPROVIDER,KEYWORD,TAG,VIEWPOINT,STARLEVEL,RATING,AWARDS,ORIGINALCOUNTRY,LANGUAGE,RELEASEYEAR,DURATION,CHANNEL,
+		CHANNELNAME,LABEL,LABELNAME,ENNAME,VNAME,DEFINITION,COPYRIGHTPROPERTY,CRBEGINDATE,CRENDDATE,COPYRIGHT,CPCONTENTID,SCORE,PICTUREURL1,PICTUREURL2,PICTUREURL3,PICTUREURL4,PICTUREURL5,
+		cpcode,now(),nextval('seq_vod_album')
+		from vod_albuminfo_strategy
+		where strategystatus=0 and updatestatus=1
+	</insert>
+	<update id="updateonlyonestatus" parameterType="Map">
+		update vod_albuminfo_strategy set strategystatus=1
+		where strategystatus=0
+	</update>
+
+	<!--根据当日更新入库 更新映射关系 -->
+	<update id="updatevodmappingphone" parameterType="Map">
+		update vod_albuminfo_strategy
+		<set>
+			<if test="phone_chnId != null and phone_chnId!=''">
+					channel= #{phone_chnId},
+				channelname= #{phone_chnname},
+			</if>
+			<if test="phone_tagId != null and phone_tagId!=''">
+					label=CONCAT(label,',','${phone_tagId}'),
+				labelname=CONCAT(labelname,',','${phone_tagname}'),
+			</if>
+		</set>
+		<where>
+			<if test="cpcode != null and cpcode!=''">
+				and cpcode =#{cpcode,jdbcType=INTEGER}
+			</if>
+			<if test="offset != null and offset!=''">
+				and offset>=#{offset,jdbcType=INTEGER}
+			</if>
+			<if
+				test="(cp_chnId != null and cp_chnId!='' ) and (cp_tagId == null or cp_tagId=='')">
+				and channel =#{cp_chnId,jdbcType=VARCHAR}
+			</if>
+			<if test="cp_tagId != null and cp_tagId!=''">
+				and oldlabel like '%${cp_tagId}%'
+				and label not like '%${phone_tagId}%'
+			</if>
+		</where>
+	</update>
+	<!-- 更新演员导演 -->
+	<update id="updateactors" parameterType="Map">
+		update
+		vod_albuminfo_strategy set
+		writer=(
+		select GROUP_CONCAT(code) from
+		vod_actors
+		where
+		FIND_IN_SET(name,REPLACE(vod_albuminfo_strategy.writerName,'|',',')))
+		,actor=(
+		select GROUP_CONCAT(code) from vod_actors
+		where
+		FIND_IN_SET(name,REPLACE(vod_albuminfo_strategy.actorName,'|',',')))
+		<where>
+			<if test="id != null and id!=''">
+				and seriescode =#{id,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</update>
+	<!-- 添加更新的播放剧集 -->
+	<insert id="insertvodalbuminfovideo" parameterType="Map">
+		insert into
+		vod_albuminfovideo(version,resolution,definition,SourceType,type,movieUrl,
+		seriescode,drama,dramaname,dramaviewPoint,fileurl,duration,dramacode,dramasequence,cpcode
+		,offset,centralcode)
+		select version,resolution,definition,SourceType,type,movieUrl,
+		seriescode,if(drama='',0,drama) drama,dramaname,dramaviewPoint,fileurl
+		,duration,dramacode,dramasequence,
+		cpcode,nextval('seq_vod_albumvideo'),centralcode
+		from vod_albuminfovideo_strategy 
+		where (seriescode,cpcode)
+		in(select seriescode,cpcode from vod_albuminfo_strategy where strategystatus=1 )
+	</insert>
+	<!--更新数据更新集数 -->
+	<update id="updatealbuminfocurrentNum" parameterType="Map">
+		update vod_albuminfo set UPDATETIME=now(),
+		currentNum=(select currentNum from
+		vod_albuminfo_strategy
+		where vod_albuminfo.seriescode=seriescode
+		and vod_albuminfo.cpcode=cpcode)
+		where seriescode in (select seriescode from vod_albuminfo_strategy where  updatestatus=0)
+	</update>
+<!-- 更新剧集 专辑唯一标识 -->
+	<update id="updatevideobycentralid" parameterType="Map">
+		update vod_albuminfovideo b set
+		centralcode =
+		(select centralcode from
+		vod_albuminfo a where a.seriescode=b.seriescode and
+		a.cpcode=b.cpcode )
+		where centralcode is null
+	</update>
+
+
+
+
+
+
+
+
+
+
+
+	 
+	   
+	<!-- * 根据国广、银河、合一id更新专辑 -->
+	<select id="findvodalbumid" parameterType="Map" resultType="Map">
+		select
+		SERIESNAME ,seriescode ,PINYIN,PINYINSUOXIE,cpcode from
+		vod_albuminfo
+		<where>
+		 <if test="seriescode != null and seriescode!=''">
+			and  seriescode =#{seriescode,jdbcType=VARCHAR}
+		 </if>
+		  <if test="cpcode != null and cpcode!=''">
+			 and cpcode =#{cpcode,jdbcType=VARCHAR}
+		 </if>
+		</where>
+	</select>
+	<!--  更改临时表中的拼音 -->
+		<update id="updatevodalbumpinyinid" parameterType="Map">
+		update vod_albuminfo
+		set pinyin = #{pinyin,jdbcType=VARCHAR},
+		pinyinsuoxie = #{pinyinsuoxie,jdbcType=VARCHAR}
+		where seriescode =	#{seriescode,jdbcType=VARCHAR}
+		and cpcode	=#{cpcode,jdbcType=VARCHAR}
+	</update>
+</mapper>

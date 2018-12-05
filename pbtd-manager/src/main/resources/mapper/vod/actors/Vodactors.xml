@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.vod.common.actors.mapper.VodactorsMapper">
+    <resultMap id="resultMap" type="com.pbtd.manager.vod.common.actors.domain.Vodactors">
+        <result column="id" property="id" jdbcType="INTEGER" />      
+        <result column="code" property="code" jdbcType="VARCHAR" /> 
+        <result column="name" property="name" jdbcType="VARCHAR" /> 
+        <result column="bz" property="bz" jdbcType="VARCHAR" /> 
+        <result column="status" property="status" jdbcType="VARCHAR" /> 
+        <result column="actor" property="actor" jdbcType="VARCHAR" /> 
+        <result column="director" property="director" jdbcType="VARCHAR" /> 
+        <result column="pinyin" property="pinyin" jdbcType="VARCHAR" /> 
+        <result column="pinyinsuoxie" property="pinyinsuoxie" jdbcType="VARCHAR" /> 
+        <result column="imgportrait" property="imgportrait" jdbcType="VARCHAR" /> 
+        <result column="backgroundimg" property="backgroundimg" jdbcType="VARCHAR" /> 
+         <result column="updatetime" property="updatetime" jdbcType="DATE" /> 
+         <result column="birthDay" property="birthDay" jdbcType="VARCHAR" /> 
+         <result column="birthPlace" property="birthPlace" jdbcType="VARCHAR" /> 
+         <result column="description" property="description" jdbcType="VARCHAR" /> 
+       
+    </resultMap>
+    <sql id="columns" >
+       	id, code, name,bz,status,actor, director,imgportrait ,backgroundimg,updatetime,  birthDay	,birthPlace, description   
+    </sql>
+    <!-- 模糊查询 -->
+    <sql id="whrClauseLike">
+        <if test="id != null and id > -1">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="code != null and code != ''">
+            and code  like CONCAT('%', #{code,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="name != null and name != ''">
+            and NAME like  CONCAT('%', #{name,jdbcType=VARCHAR}, '%')  
+        </if>
+        
+    </sql>
+    <sql id="whrClauseLikeMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <!-- 精确查询 -->
+    <sql id="whrClauseEqual">
+        <if test="id != null and id > -1">
+            and ID = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="code != null and code != ''">
+            and code = #{code,jdbcType=VARCHAR}
+        </if>
+        <if test="actor != null and actor != ''">
+            and actor = #{actor,jdbcType=VARCHAR}
+        </if>
+        <if test="director != null and director != ''">
+            and director = #{director,jdbcType=VARCHAR}
+        </if>
+        <if test="updatetime != null ">
+            and date_format(UPDATETIME,'%Y-%m-%d') = #{updatetime,jdbcType=DATE}
+        </if>
+    </sql>
+    <sql id="whrClauseEqualMore">
+        <if test="id_ != null">
+        	and ID in
+        	<foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=INTEGER}
+            </foreach>
+        </if>
+    </sql>
+    <sql id="orderByClause">
+    	<choose>
+        	<when test="sort != null and sort != ''">
+        		order by ${sort} <if test="order != null and order != ''">${order}</if>
+        	</when>
+        	<otherwise>
+        		order by updatetime asc
+        	</otherwise>
+        </choose>
+    </sql>
+    <!--SElECT查询语句-->
+    <select id="count" parameterType="Map" resultType="java.lang.Integer">
+        select count(ID)
+        from  vod_actors  
+        where 1=1
+        <include refid="whrClauseLike" />
+         <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+    </select>
+    <select id="page" parameterType="Map" resultMap="resultMap">
+        select 
+       	  	id, code, name,bz,status,
+       	  	if(actor='0','否','是') actor,
+       	  	if(director='0','否','是') director,imgportrait ,backgroundimg,birthDay	,birthPlace, description   
+        from  vod_actors a
+        where 1=1
+       <include refid="whrClauseLike" />
+         <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+            	 limit #{start},#{pageSize}
+    </select>
+    <select id="find" parameterType="Map" resultMap="resultMap">
+      select 
+         	id, code, name,bz,status,
+       	  	if(actor='0','否','是') actor,
+       	  	if(director='0','否','是') director,imgportrait ,backgroundimg,updatetime,  birthDay	,birthPlace, description   
+        from  vod_actors a
+        where 1=1
+        <include refid="whrClauseLike" />
+        <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+            	 limit #{start},#{pageSize}
+    </select>
+    <select id="generatePosition" parameterType="Map" resultType="java.lang.Integer">
+        select case when max(POSITION) is not null then max(POSITION) + 10 else 10 end as POSITION
+        from  vod_actors  
+        where 1=1
+        <include refid="whrClauseLike" />
+        <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+    </select>
+    <select id="load" parameterType="java.lang.Integer" resultMap="resultMap">
+        select 
+        <include refid="columns" />
+        from  vod_actors  
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <!--INSERT/UPDATE/DELETE 执行语句-->
+    <insert id="insert" parameterType="com.pbtd.manager.vod.common.actors.domain.Vodactors">
+        insert into 
+        vod_actors 
+        (
+     	code, name,bz,status,actor, director,pinyin,pinyinsuoxie,imgportrait ,backgroundimg,updatetime,  birthDay	,birthPlace, description   
+        )
+        values 
+        (
+       unix_timestamp(now()),
+        #{name,jdbcType=VARCHAR},
+        #{bz,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR},
+        #{actor,jdbcType=VARCHAR},
+        #{director,jdbcType=VARCHAR},
+        #{pinyin,jdbcType=VARCHAR},
+        #{pinyinsuoxie,jdbcType=VARCHAR},
+         #{imgportrait,jdbcType=VARCHAR},
+        #{backgroundimg,jdbcType=VARCHAR},now(),
+          #{birthDay,jdbcType=VARCHAR},
+         #{birthPlace,jdbcType=VARCHAR},
+        #{description,jdbcType=VARCHAR}
+        )
+    </insert>
+    <update id="update" parameterType="com.pbtd.manager.vod.common.actors.domain.Vodactors">
+        update vod_actors
+        <set>
+	    <if test="code != null ">
+              code = #{code,jdbcType=VARCHAR},
+        </if>
+        <if test="name != null">
+              name = #{name,jdbcType=VARCHAR},
+                updatetime=now(),
+        </if>
+        <if test="pinyin != null">
+              pinyin = #{pinyin,jdbcType=VARCHAR},
+        </if>
+         <if test="pinyinsuoxie != null">
+              pinyinsuoxie = #{pinyinsuoxie,jdbcType=VARCHAR},
+        </if>
+        <if test="status != null">
+              status = #{status,jdbcType=VARCHAR},
+        </if>
+        <if test="actor != null ">
+              actor = #{actor,jdbcType=VARCHAR},
+        </if>
+        <if test="director != null">
+              director = #{director,jdbcType=VARCHAR},
+        </if>
+        <if test="imgportrait != null">
+              imgportrait = #{imgportrait,jdbcType=VARCHAR},
+        </if>
+        <if test="backgroundimg != null">
+           backgroundimg = #{backgroundimg,jdbcType=VARCHAR},
+        </if>
+         <if test="birthDay != null">
+           birthDay = #{birthDay,jdbcType=VARCHAR},
+        </if>
+         <if test="birthPlace != null">
+           birthPlace = #{birthPlace,jdbcType=VARCHAR},
+        </if>
+         <if test="description != null">
+           description = #{description,jdbcType=VARCHAR},
+        </if>
+        
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <delete id="deletes" parameterType="Map" >
+        delete from vod_actors
+        where 1=1
+        <include refid="whrClauseLike" />
+        <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+    </delete>
+    
+</mapper>

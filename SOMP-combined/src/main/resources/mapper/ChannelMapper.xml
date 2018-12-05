@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.ChannelMapper">
+	<resultMap id="baseResultMap" type="com.pbtd.manager.domain.Channel">
+		<id column="id" property="id" />
+		<result column="oldChnCode" property="oldChnCode" />
+		<result column="chnCode" property="chnCode" />
+		<result column="chnName" property="chnName" />
+		<result column="packageCover" property="packageCover" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+	</resultMap>
+
+	<sql id="column">
+		id,oldChnCode,chnCode,chnName,playUrl,packageCover,createTime,updateTime
+	</sql>
+	
+	<sql id="queryLimit">
+    	<where>
+    		<if test="chnName!=null">
+    			and chnName like concat("%",#{chnName},"%")
+    		</if>
+    		<if test="chnCode!=null">
+    			and chnCode like concat("%",#{chnCode},"%")
+    		</if>
+    	</where>
+    </sql>
+    
+	<select id="queryByChnCode" resultMap="baseResultMap">
+		select
+		<include refid="column" />
+		from channel
+		where chnCode = #{chnCode}
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		select count(*)
+		from channel
+		<include refid="queryLimit"/>
+	</select>
+	
+	<select id="queryList" resultMap="baseResultMap">
+		select <include refid="column"/>
+		from channel
+		<include refid="queryLimit"/>
+	</select>
+</mapper>

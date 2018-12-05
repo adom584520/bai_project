@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.system.mapper.RealmNameMapper">
+	<!-- 查询数据 -->
+	<select id="find" resultType="Map">
+		select
+		id ,name ,type ,oldtitle ,newtitle
+		from sys_realm_name
+		<where>
+			<if test="name!=null and name!=''">
+				and name like '%#{name,jdbcType=VARCHAR}%'
+			</if>
+			<if test="id!=null and id!=''">
+				and id=#{id,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<select id="load" parameterType="INTEGER"
+		resultType="com.pbtd.manager.system.domain.RealmName">
+		select
+		id ,name ,type ,oldtitle ,newtitle
+		from sys_realm_name
+		where id=#{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="count" parameterType="Map" resultType="INTEGER">
+		select
+		count(id) count from sys_realm_name
+	</select>
+	<insert id="insert" parameterType="Map">
+		insert into sys_realm_name
+		(name ,type ,oldtitle ,newtitle)
+		values
+		(
+		#{name,jdbcType=VARCHAR},
+		#{type,jdbcType=INTEGER},
+		#{oldtitle,jdbcType=VARCHAR},
+		#{newtitle,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="Map">
+		update sys_realm_name
+		<set>
+			<if test="name!=null and name!=''">
+				name=#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="type!=null and type!=''">
+				type=#{type,jdbcType=INTEGER},
+			</if>
+			<if test="oldtitle!=null and oldtitle!=''">
+				oldtitle=#{oldtitle,jdbcType=VARCHAR},
+			</if>
+			<if test="newtitle!=null and newtitle!=''">
+				newtitle=#{newtitle,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<delete id="delete" parameterType="Map">
+		delete from sys_realm_name
+		where 1=1
+		<if test="id != null and id > -1">
+			and id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="id_!= null">
+			and ID in
+			<foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=INTEGER}
+			</foreach>
+		</if>
+	</delete>
+	<select id="findtitle" resultType="Map">
+		select	  newtitle imgtitle
+		from sys_realm_name
+		<where>
+			<if test="type!=null and type!=''">
+			and 	type=#{type,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+</mapper>

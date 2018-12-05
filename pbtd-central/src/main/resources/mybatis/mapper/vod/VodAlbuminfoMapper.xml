@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.playclick.integrate.mapper.VodAlbuminfoMapper">
+    <resultMap id="resultMap" type="com.pbtd.playclick.integrate.domain.VodAlbuminfo">
+        <result column="SERIESNAME" property="seriesname" jdbcType="VARCHAR" />      
+        <result column="SERIESCODE" property="seriescode" jdbcType="VARCHAR" />      
+        <result column="VOLUMNCOUNT" property="volumncount" jdbcType="INTEGER" />      
+        <result column="CURRENTNUM" property="currentnum" jdbcType="INTEGER" />      
+        <result column="PINYIN" property="pinyin" jdbcType="VARCHAR" />      
+        <result column="PINYINSUOXIE" property="pinyinsuoxie" jdbcType="VARCHAR" />      
+        <result column="CPCODE" property="cpcode" jdbcType="VARCHAR" />      
+        <result column="CPNAME" property="cpname" jdbcType="VARCHAR" />      
+        <result column="ORDERCODE" property="ordercode" jdbcType="VARCHAR" />      
+        <result column="ISCOLLECTFEES" property="iscollectfees" jdbcType="INTEGER" />      
+        <result column="ORIGINALNAME" property="originalname" jdbcType="VARCHAR" />      
+        <result column="ACTOR" property="actor" jdbcType="VARCHAR" />      
+        <result column="WRITER" property="writer" jdbcType="VARCHAR" />      
+        <result column="ACTORNAME" property="actorname" jdbcType="VARCHAR" />      
+        <result column="WRITERNAME" property="writername" jdbcType="VARCHAR" />      
+        <result column="ORGAIRDATE" property="orgairdate" jdbcType="VARCHAR" />      
+        <result column="PRICE" property="price" jdbcType="VARCHAR" />      
+        <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />      
+        <result column="CONTENTPROVIDER" property="contentprovider" jdbcType="VARCHAR" />      
+        <result column="KEYWORD" property="keyword" jdbcType="VARCHAR" />      
+        <result column="TAG" property="tag" jdbcType="VARCHAR" />      
+        <result column="VIEWPOINT" property="viewpoint" jdbcType="VARCHAR" />      
+        <result column="STARLEVEL" property="starlevel" jdbcType="VARCHAR" />      
+        <result column="RATING" property="rating" jdbcType="VARCHAR" />      
+        <result column="AWARDS" property="awards" jdbcType="VARCHAR" />      
+        <result column="ORIGINALCOUNTRY" property="originalcountry" jdbcType="VARCHAR" />      
+        <result column="LANGUAGE" property="language" jdbcType="VARCHAR" />      
+        <result column="RELEASEYEAR" property="releaseyear" jdbcType="VARCHAR" />      
+        <result column="DURATION" property="duration" jdbcType="VARCHAR" />      
+        <result column="CHANNEL" property="channel" jdbcType="VARCHAR" />      
+        <result column="CHANNELNAME" property="channelname" jdbcType="VARCHAR" />      
+        <result column="LABEL" property="label" jdbcType="VARCHAR" />      
+        <result column="LABELNAME" property="labelname" jdbcType="VARCHAR" />      
+        <result column="ENNAME" property="enname" jdbcType="VARCHAR" />      
+        <result column="VNAME" property="vname" jdbcType="VARCHAR" />      
+        <result column="DEFINITION" property="definition" jdbcType="VARCHAR" />      
+        <result column="COPYRIGHTPROPERTY" property="copyrightproperty" jdbcType="INTEGER" />      
+        <result column="CRBEGINDATE" property="crbegindate" jdbcType="VARCHAR" />      
+        <result column="CRENDDATE" property="crenddate" jdbcType="VARCHAR" />      
+        <result column="COPYRIGHT" property="copyright" jdbcType="VARCHAR" />      
+        <result column="CPCONTENTID" property="cpcontentid" jdbcType="VARCHAR" />      
+        <result column="SCORE" property="score" jdbcType="FLOAT" />      
+        <result column="PICTUREURL1" property="pictureurl1" jdbcType="VARCHAR" />      
+        <result column="PICTUREURL2" property="pictureurl2" jdbcType="VARCHAR" />      
+        <result column="PICTUREURL3" property="pictureurl3" jdbcType="VARCHAR" />      
+        <result column="PICTUREURL4" property="pictureurl4" jdbcType="VARCHAR" />      
+        <result column="PICTUREURL5" property="pictureurl5" jdbcType="VARCHAR" />      
+        <result column="UPDATETIME" property="updatetime" jdbcType="DATE" />  
+        <result column="issue" property="issue" jdbcType="INTEGER" />      
+        <result column="issuetime" property="issuetime" jdbcType="DATE" />  
+        <result column="cpCodelist" property="cpCodelist" jdbcType="VARCHAR" />   
+        <result column="centralcode" property="centralcode" jdbcType="VARCHAR" /> 
+        <result column="pay_type" property="pay_type" jdbcType="VARCHAR" /> 
+         <result column="exclusive" property="exclusive" jdbcType="INTEGER" />  
+            <result column="offset" property="offset" jdbcType="INTEGER" />     
+        <!-- 用于查询的字段 -->
+             <result column="updatetime1" property="updatetime1" jdbcType="DATE" /> 
+              <result column="updatetime2" property="updatetime2" jdbcType="DATE" /> 
+              <result column="channelstatus" property="channelstatus" jdbcType="INTEGER" />    
+              
+    </resultMap>
+    <sql id="columns" >
+         SERIESNAME ,
+         SERIESCODE ,
+         VOLUMNCOUNT,
+         CURRENTNUM,
+        PINYIN,
+        PINYINSUOXIE,
+        CPCODE,
+        CPNAME,
+        ORDERCODE,
+        ISCOLLECTFEES,
+        ORIGINALNAME,
+        ACTOR,
+        WRITER,
+        ACTORNAME,
+        WRITERNAME,
+        ORGAIRDATE,
+        PRICE,
+        DESCRIPTION,
+        CONTENTPROVIDER,
+        KEYWORD,
+        TAG,
+        VIEWPOINT,
+        STARLEVEL,
+        RATING,
+        AWARDS,
+        ORIGINALCOUNTRY,
+        LANGUAGE,
+        RELEASEYEAR,
+        DURATION,
+        CHANNEL,
+        CHANNELNAME,
+        LABEL,
+        LABELNAME,
+        ENNAME,
+        VNAME,
+        DEFINITION,
+        COPYRIGHTPROPERTY,
+        CRBEGINDATE,
+        CRENDDATE,
+        COPYRIGHT,
+        CPCONTENTID,
+        SCORE,
+        PICTUREURL1,
+        PICTUREURL2,
+        PICTUREURL3,
+        PICTUREURL4,
+        PICTUREURL5,
+        UPDATETIME,issue,issuetime,cpCodelist,centralcode,pay_type,exclusive,offset
+    </sql>
+    <!-- 模糊查询 -->
+    <sql id="whrClauseLike">
+        <if test="seriesname != null and seriesname != ''">
+            and SERIESNAME like '%${seriesname}%'  
+        </if>
+        <if test="pinyin != null and pinyin != ''">
+            and PINYIN like '%${pinyin}%'  
+        </if>
+        <if test="pinyinsuoxie != null and pinyinsuoxie != ''">
+            and PINYINSUOXIE like '%${pinyinsuoxie}%'  
+        </if>
+        <if test="originalname != null and originalname != ''">
+            and ORIGINALNAME  like '%${originalname}%'  
+        </if>
+        <if test="actor != null and actor != ''">
+            and ACTOR like '%${actor}%'  
+        </if>
+        <if test="writer != null and writer != ''">
+            and WRITER like '%${writer}%'  
+        </if>
+        <if test="actorname != null and actorname != ''">
+            and ACTORNAME like '%${actorname}%'  
+        </if>
+        <if test="writername != null and writername != ''">
+            and WRITERNAME like '%${writername}%'  
+        </if>
+        <if test="keyword != null and keyword != ''">
+            and KEYWORD like '%${keyword}%'  
+        </if>
+        <if test="tag != null and tag != ''">
+            and TAG like '%${tag}%'  
+        </if>
+        <if test="viewpoint != null and viewpoint != ''">
+            and VIEWPOINT like '%${viewpoint}%'  
+        </if>
+       
+        <if test="duration != null and duration != ''">
+            and DURATION like  '%${duration}%'   
+        </if>
+       <if test="label != null and label != ''">
+            and LABEL  like '%${label}%'
+        </if>
+        <if test="channelname != null and channelname != ''">
+            and CHANNELNAME like '%${channelname}%'
+        </if>
+        <if test="labelname != null and labelname != ''">
+            and LABELNAME like  '%${labelname}%'
+        </if>
+        <if test="enname != null and enname != ''">
+            and ENNAME like '%${enname}%'
+        </if>
+        <if test="vname != null and vname != ''">
+            and VNAME like '%${vname}%'
+        </if>
+    </sql>
+    <!-- 精确查询 -->
+    <sql id="whrClauseEqual">
+      <if test="channelstatus ==1 ">
+            and  channel  in (
+            select categoryCode from  vod_channel where levels=1 and status=1
+            )
+        </if>
+        <if test="centralcode != null and centralcode != ''">
+            and centralcode  =  #{centralcode,jdbcType=VARCHAR} 
+        </if>
+          <if test="exclusive != null ">
+            and  exclusive  = #{exclusive,jdbcType=INTEGER}
+        </if>
+        <if test="offset != null and offset>0">
+            and  offset  >= #{offset,jdbcType=INTEGER}
+        </if>
+        <if test="issue != null and issue > -1">
+            and  issue  = #{issue,jdbcType=INTEGER}
+        </if>
+        <if test="seriescode != null and seriescode != ''">
+            and SERIESCODE  =  #{seriescode,jdbcType=VARCHAR} 
+        </if>
+        <if test="volumncount != null and volumncount > -1">
+            and  VOLUMNCOUNT  = #{volumncount,jdbcType=INTEGER}
+        </if>
+        <if test="currentnum != null and currentnum > -1">
+            and  CURRENTNUM  = #{currentnum,jdbcType=INTEGER}
+        </if>
+        <if test="pinyin != null and pinyin != ''">
+            and PINYIN =  #{pinyin,jdbcType=VARCHAR} 
+        </if>
+        <if test="pinyinsuoxie != null and pinyinsuoxie != ''">
+            and PINYINSUOXIE  =  #{pinyinsuoxie,jdbcType=VARCHAR} 
+        </if>
+        <if test="cpcode != null and cpcode != ''">
+            and CPCODE  =  #{cpcode,jdbcType=VARCHAR} 
+        </if>
+        <if test="cpname != null and cpname != ''">
+            and CPNAME  = #{cpname,jdbcType=VARCHAR} 
+        </if>
+        <if test="ordercode != null and ordercode != ''">
+            and ORDERCODE  =  #{ordercode,jdbcType=VARCHAR} 
+        </if>
+        <if test="iscollectfees != null and iscollectfees > -1">
+            and  ISCOLLECTFEES  = #{iscollectfees,jdbcType=INTEGER}
+        </if>
+        <if test="originalname != null and originalname != ''">
+            and ORIGINALNAME  = #{originalname,jdbcType=VARCHAR} 
+        </if>
+        <if test="actor != null and actor != ''">
+            and ACTOR =  #{actor,jdbcType=VARCHAR} 
+        </if>
+        <if test="writer != null and writer != ''">
+            and WRITER  =  #{writer,jdbcType=VARCHAR}
+        </if>
+        <if test="orgairdate != null and orgairdate != ''">
+            and ORGAIRDATE  = #{orgairdate,jdbcType=VARCHAR}
+        </if>
+        <if test="price != null and price != ''">
+            and PRICE = #{price,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null and description != ''">
+            and DESCRIPTION = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="contentprovider != null and contentprovider != ''">
+            and CONTENTPROVIDER  = #{contentprovider,jdbcType=VARCHAR}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            and KEYWORD  = #{keyword,jdbcType=VARCHAR}
+        </if>
+        <if test="tag != null and tag != ''">
+            and TAG  = #{tag,jdbcType=VARCHAR}
+        </if>
+        <if test="viewpoint != null and viewpoint != ''">
+            and VIEWPOINT  = #{viewpoint,jdbcType=VARCHAR}
+        </if>
+        <if test="starlevel != null and starlevel != ''">
+            and STARLEVEL = #{starlevel,jdbcType=VARCHAR}
+        </if>
+        <if test="rating != null and rating != ''">
+            and RATING  = #{rating,jdbcType=VARCHAR}
+        </if>
+        <if test="awards != null and awards != ''">
+            and AWARDS  = #{awards,jdbcType=VARCHAR}
+        </if>
+        <if test="originalcountry != null and originalcountry != ''">
+            and ORIGINALCOUNTRY  = #{originalcountry,jdbcType=VARCHAR}
+        </if>
+        <if test="language != null and language != ''">
+            and LANGUAGE  = #{language,jdbcType=VARCHAR}
+        </if>
+        <if test="releaseyear != null and releaseyear != ''">
+            and RELEASEYEAR  = #{releaseyear,jdbcType=VARCHAR}
+        </if>
+        <if test="duration != null and duration != ''">
+            and DURATION = #{duration,jdbcType=VARCHAR}
+        </if>
+        <if test="channel != null and channel != ''">
+            and CHANNEL  = #{channel,jdbcType=VARCHAR}
+        </if>
+        <if test="enname != null and enname != ''">
+            and ENNAME  = #{enname,jdbcType=VARCHAR}
+        </if>
+        <if test="vname != null and vname != ''">
+            and VNAME = #{vname,jdbcType=VARCHAR}
+        </if>
+        <if test="crbegindate != null and crbegindate != ''">
+            and CRBEGINDATE  = #{crbegindate,jdbcType=VARCHAR}
+        </if>
+        <if test="crenddate != null and crenddate != ''">
+            and CRENDDATE  = #{crenddate,jdbcType=VARCHAR}
+        </if>
+        <if test="copyright != null and copyright != ''">
+            and COPYRIGHT  = #{copyright,jdbcType=VARCHAR}
+        </if>
+        <if test="cpcontentid != null and cpcontentid != ''">
+            and CPCONTENTID  = #{cpcontentid,jdbcType=VARCHAR}
+        </if>
+        <if test="score != null and score > -1">
+            and  SCORE  = #{score,jdbcType=FLOAT}
+        </if>
+        <if test="pictureurl1 != null and pictureurl1 != ''">
+            and PICTUREURL1  = #{pictureurl1,jdbcType=VARCHAR}
+        </if>
+        <if test="pictureurl2 != null and pictureurl2 != ''">
+            and PICTUREURL2  = #{pictureurl2,jdbcType=VARCHAR}
+        </if>
+        <if test="pictureurl3 != null and pictureurl3 != ''">
+            and PICTUREURL3  = #{pictureurl3,jdbcType=VARCHAR}
+        </if>
+        <if test="pictureurl4 != null and pictureurl4 != ''">
+            and PICTUREURL4  = #{pictureurl4,jdbcType=VARCHAR}
+        </if>
+        <if test="pictureurl5 != null and pictureurl5 != ''">
+            and PICTUREURL5  = #{pictureurl5,jdbcType=VARCHAR}
+        </if>
+        <if test="updatetime != null ">
+            and date_format(UPDATETIME,'%Y-%m-%d') = #{updatetime,jdbcType=DATE}
+        </if>
+          <if test="   updatetime1 != null  ">
+           <![CDATA[  and date_format(UPDATETIME,'%Y-%m-%d') >= #{updatetime1,jdbcType=DATE}]]>
+        </if>
+        <if test=" updatetime2!= null   ">
+            <![CDATA[   and date_format(UPDATETIME,'%Y-%m-%d') <= #{updatetime2,jdbcType=DATE}]]>
+        </if>
+    </sql>
+    <sql id="whrClauseEqualMore">
+         
+        <if test="seriescode_ != null">
+        	and SERIESCODE  in
+            <foreach collection="seriescode_" index="index" item="item" open="(" separator="," close=")">
+            	#{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="centralcode_ != null">
+        	and centralcode in
+            <foreach collection="centralcode_" index="index" item="item" open="(" separator="," close=")">
+            	    	#{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+    </sql>
+    <sql id="orderByClause">
+    	<choose>
+        	<when test="sort != null and sort != ''">
+        		order by ${sort} <if test="order != null and order != ''">${order}</if>
+        	</when>
+        	<when test="offset != null and offset >0">
+        		order by offset asc 
+        	</when>
+        	<otherwise>
+        		order by  offset desc
+        	</otherwise>
+        </choose>
+    </sql>
+    <!--SElECT查询语句-->
+    <select id="count" parameterType="Map" resultType="java.lang.Integer">
+        select count(1)
+        from  VOD_ALBUMINFO  
+        where 1=1
+        <include refid="whrClauseLike" />
+        <include refid="whrClauseEqual" />
+        <include refid="whrClauseEqualMore" />
+    </select>
+    <select id="page" parameterType="Map" resultMap="resultMap">
+        select 
+        <include refid="columns" />
+        from  VOD_ALBUMINFO  
+        where 1=1
+        <include refid="whrClauseLike" />    
+        <include refid="whrClauseEqual" />  
+        <include refid="whrClauseEqualMore" />       
+        <include refid="orderByClause" />
+         limit #{start},#{pageSize}
+    </select>
+    <select id="find" parameterType="Map" resultMap="resultMap">
+        select 
+        <include refid="columns" />
+        from  VOD_ALBUMINFO 
+        where 1=1
+        <include refid="whrClauseLike" />
+        <include refid="whrClauseEqual" />
+        <include refid="whrClauseEqualMore" />  
+        
+        <include refid="orderByClause" />
+         limit #{start},#{pageSize}
+    </select>
+    <select id="generatePosition" parameterType="Map" resultType="java.lang.Integer">
+        select case when max(POSITION) is not null then max(POSITION) + 10 else 10 end as POSITION
+        from  VOD_ALBUMINFO  
+        where 1=1
+        <include refid="whrClauseEqual" />
+        <include refid="whrClauseEqualMore" />
+    </select>
+    <select id="load" parameterType="Map" resultMap="resultMap">
+        select 
+        <include refid="columns" />
+        from  VOD_ALBUMINFO  
+        where 1=1
+        <if test="seriescode != null and seriescode != ''">
+            and SERIESCODE  =  #{seriescode,jdbcType=VARCHAR} 
+        </if>
+        <if test="cpcode != null and cpcode != ''">
+            and CPCODE  =  #{cpcode,jdbcType=VARCHAR} 
+        </if>
+        <if test="cpname != null and cpname != ''">
+            and CPNAME  = #{cpname,jdbcType=VARCHAR} 
+        </if>
+        <if test="centralcode != null and centralcode != ''">
+            and centralcode  =  #{centralcode,jdbcType=VARCHAR} 
+        </if>
+    </select>
+    <!--INSERT/UPDATE/DELETE 执行语句-->
+    <insert id="insert" parameterType="com.pbtd.playclick.integrate.domain.VodAlbuminfo">
+        insert into 
+        VOD_ALBUMINFO 
+        (
+        SERIESNAME,
+        SERIESCODE,
+        VOLUMNCOUNT,
+        CURRENTNUM,
+        PINYIN,
+        PINYINSUOXIE,
+        CPCODE,
+        CPNAME,
+        ORDERCODE,
+        ISCOLLECTFEES,
+        ORIGINALNAME,
+        ACTOR,
+        WRITER,
+        ACTORNAME,
+        WRITERNAME,
+        ORGAIRDATE,
+        PRICE,
+        DESCRIPTION,
+        CONTENTPROVIDER,
+        KEYWORD,
+        TAG,
+        VIEWPOINT,
+        STARLEVEL,
+        RATING,
+        AWARDS,
+        ORIGINALCOUNTRY,
+        LANGUAGE,
+        RELEASEYEAR,
+        DURATION,
+        CHANNEL,
+        CHANNELNAME,
+        LABEL,
+        LABELNAME,
+        ENNAME,
+        VNAME,
+        DEFINITION,
+        COPYRIGHTPROPERTY,
+        CRBEGINDATE,
+        CRENDDATE,
+        COPYRIGHT,
+        CPCONTENTID,
+        SCORE,
+        PICTUREURL1,
+        PICTUREURL2,
+        PICTUREURL3,
+        PICTUREURL4,
+        PICTUREURL5,
+        UPDATETIME,cpCodelist,offset
+        )
+        values 
+        (
+        #{seriesname,jdbcType=VARCHAR},
+        #{seriescode,jdbcType=VARCHAR},
+        #{volumncount,jdbcType=INTEGER},
+        #{currentnum,jdbcType=INTEGER},
+        #{pinyin,jdbcType=VARCHAR},
+        #{pinyinsuoxie,jdbcType=VARCHAR},
+        #{cpcode,jdbcType=VARCHAR},
+        #{cpname,jdbcType=VARCHAR},
+        #{ordercode,jdbcType=VARCHAR},
+        #{iscollectfees,jdbcType=INTEGER},
+        #{originalname,jdbcType=VARCHAR},
+        #{actor,jdbcType=VARCHAR},
+        #{writer,jdbcType=VARCHAR},
+        #{actorname,jdbcType=VARCHAR},
+        #{writername,jdbcType=VARCHAR},
+        #{orgairdate,jdbcType=VARCHAR},
+        #{price,jdbcType=VARCHAR},
+        #{description,jdbcType=VARCHAR},
+        #{contentprovider,jdbcType=VARCHAR},
+        #{keyword,jdbcType=VARCHAR},
+        #{tag,jdbcType=VARCHAR},
+        #{viewpoint,jdbcType=VARCHAR},
+        #{starlevel,jdbcType=VARCHAR},
+        #{rating,jdbcType=VARCHAR},
+        #{awards,jdbcType=VARCHAR},
+        #{originalcountry,jdbcType=VARCHAR},
+        #{language,jdbcType=VARCHAR},
+        #{releaseyear,jdbcType=VARCHAR},
+        #{duration,jdbcType=VARCHAR},
+        #{channel,jdbcType=VARCHAR},
+        #{channelname,jdbcType=VARCHAR},
+        #{label,jdbcType=VARCHAR},
+        #{labelname,jdbcType=VARCHAR},
+        #{enname,jdbcType=VARCHAR},
+        #{vname,jdbcType=VARCHAR},
+        #{definition,jdbcType=VARCHAR},
+        #{copyrightproperty,jdbcType=INTEGER},
+        #{crbegindate,jdbcType=VARCHAR},
+        #{crenddate,jdbcType=VARCHAR},
+        #{copyright,jdbcType=VARCHAR},
+        #{cpcontentid,jdbcType=VARCHAR},
+        #{score,jdbcType=FLOAT},
+        #{pictureurl1,jdbcType=VARCHAR},
+        #{pictureurl2,jdbcType=VARCHAR},
+        #{pictureurl3,jdbcType=VARCHAR},
+        #{pictureurl4,jdbcType=VARCHAR},
+        #{cpCodelist,jdbcType=VARCHAR},
+       now(),
+        #{cpCodelist,jdbcType=VARCHAR},nextval('seq_vod_album') 
+        )
+    </insert>
+    <update id="update" parameterType="com.pbtd.playclick.integrate.domain.VodAlbuminfo">
+        update VOD_ALBUMINFO
+        <set>
+	        offset=nextval('seq_vod_album') ,
+	        <if test="seriesname != null">
+	        	SERIESNAME=#{seriesname,jdbcType=VARCHAR},
+	        </if>
+	        <if test="seriescode != null">
+	        	SERIESCODE=#{seriescode,jdbcType=VARCHAR},
+	        </if>
+	        <if test="volumncount != null">
+	        	VOLUMNCOUNT=#{volumncount,jdbcType=INTEGER},
+	        </if>
+	        <if test="currentnum != null">
+	        	CURRENTNUM=#{currentnum,jdbcType=INTEGER},
+	        </if>
+	        <if test="pinyin != null">
+	        	PINYIN=#{pinyin,jdbcType=VARCHAR},
+	        </if>
+	        <if test="pinyinsuoxie != null">
+	        	PINYINSUOXIE=#{pinyinsuoxie,jdbcType=VARCHAR},
+	        </if>
+	        <if test="cpcode != null">
+	        	CPCODE=#{cpcode,jdbcType=VARCHAR},
+	        </if>
+	        <if test="cpname != null">
+	        	CPNAME=#{cpname,jdbcType=VARCHAR},
+	        </if>
+	        <if test="ordercode != null">
+	        	ORDERCODE=#{ordercode,jdbcType=VARCHAR},
+	        </if>
+	        <if test="iscollectfees != null">
+	        	ISCOLLECTFEES=#{iscollectfees,jdbcType=INTEGER},
+	        </if>
+	        <if test="originalname != null">
+	        	ORIGINALNAME=#{originalname,jdbcType=VARCHAR},
+	        </if>
+	        <if test="actor != null">
+	        	ACTOR=#{actor,jdbcType=VARCHAR},
+	        </if>
+	        <if test="writer != null">
+	        	WRITER=#{writer,jdbcType=VARCHAR},
+	        </if>
+	        <if test="actorname != null">
+	        	ACTORNAME=#{actorname,jdbcType=VARCHAR},
+	        </if>
+	        <if test="writername != null">
+	        	WRITERNAME=#{writername,jdbcType=VARCHAR},
+	        </if>
+	        <if test="orgairdate != null">
+	        	ORGAIRDATE=#{orgairdate,jdbcType=VARCHAR},
+	        </if>
+	        <if test="price != null">
+	        	PRICE=#{price,jdbcType=VARCHAR},
+	        </if>
+	        <if test="description != null">
+	        	DESCRIPTION=#{description,jdbcType=VARCHAR},
+	        </if>
+	        <if test="contentprovider != null">
+	        	CONTENTPROVIDER=#{contentprovider,jdbcType=VARCHAR},
+	        </if>
+	        <if test="keyword != null">
+	        	KEYWORD=#{keyword,jdbcType=VARCHAR},
+	        </if>
+	        <if test="tag != null">
+	        	TAG=#{tag,jdbcType=VARCHAR},
+	        </if>
+	        <if test="viewpoint != null">
+	        	VIEWPOINT=#{viewpoint,jdbcType=VARCHAR},
+	        </if>
+	        <if test="starlevel != null">
+	        	STARLEVEL=#{starlevel,jdbcType=VARCHAR},
+	        </if>
+	        <if test="rating != null">
+	        	RATING=#{rating,jdbcType=VARCHAR},
+	        </if>
+	        <if test="awards != null">
+	        	AWARDS=#{awards,jdbcType=VARCHAR},
+	        </if>
+	        <if test="originalcountry != null">
+	        	ORIGINALCOUNTRY=#{originalcountry,jdbcType=VARCHAR},
+	        </if>
+	        <if test="language != null">
+	        	LANGUAGE=#{language,jdbcType=VARCHAR},
+	        </if>
+	        <if test="releaseyear != null">
+	        	RELEASEYEAR=#{releaseyear,jdbcType=VARCHAR},
+	        </if>
+	        <if test="duration != null">
+	        	DURATION=#{duration,jdbcType=VARCHAR},
+	        </if>
+	        <if test="channel != null">
+	        	CHANNEL=#{channel,jdbcType=VARCHAR},
+	        </if>
+	        <if test="channelname != null">
+	        	CHANNELNAME=#{channelname,jdbcType=VARCHAR},
+	        </if>
+	        <if test="label != null">
+	        	LABEL=#{label,jdbcType=VARCHAR},
+	        </if>
+	        <if test="labelname != null">
+	        	LABELNAME=#{labelname,jdbcType=VARCHAR},
+	        </if>
+	        <if test="enname != null">
+	        	ENNAME=#{enname,jdbcType=VARCHAR},
+	        </if>
+	        <if test="vname != null">
+	        	VNAME=#{vname,jdbcType=VARCHAR},
+	        </if>
+	        <if test="definition != null">
+	        	DEFINITION=#{definition,jdbcType=VARCHAR},
+	        </if>
+	        <if test="copyrightproperty != null">
+	        	COPYRIGHTPROPERTY=#{copyrightproperty,jdbcType=INTEGER},
+	        </if>
+	        <if test="crbegindate != null">
+	        	CRBEGINDATE=#{crbegindate,jdbcType=VARCHAR},
+	        </if>
+	        <if test="crenddate != null">
+	        	CRENDDATE=#{crenddate,jdbcType=VARCHAR},
+	        </if>
+	        <if test="copyright != null">
+	        	COPYRIGHT=#{copyright,jdbcType=VARCHAR},
+	        </if>
+	        <if test="cpcontentid != null">
+	        	CPCONTENTID=#{cpcontentid,jdbcType=VARCHAR},
+	        </if>
+	        <if test="score != null">
+	        	SCORE=#{score,jdbcType=FLOAT},
+	        </if>
+	        <if test="pictureurl1 != null">
+	        	PICTUREURL1=#{pictureurl1,jdbcType=VARCHAR},
+	        </if>
+	        <if test="pictureurl2 != null">
+	        	PICTUREURL2=#{pictureurl2,jdbcType=VARCHAR},
+	        </if>
+	        <if test="pictureurl3 != null">
+	        	PICTUREURL3=#{pictureurl3,jdbcType=VARCHAR},
+	        </if>
+	        <if test="pictureurl4 != null">
+	        	PICTUREURL4=#{pictureurl4,jdbcType=VARCHAR},
+	        </if>
+	        <if test="pictureurl5 != null">
+	        	PICTUREURL5=#{pictureurl5,jdbcType=VARCHAR},
+	        </if>
+	        <if test="updatetime != null">
+	        	UPDATETIME=#{updatetime,jdbcType=DATE},
+	        </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <delete id="deletes" parameterType="Map" >
+        delete from VOD_ALBUMINFO
+        where 1=1
+        <include refid="whrClauseEqual" />
+        <include refid="whrClauseEqualMore" />
+    </delete>
+    
+     <!-- 剧集 Start -->
+    <select id="countAlbumsinfovideo" parameterType="Map" resultType="java.lang.Integer">
+   select count(1)
+     from vod_albuminfovideo
+    where centralcode is not null
+	  	   <if test="seriescode_ != null and seriescode_ !='' ">
+	        	and seriesCode  in
+	            <foreach collection="seriescode_" index="index" item="item" open="(" separator="," close=")">
+	            	#{item,jdbcType=VARCHAR}
+	            </foreach>
+	        </if>
+	        <if test="centralcode_ != null">
+        	and centralcode in
+            <foreach collection="centralcode_" index="index" item="item" open="(" separator="," close=")">
+            	    	#{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        
+            <if test="offset != null and offset>0">
+	            and offset>=#{offset,jdbcType=INTEGER}
+	        </if>
+	        <if test="drama !=null">
+				and drama=#{drama,jdbcType=VARCHAR}
+			</if>
+			 <if test="dramaname != null and dramaname != ''">
+	            and dramaname like '%${dramaname}%'  
+	        </if>
+			<if test="seriesCode !=null and seriesCode!=''">
+				and seriesCode=#{seriesCode,jdbcType=VARCHAR}
+			</if>
+			<if test="centralcode !=null and centralcode !=''">
+				and centralcode=#{centralcode,jdbcType=VARCHAR}
+			</if>
+			<if test="id !=null and id>0">
+				and id=#{id,jdbcType=INTEGER}
+			</if>
+			<if test="currtime !=null and currtime !='' ">
+				and date_format(UPDATETIME,'%Y-%m-%d') =date_format(now(),'%Y-%m-%d') 
+			</if>
+			 
+    </select>
+    
+     <select id="findAlbumsinfovideo" parameterType="Map" resultType="Map">
+   select id,
+ version,resolution,definition,SourceType,type,movieUrl,
+		seriesCode,drama,dramaname,dramaviewPoint,fileurl,pic,title,duration,updatetime,dramasequence,
+		dramacode,isPositive isShow,centralcode,isCollectfees,bz cpvideoId,isPositive,offset
+     from vod_albuminfovideo
+    where  centralcode is not null
+	  	   <if test="seriescode_ != null and seriescode_ !='' ">
+	        	and seriesCode  in
+	            <foreach collection="seriescode_" index="index" item="item" open="(" separator="," close=")">
+	            	#{item,jdbcType=VARCHAR}
+	            </foreach>
+	        </if>
+	          <if test="centralcode_ != null">
+        	and centralcode in
+            <foreach collection="centralcode_" index="index" item="item" open="(" separator="," close=")">
+            	   #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+			<if test="seriesCode !=null">
+				and seriesCode=#{seriesCode,jdbcType=VARCHAR}
+			</if>
+			<if test="centralcode !=null and centralcode !=''">
+				and centralcode=#{centralcode,jdbcType=VARCHAR}
+			</if>
+			 <if test="offset != null and offset>0">
+	            and offset>=#{offset,jdbcType=INTEGER}
+	        </if>
+			<if test="id !=null and id>0">
+				and id=#{id,jdbcType=INTEGER}
+			</if>
+			 <if test="dramaname != null and dramaname != ''">
+	            and dramaname like '%${dramaname}%'  
+	        </if>
+			 <if test="drama !=null">
+				and drama=#{drama,jdbcType=VARCHAR}
+			</if>
+			<if test="currtime !=null and currtime !='' ">
+				and date_format(UPDATETIME,'%Y-%m-%d') =date_format(now(),'%Y-%m-%d') 
+			</if>
+        	<choose>
+	        	<when test="offset != null and offset >0">
+	        		order  by CAST(offset as SIGNED)   asc 
+	        	</when>
+	        	<otherwise>
+	        		order by  CAST(offset as SIGNED) desc 
+	        	</otherwise>
+        	</choose>
+ 	<if test="start !=null   ">
+		  limit #{start},#{pageSize}
+	</if> 
+    </select>
+    
+    
+     <insert id="insertvideo" parameterType="Map">
+        insert into 
+        vod_albuminfovideo( version,resolution,definition,SourceType,type,movieUrl,
+		seriesCode,drama,dramaname,dramaviewPoint,fileurl,pic,title,duration,updatetime,
+		dramasequence,dramacode,centralcode,offset,bz) 
+       values(
+        #{version,jdbcType=VARCHAR},
+         #{resolution,jdbcType=VARCHAR},
+          #{definition,jdbcType=VARCHAR},
+           #{SourceType,jdbcType=VARCHAR},
+            #{type,jdbcType=VARCHAR},
+             #{movieUrl,jdbcType=VARCHAR},
+              #{seriesCode,jdbcType=VARCHAR},
+               #{drama,jdbcType=VARCHAR},
+                #{dramaname,jdbcType=VARCHAR},
+                 #{dramaviewPoint,jdbcType=VARCHAR},
+                  #{fileurl,jdbcType=VARCHAR},
+                   #{pic,jdbcType=VARCHAR},
+                   #{title,jdbcType=VARCHAR},
+                   #{duration,jdbcType=VARCHAR},now(),
+                    #{dramasequence,jdbcType=VARCHAR},
+                  CONCAT(unix_timestamp(now()),cast( floor(rand()*100000) as SIGNED) ),
+                  #{centralcode,jdbcType=VARCHAR},nextval('seq_vod_albumvideo'),
+                  #{bz,jdbcType=VARCHAR}
+       )
+        </insert>
+        
+         <delete id="deletesvideo" parameterType="Map" >
+        delete from vod_albuminfovideo
+        where 1=1
+         <if test="id_ != null and id_ !='' ">
+	        	and id  in
+	            <foreach collection="id_" index="index" item="item" open="(" separator="," close=")">
+	            	#{item,jdbcType=VARCHAR}
+	            </foreach>
+	        </if>
+	        <if test="id !=null">
+				and id in (${id})
+			</if> 
+    </delete>
+        <!-- 剧集 end -->
+     <update id="updateissue" parameterType="com.pbtd.playclick.integrate.domain.VodAlbuminfo">
+        update VOD_ALBUMINFO
+        set issuetime=now(),issue=1
+	     where 1=1
+	     <include refid="whrClauseLike" />
+        <include refid="whrClauseEqual" />
+        <include refid="whrClauseEqualMore" />  
+	  </update>
+	    <select id="loadvodalbum" parameterType="Map" resultType="java.lang.Integer">
+		select count(1) from vod_albuminfo where 1=1
+		 <if test="seriescode !=null and seriescode!=''">
+				and seriescode=#{seriescode,jdbcType=VARCHAR} 
+			</if>
+		 <if test="cpcode !=null and cpcode!=''">
+				and cpcode=#{cpcode,jdbcType=VARCHAR} 
+			</if>
+			<if test="id != null and id != ''">
+            and SERIESCODE  =  #{id,jdbcType=VARCHAR} 
+        </if>
+        <if test="cp != null and cp != ''">
+            and CPCODE  =  #{cp,jdbcType=VARCHAR} 
+        </if>
+	</select>
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.inject.mapper.InjectPriorityMapper">
+	
+	<resultMap id="resultMap" type="com.pbtd.manager.inject.phone.domain.InjectPriority">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="priority" property="priority" jdbcType="INTEGER" />
+		<result column="channel_id" property="channel_id" jdbcType="INTEGER" />
+		<result column="updatetime" property="update_time" jdbcType="DATE" />
+		<result column="channel_name" property="channel_name" jdbcType="VARCHAR" />
+		<result column="modifier" property="modifier" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="columns">
+		id,channel_id,channel_name,priority,updatetime,modifier
+	</sql>
+	
+	<!-- 模糊查询 -->
+	<sql id="whrClauseLike">
+		<if test="id != null and id > -1">
+			and id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="channelName != null and channelName != ''">
+			and channelName like '%${channelName}%'
+		</if>
+		<if test="create_user != null and create_user != ''">
+			and create_user like '%${create_user}%'
+		</if>
+		<if test="update_user != null and update_user != ''">
+			and update_user like '%${update_user}%'
+		</if>
+	</sql>
+	
+	<sql id="whrClauseLikeMore">
+		<if test="id_ != null">
+			and ID in
+			<foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=INTEGER}
+			</foreach>
+		</if>
+	</sql>
+	
+	<!-- 精确查询 -->
+	<sql id="whrClauseEqual">
+		<if test="id != null and id > -1">
+			and ID = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="levels != null and levels > -1">
+			and levels = #{levels,jdbcType=INTEGER}
+		</if>
+		<if test="channelCode != null and channelCode > -1">
+			and channelCode = #{channelCode,jdbcType=INTEGER}
+		</if>
+
+		<if test="parentCode != null and parentCode > -1">
+			and parentCode = #{parentCode,jdbcType=INTEGER}
+		</if>
+		<if test="status != null and status > -1">
+			and status = #{status,jdbcType=INTEGER}
+		</if>
+		<if test="navigationtype != null and navigationtype > -1">
+			and navigationtype = #{navigationtype,jdbcType=INTEGER}
+		</if>
+		<if test="create_time != null and create_time != '' ">
+			and date_format(create_time,'%Y-%m-%d') =
+			#{create_time,jdbcType=DATE}
+		</if>
+		<if test="update_time != null and update_time != '' ">
+			and date_format(update_time,'%Y-%m-%d') =
+			#{update_time,jdbcType=DATE}
+		</if>
+	</sql>
+	
+	<sql id="whrClauseEqualMore">
+		<if test="id_ != null">
+			and ID in
+			<foreach collection="id_" index="index" item="item" open="("
+				separator="," close=")">
+				#{item,jdbcType=INTEGER}
+			</foreach>
+		</if>
+	</sql>
+	
+	<sql id="orderByClause">
+		<choose>
+			<when test="sort != null and sort != ''">
+				order by ${sort}
+				<if test="order != null and order != ''">${order}</if>
+			</when>
+			<otherwise>
+				order by parentCode,sequence
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<!--SElECT查询语句 -->
+	<select id="count" parameterType="Map" resultType="java.lang.Integer">
+		select count(ID)
+		from inject_phone_channelpriority
+		where 1=1
+		<!-- <include refid="whrClauseLike" /> <include refid="whrClauseEqual" 
+			/> <include refid="whrClauseLikeMore" /> -->
+	</select>
+	
+	<select id="find" parameterType="Map" resultMap="resultMap">
+		select
+		<include refid="columns"></include>
+		from
+		inject_phone_channelpriority
+	</select>
+	
+	<select id="load" parameterType="java.lang.Integer"
+		resultType="com.pbtd.manager.inject.phone.domain.InjectPriority">
+		select
+		<include refid="columns"></include>
+		from inject_phone_channelpriority
+		where id = #{id,jdbcType= INTEGER}
+	</select>
+	
+	<resultMap type="java.util.HashMap" id="BaseMap">
+		<result property="channel_name" column="channelName" />
+	</resultMap>
+	
+	<select id="getChannelNameMap" parameterType="Map" resultMap="BaseMap">
+		select a.channelName,a.channelCode from vod_phone_channel a
+		where 1=1
+		and a.channelName
+		not in (select channel_name from inject_phone_channelpriority)
+	</select>
+	
+	<select id="getOneChannelname" parameterType="java.lang.Integer"
+		resultType="Map">
+		select channel_name,channel_id
+		from inject_phone_channelpriority
+		where id = #{id,jdbcType = INTEGER}
+	</select>
+	
+	<select id="getChannelName" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		select channel_name as channelNamelist
+		from inject_phone_channelpriority
+		where id = #{id,jdbcType = INTEGER}
+	</select>
+	
+	<select id="getIdBychannelName" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		select id 
+		from vod_tv_channel
+		where 1=1 
+		and
+		channelName = #{channel_name,jdbcType = VARCHAR}
+	</select>
+	
+	<!--INSERT/UPDATE/DELETE 执行语句 -->
+	<update id="updatePro" parameterType="com.pbtd.manager.inject.phone.domain.InjectPriority">
+		update inject_phone_channelpriority
+		<set>
+			updatetime = now(),
+			<if test="priority != null">
+				priority = #{priority
+				,jdbcType=INTEGER},
+			</if>
+			<if test="modifier != null">
+				modifier = #{modifier
+				,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	 <insert id="insertPriority" parameterType="Map">
+        insert into 
+        inject_phone_channelpriority 
+        (
+     		channel_id,priority,updatetime,channel_name	, modifier
+        )
+        values 
+        (
+        #{channel_id,jdbcType=INTEGER},
+        #{priority,jdbcType=INTEGER},
+        now(),
+        #{channel_name,jdbcType=VARCHAR},
+        #{modifier,jdbcType=VARCHAR}
+        )
+    </insert>
+    
+	 <delete id="deletes" parameterType="Map" >
+        delete from inject_phone_channelpriority
+        where 1=1
+        <include refid="whrClauseLike" />
+        <include refid="whrClauseEqual" />
+		<include refid="whrClauseLikeMore" />
+    </delete>
+    
+</mapper>

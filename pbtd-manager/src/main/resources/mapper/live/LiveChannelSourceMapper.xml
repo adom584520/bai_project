@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LiveChannelSourceMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.manager.live.domain.LiveChannelSource" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cpEpgId" property="cpepgid" jdbcType="INTEGER" />
+    <result column="packageId" property="packageid" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="isSave" property="issave" jdbcType="TINYINT" />
+    <result column="startTime" property="starttime" jdbcType="BIGINT" />
+    <result column="endTime" property="endtime" jdbcType="BIGINT" />
+    <result column="tag" property="tag" jdbcType="VARCHAR" />
+    <result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+    <result column="chnName" property="chnname" jdbcType="VARCHAR" />
+    <result column="isModified" property="ismodified" jdbcType="TINYINT" />
+    <result column="playOrder" property="playorder" jdbcType="INTEGER" />
+    <result column="playUrl" property="playurl" jdbcType="VARCHAR" />
+    <result column="backPlayUrl" property="backplayurl" jdbcType="VARCHAR" />
+    <result column="epgPoster" property="epgposter" jdbcType="VARCHAR" />
+    <result column="backPoster" property="backposter" jdbcType="VARCHAR" />
+    <result column="epgStatus" property="epgstatus" jdbcType="TINYINT" />
+    <result column="createTime" property="createtime" jdbcType="BIGINT" />
+    <result column="updateTime" property="updatetime" jdbcType="BIGINT" />
+    <result column="packageName" property="packagename" jdbcType="VARCHAR" />
+    <result column="packageCode" property="packagecode" jdbcType="VARCHAR" />
+    <result column="packageCover" property="packagecover" jdbcType="VARCHAR" />
+    <result column="chnImage" property="chnimage" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, cpEpgId, packageId, title, isSave, startTime, endTime, tag, chnCode, chnName, 
+    isModified, playOrder, playUrl, backPlayUrl, epgPoster, backPoster, epgStatus, createTime, 
+    updateTime, packageName, packageCode, packageCover, chnImage
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from live_channel_source
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from live_channel_source
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pbtd.manager.live.domain.LiveChannelSource" >
+    insert into live_channel_source (id, cpEpgId, packageId, 
+      title, isSave, startTime, 
+      endTime, tag, chnCode, 
+      chnName, isModified, playOrder, 
+      playUrl, backPlayUrl, epgPoster, 
+      backPoster, epgStatus, createTime, 
+      updateTime, packageName, packageCode, 
+      packageCover, chnImage)
+    values (#{id,jdbcType=INTEGER}, #{cpepgid,jdbcType=INTEGER}, #{packageid,jdbcType=INTEGER}, 
+      #{title,jdbcType=VARCHAR}, #{issave,jdbcType=TINYINT}, #{starttime,jdbcType=BIGINT}, 
+      #{endtime,jdbcType=BIGINT}, #{tag,jdbcType=VARCHAR}, #{chncode,jdbcType=VARCHAR}, 
+      #{chnname,jdbcType=VARCHAR}, #{ismodified,jdbcType=TINYINT}, #{playorder,jdbcType=INTEGER}, 
+      #{playurl,jdbcType=VARCHAR}, #{backplayurl,jdbcType=VARCHAR}, #{epgposter,jdbcType=VARCHAR}, 
+      #{backposter,jdbcType=VARCHAR}, #{epgstatus,jdbcType=TINYINT}, #{createtime,jdbcType=BIGINT}, 
+      #{updatetime,jdbcType=BIGINT}, #{packagename,jdbcType=VARCHAR}, #{packagecode,jdbcType=VARCHAR}, 
+      #{packagecover,jdbcType=VARCHAR}, #{chnimage,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pbtd.manager.live.domain.LiveChannelSource" >
+    insert into live_channel_source
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="cpepgid != null" >
+        cpEpgId,
+      </if>
+      <if test="packageid != null" >
+        packageId,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="issave != null" >
+        isSave,
+      </if>
+      <if test="starttime != null" >
+        startTime,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+      <if test="tag != null" >
+        tag,
+      </if>
+      <if test="chncode != null" >
+        chnCode,
+      </if>
+      <if test="chnname != null" >
+        chnName,
+      </if>
+      <if test="ismodified != null" >
+        isModified,
+      </if>
+      <if test="playorder != null" >
+        playOrder,
+      </if>
+      <if test="playurl != null" >
+        playUrl,
+      </if>
+      <if test="backplayurl != null" >
+        backPlayUrl,
+      </if>
+      <if test="epgposter != null" >
+        epgPoster,
+      </if>
+      <if test="backposter != null" >
+        backPoster,
+      </if>
+      <if test="epgstatus != null" >
+        epgStatus,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+      <if test="packagename != null" >
+        packageName,
+      </if>
+      <if test="packagecode != null" >
+        packageCode,
+      </if>
+      <if test="packagecover != null" >
+        packageCover,
+      </if>
+      <if test="chnimage != null" >
+        chnImage,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="cpepgid != null" >
+        #{cpepgid,jdbcType=INTEGER},
+      </if>
+      <if test="packageid != null" >
+        #{packageid,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="issave != null" >
+        #{issave,jdbcType=TINYINT},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=BIGINT},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=BIGINT},
+      </if>
+      <if test="tag != null" >
+        #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="chncode != null" >
+        #{chncode,jdbcType=VARCHAR},
+      </if>
+      <if test="chnname != null" >
+        #{chnname,jdbcType=VARCHAR},
+      </if>
+      <if test="ismodified != null" >
+        #{ismodified,jdbcType=TINYINT},
+      </if>
+      <if test="playorder != null" >
+        #{playorder,jdbcType=INTEGER},
+      </if>
+      <if test="playurl != null" >
+        #{playurl,jdbcType=VARCHAR},
+      </if>
+      <if test="backplayurl != null" >
+        #{backplayurl,jdbcType=VARCHAR},
+      </if>
+      <if test="epgposter != null" >
+        #{epgposter,jdbcType=VARCHAR},
+      </if>
+      <if test="backposter != null" >
+        #{backposter,jdbcType=VARCHAR},
+      </if>
+      <if test="epgstatus != null" >
+        #{epgstatus,jdbcType=TINYINT},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=BIGINT},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=BIGINT},
+      </if>
+      <if test="packagename != null" >
+        #{packagename,jdbcType=VARCHAR},
+      </if>
+      <if test="packagecode != null" >
+        #{packagecode,jdbcType=VARCHAR},
+      </if>
+      <if test="packagecover != null" >
+        #{packagecover,jdbcType=VARCHAR},
+      </if>
+      <if test="chnimage != null" >
+        #{chnimage,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.manager.live.domain.LiveChannelSource" >
+    update live_channel_source
+    <set >
+      <if test="cpepgid != null" >
+        cpEpgId = #{cpepgid,jdbcType=INTEGER},
+      </if>
+      <if test="packageid != null" >
+        packageId = #{packageid,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="issave != null" >
+        isSave = #{issave,jdbcType=TINYINT},
+      </if>
+      <if test="starttime != null" >
+        startTime = #{starttime,jdbcType=BIGINT},
+      </if>
+      <if test="endtime != null" >
+        endTime = #{endtime,jdbcType=BIGINT},
+      </if>
+      <if test="tag != null" >
+        tag = #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="chncode != null" >
+        chnCode = #{chncode,jdbcType=VARCHAR},
+      </if>
+      <if test="chnname != null" >
+        chnName = #{chnname,jdbcType=VARCHAR},
+      </if>
+      <if test="ismodified != null" >
+        isModified = #{ismodified,jdbcType=TINYINT},
+      </if>
+      <if test="playorder != null" >
+        playOrder = #{playorder,jdbcType=INTEGER},
+      </if>
+      <if test="playurl != null" >
+        playUrl = #{playurl,jdbcType=VARCHAR},
+      </if>
+      <if test="backplayurl != null" >
+        backPlayUrl = #{backplayurl,jdbcType=VARCHAR},
+      </if>
+      <if test="epgposter != null" >
+        epgPoster = #{epgposter,jdbcType=VARCHAR},
+      </if>
+      <if test="backposter != null" >
+        backPoster = #{backposter,jdbcType=VARCHAR},
+      </if>
+      <if test="epgstatus != null" >
+        epgStatus = #{epgstatus,jdbcType=TINYINT},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=BIGINT},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=BIGINT},
+      </if>
+      <if test="packagename != null" >
+        packageName = #{packagename,jdbcType=VARCHAR},
+      </if>
+      <if test="packagecode != null" >
+        packageCode = #{packagecode,jdbcType=VARCHAR},
+      </if>
+      <if test="packagecover != null" >
+        packageCover = #{packagecover,jdbcType=VARCHAR},
+      </if>
+      <if test="chnimage != null" >
+        chnImage = #{chnimage,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.manager.live.domain.LiveChannelSource" >
+    update live_channel_source
+    set cpEpgId = #{cpepgid,jdbcType=INTEGER},
+      packageId = #{packageid,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      isSave = #{issave,jdbcType=TINYINT},
+      startTime = #{starttime,jdbcType=BIGINT},
+      endTime = #{endtime,jdbcType=BIGINT},
+      tag = #{tag,jdbcType=VARCHAR},
+      chnCode = #{chncode,jdbcType=VARCHAR},
+      chnName = #{chnname,jdbcType=VARCHAR},
+      isModified = #{ismodified,jdbcType=TINYINT},
+      playOrder = #{playorder,jdbcType=INTEGER},
+      playUrl = #{playurl,jdbcType=VARCHAR},
+      backPlayUrl = #{backplayurl,jdbcType=VARCHAR},
+      epgPoster = #{epgposter,jdbcType=VARCHAR},
+      backPoster = #{backposter,jdbcType=VARCHAR},
+      epgStatus = #{epgstatus,jdbcType=TINYINT},
+      createTime = #{createtime,jdbcType=BIGINT},
+      updateTime = #{updatetime,jdbcType=BIGINT},
+      packageName = #{packagename,jdbcType=VARCHAR},
+      packageCode = #{packagecode,jdbcType=VARCHAR},
+      packageCover = #{packagecover,jdbcType=VARCHAR},
+      chnImage = #{chnimage,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.playclick.yinhe.mapper.YhactorsMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playclick.yinhe.domain.YhActors">
+		<id column="code" property="code" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="bz" property="bz" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="actor" property="actor" jdbcType="VARCHAR" />
+		<result column="director" property="director" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		code, name, bz, status, actor, director
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from yh_vod_actors
+		where code = #{code,jdbcType=VARCHAR}
+	</select>
+
+	<insert id="insert" parameterType="com.pbtd.playclick.yinhe.domain.YhActors">
+		insert into yh_vod_actors
+		(code, name, bz,
+		status, actor, director
+		)
+		values
+		(#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+		#{bz,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{actor,jdbcType=VARCHAR}, #{director,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="insertSelective" parameterType="com.pbtd.playclick.yinhe.domain.YhActors">
+		insert into yh_vod_actors
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="code != null">
+				code,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="bz != null">
+				bz,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="actor != null">
+				actor,
+			</if>
+			<if test="director != null">
+				director,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="bz != null">
+				#{bz,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="actor != null">
+				#{actor,jdbcType=VARCHAR},
+			</if>
+			<if test="director != null">
+				#{director,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playclick.yinhe.domain.YhActors">
+		update yh_vod_actors
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="bz != null">
+				bz = #{bz,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="actor != null">
+				actor = #{actor,jdbcType=VARCHAR},
+			</if>
+			<if test="director != null">
+				director = #{director,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where code = #{code,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.pbtd.playclick.yinhe.domain.YhActors">
+		update
+		yh_vod_actors
+		set name = #{name,jdbcType=VARCHAR},
+		bz =
+		#{bz,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR},
+		actor =
+		#{actor,jdbcType=VARCHAR},
+		director = #{director,jdbcType=VARCHAR}
+		where code = #{code,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateActor">
+		update
+		yh_vod_actors
+		set actor = #{actor,jdbcType=VARCHAR}
+		where code =
+		#{code,jdbcType=VARCHAR}
+	</update>
+	<update id="updateDirector">
+		update
+		yh_vod_actors
+		set director =
+		#{director,jdbcType=VARCHAR}
+		where code = #{code,jdbcType=VARCHAR}
+	</update>
+
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		yh_vod_actors where code=#{code,jdbcType=INTEGER}
+	</delete>
+
+	<select id="find" parameterType="Map"
+		resultType="com.pbtd.playclick.yinhe.domain.YhActors">
+		select `code`,name,bz,actor,director,`status`,
+		if(actor='1','是','否')
+		actor ,if(director='1','是','否') director
+		from yh_vod_actors
+		<where>
+			<if test="name!=null and name!='' ">
+				and name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="code!=null and code!='' ">
+				and code=#{code,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by code
+	</select>
+
+</mapper>

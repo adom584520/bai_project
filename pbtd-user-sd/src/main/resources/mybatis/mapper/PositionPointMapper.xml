@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.PositionPointMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.playuser.domain.PositionPoint" >
+    	<id column="id" property="id"/>
+        <result column="pos" property="pos"/>
+        <result column="code" property="code"/>
+        <result column="type" property="type"/>
+        <result column="channel" property="channel"/>
+        <result column="userid" property="userId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+    
+    <sql id="columns">
+    	id,pos,code,type,channel,userid,create_time
+    </sql>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    	insert into position_point
+    	(pos,code,type,channel,userid,create_time)
+    	values(#{pos},#{code},#{type},#{channel},#{userId},#{createTime})
+    </insert>
+</mapper>

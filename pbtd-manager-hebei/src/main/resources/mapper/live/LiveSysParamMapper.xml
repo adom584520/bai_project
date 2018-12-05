@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.live.mapper.LiveSysParamMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.manager.live.domain.LiveSysParam" >
+    <id column="paramId" property="paramid" jdbcType="INTEGER" />
+    <result column="paramName" property="paramname" jdbcType="VARCHAR" />
+    <result column="paramCnName" property="paramcnname" jdbcType="VARCHAR" />
+    <result column="paramValue" property="paramvalue" jdbcType="VARCHAR" />
+    <result column="paramValueadd" property="paramvalueadd" jdbcType="VARCHAR" />
+    <result column="paramStatus" property="paramstatus" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    paramId, paramName, paramCnName, paramValue, paramValueadd, paramStatus, createTime, 
+    updateTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from live_sys_param
+    where paramId = #{paramid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from live_sys_param
+    where paramId = #{paramid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pbtd.manager.live.domain.LiveSysParam" >
+    insert into live_sys_param (paramId, paramName, paramCnName, 
+      paramValue, paramValueadd, paramStatus, 
+      createTime, updateTime, Column_9, 
+      Column_10)
+    values (#{paramid,jdbcType=INTEGER}, #{paramname,jdbcType=VARCHAR}, #{paramcnname,jdbcType=VARCHAR}, 
+      #{paramvalue,jdbcType=VARCHAR}, #{paramvalueadd,jdbcType=VARCHAR}, #{paramstatus,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
+  </insert>
+  <insert id="insertSelective" parameterType="com.pbtd.manager.live.domain.LiveSysParam" >
+    insert into live_sys_param
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="paramid != null" >
+        paramId,
+      </if>
+      <if test="paramname != null" >
+        paramName,
+      </if>
+      <if test="paramcnname != null" >
+        paramCnName,
+      </if>
+      <if test="paramvalue != null" >
+        paramValue,
+      </if>
+      <if test="paramvalueadd != null" >
+        paramValueadd,
+      </if>
+      <if test="paramstatus != null" >
+        paramStatus,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+      <if test="column9 != null" >
+        Column_9,
+      </if>
+      <if test="column10 != null" >
+        Column_10,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="paramid != null" >
+        #{paramid,jdbcType=INTEGER},
+      </if>
+      <if test="paramname != null" >
+        #{paramname,jdbcType=VARCHAR},
+      </if>
+      <if test="paramcnname != null" >
+        #{paramcnname,jdbcType=VARCHAR},
+      </if>
+      <if test="paramvalue != null" >
+        #{paramvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="paramvalueadd != null" >
+        #{paramvalueadd,jdbcType=VARCHAR},
+      </if>
+      <if test="paramstatus != null" >
+        #{paramstatus,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="column9 != null" >
+        #{column9,jdbcType=CHAR},
+      </if>
+      <if test="column10 != null" >
+        #{column10,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.manager.live.domain.LiveSysParam" >
+    update live_sys_param
+    <set >
+      <if test="paramname != null" >
+        paramName = #{paramname,jdbcType=VARCHAR},
+      </if>
+      <if test="paramcnname != null" >
+        paramCnName = #{paramcnname,jdbcType=VARCHAR},
+      </if>
+      <if test="paramvalue != null" >
+        paramValue = #{paramvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="paramvalueadd != null" >
+        paramValueadd = #{paramvalueadd,jdbcType=VARCHAR},
+      </if>
+      <if test="paramstatus != null" >
+        paramStatus = #{paramstatus,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="column9 != null" >
+        Column_9 = #{column9,jdbcType=CHAR},
+      </if>
+      <if test="column10 != null" >
+        Column_10 = #{column10,jdbcType=CHAR},
+      </if>
+    </set>
+    where paramId = #{paramid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.manager.live.domain.LiveSysParam" >
+    update live_sys_param
+    set paramName = #{paramname,jdbcType=VARCHAR},
+      paramCnName = #{paramcnname,jdbcType=VARCHAR},
+      paramValue = #{paramvalue,jdbcType=VARCHAR},
+      paramValueadd = #{paramvalueadd,jdbcType=VARCHAR},
+      paramStatus = #{paramstatus,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      Column_9 = #{column9,jdbcType=CHAR},
+      Column_10 = #{column10,jdbcType=CHAR}
+    where paramId = #{paramid,jdbcType=INTEGER}
+  </update>
+</mapper>

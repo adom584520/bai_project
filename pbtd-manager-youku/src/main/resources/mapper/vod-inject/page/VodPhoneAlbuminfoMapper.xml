@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pbtd.manager.inject.page.mapper.InjectPhoneOutPutMapper">
+
+	<!--INSERT/UPDATE/DELETE 执行语句 -->
+	<update id="updatePhoneInject" parameterType="Map">
+		update vod_phone_albuminfovideo
+		<set>
+			isShow=1,
+			<if test="hwdispatchurl != null">
+				hwdispatchurl=#{hwdispatchurl,jdbcType=VARCHAR},
+			</if>
+			<if test="hwversion != null">
+				hwversion=#{hwversion,jdbcType=VARCHAR},
+			</if>
+			<if test="zxdispatchurl != null">
+				zxdispatchurl=#{zxdispatchurl,jdbcType=VARCHAR},
+			</if>
+			<if test="zxversion != null">
+				zxversion=#{zxversion,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where 1=1
+		<if test="id != null and id>-1">
+			and id=#{id,jdbcType=INTEGER}
+		</if>
+	</update>
+
+	<!-- 统计剧集集数 -华为 -->
+	<select id="countHwAlbumsinfovideo" parameterType="Map" resultType="java.lang.Integer">
+		select count(1)
+		FROM
+		vod_phone_albuminfovideo a
+		LEFT JOIN
+		inject_phone_albuminfovideo b ON a.seriesCode = b.seriesCode
+		AND
+		a.drama = b.drama
+		WHERE 1 = 1
+		<if test="seriescode_ != null and seriescode_ !='' ">
+			and a.id in
+			<foreach collection="seriescode_" index="index" item="item"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="drama !=null">
+			and a.drama=#{drama,jdbcType=VARCHAR}
+		</if>
+		<if test="seriesCode !=null">
+			and a.seriesCode=#{seriesCode,jdbcType=INTEGER}
+		</if>
+		<if test="Type !=null">
+			and a.Type=#{Type,jdbcType=VARCHAR}
+		</if>
+		<if test="id !=null and id>0">
+			and a.id=#{id,jdbcType=INTEGER}
+		</if>
+		<if test="create_time !=null and create_time !='' ">
+			and date_format(a.create_time,'%Y-%m-%d') =
+			#{create_time,jdbcType=DATE}
+		</if>
+		and zxfileurl is not null
+	</select>
+
+
+	<!-- 查看剧集list -->
+	<select id="findHwAlbumsinfovideo" parameterType="Map" resultType="java.util.HashMap">
+		select
+		a.id,
+		a.seriesCode,
+		a.drama,
+		a.dramaname,
+		a.Type AS cpseriesCode,
+		a.hwversionlist,
+		a.zxfileurl,
+		DATE_FORMAT(a.create_time,"%Y-%m-%d %H:%i:%s") as
+		createtime ,
+		b.hwInjectState,
+		b.hwPriority
+		FROM
+		vod_phone_albuminfovideo a
+		LEFT JOIN inject_phone_albuminfovideo b ON a.seriesCode = b.seriesCode
+		AND a.drama = b.drama
+		WHERE 1=1
+		<if test="seriescode_ != null and seriescode_ !='' ">
+			and a.id in
+			<foreach collection="seriescode_" index="index" item="item"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="seriesCode !=null">
+			and a.seriesCode=#{seriesCode,jdbcType=VARCHAR}
+		</if>
+		<if test="Type !=null">
+			and a.Type=#{Type,jdbcType=VARCHAR}
+		</if>
+		<if test="id !=null and id>0">
+			and a.id=#{id,jdbcType=INTEGER}
+		</if>
+		<if test="drama !=null">
+			and a.drama=#{drama,jdbcType=VARCHAR}
+		</if>
+		<if test="create_time !=null and create_time !='' ">
+			and date_format(a.create_time,'%Y-%m-%d') =
+			#{create_time,jdbcType=DATE}
+		</if>
+		and zxfileurl is not null
+		order by IFNULL(b.hwPriority,0) DESC,createtime 
+		<if test="start !=null   ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+
+	<!-- 统计剧集集数 -中兴 -->
+	<select id="countZxAlbumsinfovideo" parameterType="Map" resultType="java.lang.Integer">
+		select count(1)
+		FROM
+		vod_phone_albuminfovideo a
+		LEFT JOIN
+		inject_phone_albuminfovideo b ON a.seriesCode = b.seriesCode
+		AND
+		a.drama = b.drama
+		WHERE 1 = 1
+		<if test="seriescode_ != null and seriescode_ !='' ">
+			and a.id in
+			<foreach collection="seriescode_" index="index" item="item"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="drama !=null">
+			and a.drama=#{drama,jdbcType=VARCHAR}
+		</if>
+		<if test="seriesCode !=null">
+			and a.seriesCode=#{seriesCode,jdbcType=INTEGER}
+		</if>
+		<if test="zxInjectState!=null">
+			and b.zxInjectState=#{zxInjectState,jdbcType=INTEGER}
+		</if>
+		<if test="hwInjectState!=null">
+			and b.hwInjectState=#{hwInjectState,jdbcType=INTEGER}
+		</if>
+		<if test="Type !=null">
+			and a.Type=#{Type,jdbcType=VARCHAR}
+		</if>
+		<if test="id !=null and id>0">
+			and a.id=#{id,jdbcType=INTEGER}
+		</if>
+		<if test="create_time !=null and create_time !='' ">
+			and date_format(a.create_time,'%Y-%m-%d') =
+			#{create_time,jdbcType=DATE}
+		</if>
+		and zxfileurl is not null
+	</select>
+
+
+	<!-- 查看剧集list -中兴 -->
+	<select id="findZxAlbumsinfovideo" parameterType="Map" resultType="java.util.HashMap">
+		select
+		a.id,
+		a.seriesCode,
+		a.drama,
+		a.dramaname,
+		a.Type AS cpseriesCode,
+		a.zxversionlist,
+		a.zxfileurl,
+		DATE_FORMAT(a.create_time,"%Y-%m-%d %H:%i:%s") as
+		createtime ,
+		b.zxInjectState,
+		b.zxPriority
+		FROM
+		vod_phone_albuminfovideo a
+		LEFT JOIN inject_phone_albuminfovideo b ON a.seriesCode = b.seriesCode
+		AND a.drama = b.drama
+		WHERE 1=1
+		<if test="seriescode_ != null and seriescode_ !='' ">
+			and a.id in
+			<foreach collection="seriescode_" index="index" item="item"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="seriesCode !=null">
+			and a.seriesCode=#{seriesCode,jdbcType=VARCHAR}
+		</if>
+		<if test="zxInjectState!=null">
+			and b.zxInjectState=#{zxInjectState,jdbcType=INTEGER}
+		</if>
+		<if test="hwInjectState!=null">
+			and b.hwInjectState=#{hwInjectState,jdbcType=INTEGER}
+		</if>
+		<if test="Type !=null">
+			and a.Type=#{Type,jdbcType=VARCHAR}
+		</if>
+		<if test="id !=null and id>0">
+			and a.id=#{id,jdbcType=INTEGER}
+		</if>
+		<if test="drama !=null">
+			and a.drama=#{drama,jdbcType=VARCHAR}
+		</if>
+		<if test="create_time !=null and create_time !='' ">
+			and date_format(a.create_time,'%Y-%m-%d') =
+			#{create_time,jdbcType=DATE}
+		</if>
+		and zxfileurl is not null
+		order by IFNULL(b.zxPriority,0) DESC,createtime 
+		<if test="start !=null   ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 查华为已注入码率 -->
+	<select id="selectHwVersion" resultType="java.lang.String">
+		select
+		a.hwversion
+		FROM
+		vod_phone_albuminfovideo a
+		WHERE a.id=#{id,jdbcType=INTEGER}
+	</select>
+	<!-- 查中兴已注入码率 -->
+	<select id="selectZxVersion" resultType="java.lang.String">
+		select
+		a.zxversion
+		FROM
+		vod_phone_albuminfovideo a
+		WHERE a.id=#{id,jdbcType=INTEGER}
+	</select>
+
+</mapper>

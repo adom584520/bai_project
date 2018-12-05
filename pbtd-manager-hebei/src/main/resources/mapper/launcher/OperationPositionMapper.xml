@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.launcher.mapper.OperationPositionMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.launcher.domain.OperationPosition" >
+        <id column="id" property="id"/>
+        <id column="nav_id" property="navId"/>
+        <id column="group_id" property="groupId"/>
+        <id column="temp_id" property="tempId"/>
+        <result column="operation_name" property="operationName"/>
+        <result column="title_name" property="titleName"/>
+        <result column="title_detail" property="titleDetail"/>
+        <result column="show_title" property="showTitle"/>
+        <result column="play_time" property="playTime"/>
+        <result column="sortpos" property="sortpos"/>
+        <result column="show_type" property="showType"/>
+        <result column="focus" property="focus"/>
+        <result column="top_margin" property="topMargin"/>
+        <result column="left_margin" property="leftMargin"/>
+        <result column="width" property="width"/>
+        <result column="height" property="height"/>
+        <result column="video" property="video"/>
+        <result column="image" property="image"/>
+        <result column="images" property="images"/>
+        <result column="package_name" property="packageName"/>
+        <result column="class_name" property="className"/>
+        <result column="param_key" property="paramKey"/>
+        <result column="param_value" property="paramValue"/>
+        <result column="status" property="status"/>
+        <result column="loginInfo_name" property="loginInfoName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="option_focus" property="optionFocus"/>
+    </resultMap>
+    
+    <sql id="columns">
+    	id,nav_id,group_id,temp_id,operation_name,title_name,title_detail,show_title,play_time,sortpos,show_type,
+    	focus,top_margin,left_margin,width,height,video,image,images,package_name,class_name,param_key,
+    	param_value,status,loginInfo_name,create_time,modify_time,option_focus
+    </sql>
+    
+    <sql id="easyColumns">
+    	id,nav_id,group_id,temp_id,operation_name
+    </sql>
+    
+    <sql id="queryAndlimit">
+    	<where>
+    		and data_status=#{dataStatus}
+    		<if test="navId!=null">
+    			and nav_id = #{navId}
+    		</if>
+    		<if test="tempId!=null">
+    			and temp_id = #{tempId}
+    		</if>
+    	</where>
+    </sql>
+    <select id="queryCount" resultType="long">
+    	select count(*)
+    	from launcher_operation_position
+    	<include refid="queryAndlimit"/>
+    </select>
+    <select id="queryList" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from launcher_operation_position
+    	<include refid="queryAndlimit"/>
+    	order by sortpos asc,id asc
+    	limit #{start},#{pageSize}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    	insert into launcher_operation_position
+    	(nav_id,group_id,temp_id,operation_name,title_name,title_detail,show_title,play_time,sortpos,show_type,
+    	top_margin,left_margin,width,height,video,image,images,package_name,class_name,param_key,
+    	param_value,status,loginInfo_name,create_time,modify_time,focus,data_status,option_focus)
+    	values(#{navId},#{groupId},#{tempId},#{operationName},#{titleName},#{titleDetail},#{showTitle},#{playTime},
+    	#{sortpos},#{showType},#{topMargin},#{leftMargin},#{width},#{height},#{video},
+    	#{image},#{images},#{packageName},#{className},#{paramKey},#{paramValue},#{status},
+    	#{loginInfoName},#{createTime},#{modifyTime},#{focus},#{dataStatus},#{optionFocus})
+    </insert>
+    
+    <update id="update">
+    	update launcher_operation_position
+    	set operation_name=#{operationName},title_name=#{titleName},title_detail=#{titleName},
+    	show_title=#{showTitle},play_time=#{playTime},sortpos=#{sortpos},show_type=#{showType},
+    	top_margin=#{topMargin},left_margin=#{leftMargin},width=#{width},height=#{height},
+    	video=#{video},image=#{image},images=#{images},package_name=#{packageName},class_name=#{className},
+    	param_key=#{paramKey},param_value=#{paramValue},modify_time=#{modifyTime},focus=#{focus},
+    	temp_id=#{tempId},option_focus=#{optionFocus}
+    	where id = #{id}
+    </update>
+    
+    <delete id="delete">
+    	delete from launcher_operation_position
+    	where id = #{id}
+    </delete>
+    
+    <select id="queryByNavIdSortpos" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from launcher_operation_position
+    	where nav_id = #{navId} and sortpos = #{sortpos} and status = #{status}
+    </select>
+    
+    <update id="uplineOrDownLine">
+    	update launcher_operation_position
+    	set status = #{status},modify_time=#{modifyTime}
+    	where id = #{id}
+    </update>
+    
+    <select id="queryById" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from launcher_operation_position
+    	where id = #{id}
+    </select>
+    
+    <delete id="deleteBatch">
+    	delete from launcher_operation_position
+    	where id in 
+    	<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
+    
+    <update id="updateStatusByTempId">
+    	update launcher_operation_position
+    	set status = #{status},modify_time = #{modifyTime}
+    	where temp_id = #{tempId}
+    </update>
+    
+    <update id="updateStatusByNavId">
+    	update launcher_operation_position
+    	set status = #{status},modify_time = #{modifyTime}
+    	where nav_id = #{navId}
+    </update>
+    
+    <select id="queryByTempId" resultMap="baseResultMap">
+    	select <include refid="columns"/>
+    	from launcher_operation_position
+    	where temp_id = #{tempId}
+    </select>
+    
+     <insert id="batchInsert">
+    	insert into launcher_operation_position
+    	(nav_id,group_id,temp_id,operation_name,title_name,title_detail,show_title,play_time,sortpos,show_type,
+    	top_margin,left_margin,width,height,video,image,images,package_name,class_name,param_key,
+    	param_value,status,loginInfo_name,create_time,modify_time,focus,option_focus)
+    	values
+    	<foreach collection="list" index="index" item="op" separator=",">  
+    		(#{op.navId},#{op.groupId},#{op.tempId},#{op.operationName},#{op.titleName},#{op.titleDetail},#{op.showTitle},#{op.playTime},
+	    	#{op.sortpos},#{op.showType},#{op.topMargin},#{op.leftMargin},#{op.width},#{op.height},#{op.video},
+	    	#{op.image},#{op.images},#{op.packageName},#{op.className},#{op.paramKey},#{op.paramValue},#{op.status},
+	    	#{op.loginInfoName},#{op.createTime},#{op.modifyTime},#{op.focus},#{op.optionFocus})
+    	</foreach>
+    </insert>
+    
+    <update id="updateDataStatus">
+    	update launcher_operation_position
+    	set data_status=#{dataStatus}
+    	where temp_id in
+    	<foreach collection="list" index="index" item="tempId" open="(" separator="," close=")">
+    		#{tempId}
+    	</foreach>
+    </update>
+    <update id="updateDataStatusByNavId">
+    	update launcher_operation_position
+    	set data_status=#{dataStatus}
+    	where nav_id in
+    	<foreach collection="list" index="index" item="navId" open="(" separator="," close=")">
+    		#{navId}
+    	</foreach>
+    </update>
+</mapper>

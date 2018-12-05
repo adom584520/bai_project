@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.PushUserMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.manager.domain.PushUser">
+		<id column="pUserId" property="pUserId" jdbcType="VARCHAR" />
+		<id column="tvUserId" property="tvUserId" jdbcType="VARCHAR" />
+		<result column="pSystem" property="pSystem" jdbcType="VARCHAR" />
+		<result column="tvSystem" property="tvSystem" jdbcType="VARCHAR" />
+		<result column="pToken" property="pToken" jdbcType="VARCHAR" />
+		<result column="tvToken" property="tvToken" jdbcType="VARCHAR" />
+		<result column="pProName" property="pProName" jdbcType="VARCHAR" />
+		<result column="tvProName" property="tvProName" jdbcType="VARCHAR" />
+		<result column="pNum" property="pNum" jdbcType="VARCHAR" />
+		<result column="tvMac" property="tvMac" jdbcType="VARCHAR" />
+		<result column="pName" property="pName" jdbcType="VARCHAR" />
+		<result column="tvName" property="tvName" jdbcType="VARCHAR" />
+		<result column="cpId" property="cpId" jdbcType="VARCHAR" />
+		<result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="update_time" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="bz" property="bz" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		pUserId, tvUserId, pSystem, tvSystem, pToken, tvToken, pProName, tvProName,
+		pNum,
+		tvMac, pName, tvName, cpId, create_time, update_time, status, bz
+	</sql>
+	
+	<sql id="Push_Column_List">
+		pUserId, tvUserId, pSystem, tvSystem, pToken, tvToken, pProName, tvProName,
+		pNum,
+		tvMac, pName, tvName, cpId
+	</sql>
+	
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		<include refid="Push_Column_List" />
+		from push_user
+		where pUserId = #{pUserId,jdbcType=VARCHAR}
+		and tvUserId = #{tvUserId,jdbcType=VARCHAR}
+	</select>
+
+	<insert id="insert" parameterType="com.pbtd.manager.domain.PushUser">
+		insert into push_user (pUserId, tvUserId, pSystem,
+		tvSystem, pToken, tvToken,
+		pProName, tvProName, pNum,
+		tvMac, pName, tvName,
+		cpId, create_time, update_time,
+		status, bz)
+		values (#{pUserId,jdbcType=VARCHAR}, #{tvUserId,jdbcType=VARCHAR},
+		#{pSystem,jdbcType=VARCHAR},
+		#{tvSystem,jdbcType=VARCHAR}, #{pToken,jdbcType=VARCHAR}, #{tvToken,jdbcType=VARCHAR},
+		#{pProName,jdbcType=VARCHAR}, #{tvProName,jdbcType=VARCHAR},
+		#{pNum,jdbcType=VARCHAR},
+		#{tvMac,jdbcType=VARCHAR}, #{pName,jdbcType=VARCHAR}, #{tvName,jdbcType=VARCHAR},
+		#{cpId,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP},
+		#{update_time,jdbcType=TIMESTAMP},
+		'1', #{bz,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="updateByPrimaryKey" parameterType="com.pbtd.manager.domain.PushUser">
+		update push_user
+		set pSystem = #{pSystem,jdbcType=VARCHAR},
+		tvSystem = #{tvSystem,jdbcType=VARCHAR},
+		pToken = #{pToken,jdbcType=VARCHAR},
+		tvToken = #{tvToken,jdbcType=VARCHAR},
+		pProName = #{pProName,jdbcType=VARCHAR},
+		tvProName = #{tvProName,jdbcType=VARCHAR},
+		pNum = #{pNum,jdbcType=VARCHAR},
+		tvMac = #{tvMac,jdbcType=VARCHAR},
+		pName = #{pName,jdbcType=VARCHAR},
+		tvName = #{tvName,jdbcType=VARCHAR},
+		cpId = #{cpId,jdbcType=VARCHAR},
+		update_time = now(),
+		status = '1',
+		bz = #{bz,jdbcType=VARCHAR}
+		where pUserId = #{pUserId,jdbcType=VARCHAR}
+		and tvUserId = #{tvUserId,jdbcType=VARCHAR}
+	</update>
+
+	<select id="selectPhoneToken" resultMap="BaseResultMap">
+		select
+		<include refid="Push_Column_List" />
+		from push_user
+		where pUserId = #{pUserId,jdbcType=VARCHAR} and
+		status='1'
+	</select>
+
+	<select id="selectTvToken" resultMap="BaseResultMap">
+		select
+		<include refid="Push_Column_List" />
+		from push_user
+		where tvUserId = #{tvUserId,jdbcType=VARCHAR} and
+		status='1'
+	</select>
+
+	<select id="selectDel" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from push_user
+		where tvUserId = #{tvUserId,jdbcType=VARCHAR}
+	</select>
+
+	<select id="select" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from push_user
+		where pUserId = #{pUserId,jdbcType=VARCHAR}
+		and
+		tvUserId = #{tvUserId,jdbcType=VARCHAR}
+	</select>
+
+	<delete id="deleteToken">
+		delete from push_user
+		where tvUserId =
+		#{tvUserId,jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteByPrimaryKey">
+		delete from push_user
+		where pUserId =
+		#{pUserId,jdbcType=VARCHAR}
+		and tvUserId =
+		#{tvUserId,jdbcType=VARCHAR}
+	</delete>
+
+	<update id="UpdatePhoneToken">
+		update push_user set
+		update_time = now(),
+		pToken =
+		#{pToken,jdbcType=VARCHAR},
+		pSystem = #{pSystem,jdbcType=VARCHAR}
+		where
+		pUserId = #{pUserId,jdbcType=VARCHAR}
+		and
+		<![CDATA[pToken <>]]>
+		#{pToken,jdbcType=VARCHAR}
+	</update>
+
+	<update id="UpdateTvToken">
+		update push_user set
+		update_time = now(),
+		tvToken =
+		#{tvToken,jdbcType=VARCHAR}
+		where
+		tvUserId =
+		#{tvUserId,jdbcType=VARCHAR}
+		and
+		<![CDATA[tvToken <>]]>
+		#{tvToken,jdbcType=VARCHAR}
+	</update>
+
+	<!-- <update id="updatePrimary" parameterType="com.pbtd.manager.domain.PushUser">
+		update push_user set
+		update_time = now(),
+		tvUserId = #{tvUserId,jdbcType=VARCHAR},
+		tvProName = #{tvProName,jdbcType=VARCHAR},
+		tv_name =
+		#{tv_name,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR}
+		where
+		pToken = #{pToken,jdbcType=VARCHAR}
+		and
+		tvToken =
+		#{tvToken,jdbcType=VARCHAR}
+	</update> -->
+
+	<!-- <update id="updatePrimaryPhone" parameterType="com.pbtd.manager.domain.PushUser">
+		update push_user
+		set
+		update_time = now(),
+		pUserId = #{pUserId,jdbcType=VARCHAR},
+		pProName = #{pProName,jdbcType=VARCHAR},
+		phone_name =
+		#{phone_name,jdbcType=VARCHAR},
+		pSystem = #{pSystem,jdbcType=VARCHAR}
+		where
+		pToken = #{pToken,jdbcType=VARCHAR}
+		and
+		tvToken =
+		#{tvToken,jdbcType=VARCHAR}
+	</update> -->
+	
+	<!-- <delete id="deletePhone">
+		delete from push_user
+		where pUserId =
+		#{pUserId,jdbcType=VARCHAR}
+	</delete> -->
+
+<!-- 	<delete id="deleteTv">
+		delete from push_user
+		where tvUserId =
+		#{tvUserId,jdbcType=VARCHAR}
+	</delete> -->
+</mapper>

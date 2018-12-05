@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playlive.mapper.LiveChannelMapper">
+	<resultMap id="BaseResultMap" type="com.pbtd.playlive.domain.LiveChannel">
+		<id column="channelId" property="channelid" jdbcType="INTEGER" />
+		<result column="sournece" property="sournece" jdbcType="INTEGER" />
+		<result column="oldChnCode" property="oldchncode" jdbcType="VARCHAR" />
+		<result column="chnCode" property="chncode" jdbcType="VARCHAR" />
+		<result column="chnName" property="chnname" jdbcType="VARCHAR" />
+		<result column="playUrl" property="playurl" jdbcType="VARCHAR" />
+		<result column="packageCover" property="packagecover" jdbcType="VARCHAR" />
+		<result column="groupId" property="groupid" jdbcType="INTEGER" />
+		<result column="tagId" property="tagid" jdbcType="INTEGER" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+		<result column="epgStatus" property="epgstatus" jdbcType="INTEGER" />
+		<result column="videoId" property="videoid" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		channelid, sournece, oldChnCode, chnCode, chnName, playUrl,
+		packageCover,
+		groupId,tagId, createTime,
+		updateTime, epgStatus,defaultNum,videoid
+	</sql>
+	<select id="selectByKey" resultMap="BaseResultMap" parameterType="com.pbtd.playlive.domain.LiveChannel">
+		select
+		<include refid="Base_Column_List" />
+		from live_channel
+		<trim prefix="where " suffixOverrides="and">
+			<if test="groupid != null">
+				groupId = #{groupid,jdbcType=INTEGER}
+			</if>
+		</trim>
+	</select>
+	<select id="select" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from live_channel where chnCode = #{chncode}
+	</select>
+	<select id="selectoldcode" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from live_channel where oldChnCode = #{oldchncode} limit 1
+	</select>
+	
+	<update id="truncateTable">
+		truncate table live_channel ;
+	</update>
+	<delete id="delete" parameterType="java.lang.String">
+	
+	<![CDATA[ delete from live_channel  where chnCode = #{chncode} ]]>
+
+	</delete>
+	
+	<insert id="insert" parameterType="com.pbtd.playlive.domain.LiveChannel">
+		insert into live_channel (
+		sournece,
+		oldChnCode,
+		chnCode,
+		chnName,
+		playUrl,
+		packageCover,
+		groupId,
+		tagId,
+		defaultNum,
+		createTime,
+		updateTime,
+		epgStatus,
+		videoId
+		)
+		values (
+		#{sournece,jdbcType=INTEGER},
+		#{oldchncode,jdbcType=VARCHAR},
+		#{chncode,jdbcType=VARCHAR},
+		#{chnname,jdbcType=VARCHAR},
+		#{playurl,jdbcType=VARCHAR},
+		#{packagecover,jdbcType=VARCHAR},
+		#{groupid,jdbcType=INTEGER},
+		#{tagid,jdbcType=INTEGER},
+		#{defaultnum,jdbcType=INTEGER},
+		now(),
+		now(),
+		#{epgstatus,jdbcType=INTEGER},
+		#{videoid,jdbcType=INTEGER})
+	</insert>
+</mapper>

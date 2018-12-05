@@ -1,0 +1,38 @@
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="System.Data.SqlClient" %>
+
+<script language="VB" runat="server">
+
+   Sub Page_Load(Sender As Object, E As EventArgs) 
+
+             
+   End Sub
+
+   Sub exit_Click(sender As Object, e As ImageClickEventArgs)
+   
+   End Sub
+
+   Sub Index_Changed(sender As Object, e As EventArgs)
+ 
+         
+   End Sub
+    
+   Sub UploadFile(sender as Object,e as EventArgs)
+ 
+   End Sub
+
+
+</script>
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta http-equiv="Content-Language" content="zh-cn">
+<link rel="stylesheet" type="text/css" href="../../css/doc_manage.css">
+</head>
+
+<form >
+   <div align="center">
+    <center>
+     <asp:imagebutton id="accept" runat="server"  AlternateText="确认"  ImageUrl="../../img/accept.gif" onclick="exit_click" />   
+        <asp:imagebutton id="exitdoc" runat="server"  AlternateText="退出"  ImageUrl="../../img/ex

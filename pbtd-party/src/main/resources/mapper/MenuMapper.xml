@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.manager.mapper.MenuMapper" >
+    <resultMap id="baseResultMap" type="com.pbtd.manager.domain.Menu" >
+        <id column="id" property="id"/>
+        <result column="text" property="text"/>
+        <result column="url" property="url"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="state" property="state"/>
+        <result column="iconCls" property="iconCls"/>
+        <result column="sort" property="sort"/>
+        <result column="permission" property="permission"/>
+        <collection column="id" ofType="com.pbtd.manager.domain.Menu" property="children"
+        select="queryMenuById"></collection>
+    </resultMap>
+    
+    <select id="queryRootMenu" resultMap="baseResultMap">
+    	select id,text,url,parent_id,state,iconCls,sort,permission
+    	from pb_menu
+    	where parent_id is null
+    	order by sort
+    </select>
+    
+    <select id="queryMenuById" resultMap="baseResultMap">
+    	select id,text,url,parent_id,state,iconCls,sort,permission
+    	from pb_menu
+    	where parent_id = #{parentId}
+    	order by sort
+    </select>
+</mapper>

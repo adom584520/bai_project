@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pbtd.playuser.mapper.UserSearchInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.pbtd.playuser.domain.UserSearchInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="mobileNum" property="mobilenum" jdbcType="INTEGER" />
+    <result column="sousuowenzi" property="sousuowenzi" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, mobileNum, sousuowenzi, createTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, mobileNum, sousuowenzi, createTime,count
+    from user_search_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectforsousuowenzi" resultMap="BaseResultMap" parameterType="Map">
+    select 
+    mobileNum, sousuowenzi, createTime,count(sousuowenzi)  count
+    from user_search_info
+   WHERE date_format(createTime,'%Y-%m-%d') > #{starttime} AND date_format(createtime,'%Y-%m-%d') <![CDATA[ < ]]> #{endtime} and
+  	sousuowenzi !=   "用户进入优酷专区首页" group by sousuowenzi order by count DESC LIMIT 10 ;
+  </select>
+  <select id="selectforall" resultType="int"  >
+    select   count(1)
+    from user_search_info  WHERE date_format(createTime,'%Y-%m-%d') > #{startTime} AND date_format(createTime,'%Y-%m-%d') <![CDATA[ < ]]> #{endTime} and
+  	sousuowenzi !=   "用户进入优酷专区首页";
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_search_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pbtd.playuser.domain.UserSearchInfo" >
+    insert into user_search_info (id, mobileNum, sousuowenzi, 
+      createTime)
+    values (#{id,jdbcType=INTEGER}, #{mobilenum,jdbcType=INTEGER}, #{sousuowenzi,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="Map" >
+    insert into user_search_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mobileNum != null" >
+        mobileNum,
+      </if>
+      <if test="sousuowenzi != null" >
+        sousuowenzi,
+      </if>
+        createTime,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mobileNum != null" >
+        #{mobileNum,jdbcType=INTEGER},
+      </if>
+      <if test="sousuowenzi != null" >
+        #{sousuowenzi,jdbcType=VARCHAR},
+      </if>
+        now()
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pbtd.playuser.domain.UserSearchInfo" >
+    update user_search_info
+    <set >
+      <if test="mobilenum != null" >
+        mobileNum = #{mobilenum,jdbcType=INTEGER},
+      </if>
+      <if test="sousuowenzi != null" >
+        sousuowenzi = #{sousuowenzi,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pbtd.playuser.domain.UserSearchInfo" >
+    update user_search_info
+    set mobileNum = #{mobilenum,jdbcType=INTEGER},
+      sousuowenzi = #{sousuowenzi,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
